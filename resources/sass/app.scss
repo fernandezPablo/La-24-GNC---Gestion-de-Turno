@@ -1,0 +1,40 @@
+// Fonts
+@import url('https://fonts.googleapis.com/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import '~bootstrap/scss/bootstrap';
+
+.navbar-la24gnc {
+    background-color: $app-primary;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    color: $white !important;
+}
+
+a{
+    color: $white ;
+}
+
+a:hover{
+    color: $grey;
+}
+
+.icon-brand{
+    display: inline;
+}
+
+.wrapper {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+}
+
+#content {
+    width: 100%;
+    padding: 0px;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
