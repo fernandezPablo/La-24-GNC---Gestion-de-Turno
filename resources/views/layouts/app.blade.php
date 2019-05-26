@@ -20,9 +20,11 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    <div id="app" class="wrapper">
-        <sidebar-component></sidebar-component>
-        <div id="content">
+    <div id="app">
+        <div id="sidebar" class="sidebar-expanded">
+            <sidebar-component></sidebar-component>
+        </div>
+        <div class="content">
             @guest
                 <navbar-component
                     :app-name="{{json_encode('LA 24 GNC')}}" 
@@ -44,9 +46,7 @@
                     :user-name="{{json_encode(Auth::user()->name)}}">
                 </navbar-component>
             @endguest
-            <main class="py-4">
-                @yield('content')
-            </main>
+           
         </div>
     </div>
 </body>

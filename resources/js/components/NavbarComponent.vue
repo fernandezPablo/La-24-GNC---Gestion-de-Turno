@@ -1,13 +1,12 @@
 <template>
-    <nav id="navbar" class="navbar navbar-expand-md navbar-la24gnc navbar-dark bg-inverse">
+    <nav class="navbar navbar-expand-md navbar-la24gnc navbar-dark bg-inverse">
         <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
-
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ml-auto">
                     <!-- Authentication Links -->
@@ -66,23 +65,6 @@ export default {
 </script>
 
 <style>
-    .navbar-la24gnc{
-        padding: 20px !important;
-    }
-
-   ul li a {
-        font-size: 0.9em !important;
-        padding-right: 30px !important;
-    }
-
-    a[aria-expanded="true"] {
-        background: #e3342f !important;
-    }
-
-    @media (max-width: 768px) {
-        .navbar-la24gnc {
-            margin-left: 0px;
-        }
-    }
+    
 
 </style>

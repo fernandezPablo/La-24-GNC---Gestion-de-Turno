@@ -1,11 +1,19 @@
 // Fonts
 @import url('https://fonts.googleapis.com/css?family=Nunito');
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+// Icons
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 // Variables
 @import 'variables';
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+body{
+    font-family: Roboto;
+}
 
 .navbar-la24gnc {
     background-color: $app-primary;
@@ -25,16 +33,61 @@ a:hover{
     display: inline;
 }
 
-.wrapper {
-    display: flex;
-    align-items: stretch;
-    width: 100%;
+.sidebar-expanded{
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    left: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+    background-color: $grey;
+    transition: width 1s;
 }
 
-#content {
-    width: 100%;
-    padding: 0px;
-    min-height: 100vh;
-    transition: all 0.3s;
+.sidebar-minimized{
+    height: 100%;
+    width: 60px;
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    left: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+    background-color: $grey;
+    transition: width 1s;
 }
 
+.content{
+    margin-left: 250px;
+    transition: margin-left 1s;
+}
+
+@media (max-width: 770px){
+    .content{
+        margin-left: 60px;
+    }
+}
+
+.material-icons.md-light { color: rgba(255, 255, 255, 1)!important; }
+.material-icons.md-light.md-inactive { color: rgba(255, 255, 255, 0.3)!important; }
+
+.sidebar-item{
+    padding: 10px;
+    font-size: 0.9em;
+    font-family: Roboto;
+    border: 1pt solid #fefefe;
+    text-align: justify;
+}
+
+.icon{
+    position: relative;
+    top: 5px;
+    left: 5px;
+    margin-right: 5px;
+}
+
+#sidebar-header{
+    padding: 8px;
+}
