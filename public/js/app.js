@@ -1914,10 +1914,12 @@ __webpack_require__.r(__webpack_exports__);
         sidebar.classList.add("sidebar-expanded");
         this.expanded = true;
       } else {
-        console.log('expand sidebar');
-        sidebar.classList.remove("sidebar-expanded");
-        sidebar.classList.add("sidebar-minimized");
-        this.expanded = false;
+        if (window.innerWidth < 770) {
+          console.log('expand sidebar');
+          sidebar.classList.remove("sidebar-expanded");
+          sidebar.classList.add("sidebar-minimized");
+          this.expanded = false;
+        }
       }
     }
   },
