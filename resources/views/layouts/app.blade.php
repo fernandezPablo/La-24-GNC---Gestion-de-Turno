@@ -45,6 +45,7 @@
                     :has-register="{{json_encode(true)}}"
                     :user-name="{{json_encode(Auth::user()->name)}}">
                 </navbar-component>
+                <router-view></router-view>
             @endguest
            
         </div>

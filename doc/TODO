@@ -1,4 +1,7 @@
 ### TODO FILE ###
 issue1:
     -Make GUI: Create a sidebar and a navbar.
-    
+issue2:
+    -Make GUI: Add router-link to items
+    -Create OpenTurn Form
+    -Add styles and animation

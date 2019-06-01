@@ -10664,6 +10664,7 @@ a.text-dark:focus {
 
 body {
   font-family: Roboto;
+  background-image: radial-gradient(#333333, #b3b3b3);
 }
 
 .navbar-la24gnc {
@@ -10673,11 +10674,17 @@ body {
 }
 
 a {
-  color: #ffffff;
+  color: black;
+  text-decoration: none;
 }
 
 a:hover {
-  color: #dddddd;
+  color: #1c1717;
+  text-decoration: none;
+}
+
+li:hover {
+  background-color: white;
 }
 
 .icon-brand {
@@ -10711,6 +10718,7 @@ a:hover {
 }
 
 .content {
+  height: 100vh;
   margin-left: 250px;
   transition: margin-left 1s;
 }
@@ -10746,5 +10754,16 @@ a:hover {
 
 #sidebar-header {
   padding: 8px;
+}
+
+.form {
+  width: 60%;
+  padding: 15px;
+  position: relative;
+  left: 20%;
+  top: 20px;
+  background-image: linear-gradient(to top, #cccccc, #4d4d4d);
+  border-radius: 20px;
+  color: #ffffff;
 }
 

@@ -7,9 +7,11 @@
                 </h3>
             </div>
             <ul class="list-unstyled">
-                <li class="sidebar-item" v-for="(item,index) in items">
-                    <i id="img-header" class="material-icons icon">{{icons[index]}}</i> <span v-if="expanded">{{item}}</span>
-                </li>
+                <router-link :to="routes[index]" v-for="(item,index) in items" v-bind:key="item.id">
+                    <li class="sidebar-item">
+                        <i id="img-header" class="material-icons icon">{{icons[index]}}</i> <span v-if="expanded">{{item.name}}</span>
+                    </li>
+                </router-link>
             </ul>
         </nav>
     </div>
@@ -55,8 +57,9 @@ export default {
     },
     data(){
         return{
-            items: ['ABRIR TURNO','VENTA','DESCUENTOS','CERRAR TURNO','ABM PRODUCTOS','CONSULTAR TURNO'],
+            items: [{id: 1, name: 'ABRIR TURNO'},{id: 2, name: 'VENTA'},{id: 3, name: 'DESCUENTOS'},{id: 4, name: 'CERRAR TURNO'},{id: 5, name: 'ABM PRODUCTOS'},{id: 1, name: 'CONSULTAR TURNO'}],
             icons: ['open_in_new','credit_card','local_atm','exit_to_app','assignment','search'],
+            routes: ['/abrirTurno','/venta','/descuentos','/cerrarTurno','/abmProductos','/consultarTurno'],
             expanded: true,
         }
     },
