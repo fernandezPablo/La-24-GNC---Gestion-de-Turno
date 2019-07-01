@@ -5,3 +5,6 @@ issue2:
     -Make GUI: Add router-link to items
     -Create OpenTurn Form
     -Add styles and animation
+issue3:
+    -Create sales components
+    -add sweetalert2 plugin

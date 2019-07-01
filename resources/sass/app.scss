@@ -11,6 +11,9 @@
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
 
+// SweetAlert2
+@import 'node_modules/sweetalert2/dist/sweetalert2';
+
 body{
     font-family: Roboto;
     background-image: radial-gradient(hsl(0,0%,20%),hsl(0,0%,70%));

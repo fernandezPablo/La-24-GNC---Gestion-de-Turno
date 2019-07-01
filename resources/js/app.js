@@ -11,6 +11,7 @@ window.Vue = require('vue');
 import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
+
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -26,13 +27,15 @@ Vue.component('example-component', require('./components/ExampleComponent.vue').
 Vue.component('navbar-component',require('./components/NavbarComponent.vue').default);
 Vue.component('sidebar-component',require('./components/SidebarComponent.vue').default);
 Vue.component('open-turn-component',require('./components/OpenTurnComponent.vue').default);
+Vue.component('sales-component',require("./components/SalesComponent.vue").default);
 
 import OpenTurn from './components/OpenTurnComponent';
 import Example from './components/ExampleComponent';
+import Sales from './components/SalesComponent';
 
 const routes = [
     {path: '/abrirTurno', name: 'openTurn', component: OpenTurn},
-    {path: '/example', name: 'example', component: Example}
+    {path: '/venta', name: 'venta', component: Sales},
 ]
 
 const router = new VueRouter({
