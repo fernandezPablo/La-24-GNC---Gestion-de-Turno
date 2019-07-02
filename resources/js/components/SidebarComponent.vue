@@ -57,9 +57,9 @@ export default {
     },
     data(){
         return{
-            items: [{id: 1, name: 'ABRIR TURNO'},{id: 2, name: 'VENTA'},{id: 3, name: 'DESCUENTOS'},{id: 4, name: 'CERRAR TURNO'},{id: 5, name: 'ABM PRODUCTOS'},{id: 1, name: 'CONSULTAR TURNO'}],
+            items: [{id: 1, name: 'ABRIR TURNO'},{id: 2, name: 'VENTA'},{id: 3, name: 'A DECLARAR'},{id: 4, name: 'CERRAR TURNO'},{id: 5, name: 'ABM PRODUCTOS'},{id: 1, name: 'CONSULTAR TURNO'}],
             icons: ['open_in_new','credit_card','local_atm','exit_to_app','assignment','search'],
-            routes: ['/abrirTurno','/venta','/descuentos','/cerrarTurno','/abmProductos','/consultarTurno'],
+            routes: ['/abrirTurno','/venta','/a_declarar','/cerrarTurno','/abmProductos','/consultarTurno'],
             expanded: true,
         }
     },

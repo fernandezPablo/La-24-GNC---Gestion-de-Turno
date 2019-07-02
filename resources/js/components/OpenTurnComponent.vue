@@ -45,7 +45,7 @@ export default {
 <style>
     .animation{
         margin-top: 40px;
-        animation-name: rotate;
+        animation-name: skew;
         animation-duration: 1s;
     }
 
@@ -56,6 +56,17 @@ export default {
         }
         to{
             transform: rotate(360deg);
+            opacity: 1;
+        }
+    }
+
+    @keyframes skew{
+        from {
+            transform: skew(0deg,45deg);
+            opacity: 0;
+        }
+        to{
+            transform: skew(45deg,90deg));
             opacity: 1;
         }
     }

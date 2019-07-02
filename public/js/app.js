@@ -2153,7 +2153,7 @@ __webpack_require__.r(__webpack_exports__);
         name: 'VENTA'
       }, {
         id: 3,
-        name: 'DESCUENTOS'
+        name: 'A DECLARAR'
       }, {
         id: 4,
         name: 'CERRAR TURNO'
@@ -2165,7 +2165,7 @@ __webpack_require__.r(__webpack_exports__);
         name: 'CONSULTAR TURNO'
       }],
       icons: ['open_in_new', 'credit_card', 'local_atm', 'exit_to_app', 'assignment', 'search'],
-      routes: ['/abrirTurno', '/venta', '/descuentos', '/cerrarTurno', '/abmProductos', '/consultarTurno'],
+      routes: ['/abrirTurno', '/venta', '/a_declarar', '/cerrarTurno', '/abmProductos', '/consultarTurno'],
       expanded: true
     };
   }
@@ -6630,7 +6630,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.animation{\n    margin-top: 40px;\n    -webkit-animation-name: rotate;\n            animation-name: rotate;\n    -webkit-animation-duration: 1s;\n            animation-duration: 1s;\n}\n@-webkit-keyframes rotate{\nfrom {\n        -webkit-transform: rotate(0deg);\n                transform: rotate(0deg);\n        opacity: 0;\n}\nto{\n        -webkit-transform: rotate(360deg);\n                transform: rotate(360deg);\n        opacity: 1;\n}\n}\n@keyframes rotate{\nfrom {\n        -webkit-transform: rotate(0deg);\n                transform: rotate(0deg);\n        opacity: 0;\n}\nto{\n        -webkit-transform: rotate(360deg);\n                transform: rotate(360deg);\n        opacity: 1;\n}\n}\n\n", ""]);
+exports.push([module.i, "\n.animation{\n    margin-top: 40px;\n    -webkit-animation-name: skew;\n            animation-name: skew;\n    -webkit-animation-duration: 1s;\n            animation-duration: 1s;\n}\n@-webkit-keyframes rotate{\nfrom {\n        -webkit-transform: rotate(0deg);\n                transform: rotate(0deg);\n        opacity: 0;\n}\nto{\n        -webkit-transform: rotate(360deg);\n                transform: rotate(360deg);\n        opacity: 1;\n}\n}\n@keyframes rotate{\nfrom {\n        -webkit-transform: rotate(0deg);\n                transform: rotate(0deg);\n        opacity: 0;\n}\nto{\n        -webkit-transform: rotate(360deg);\n                transform: rotate(360deg);\n        opacity: 1;\n}\n}\n@-webkit-keyframes skew{\nfrom {\n        -webkit-transform: skew(0deg,45deg);\n                transform: skew(0deg,45deg);\n        opacity: 0;\n}\nto{\n        -webkit-transform: skew(45deg,90deg));\n                transform: skew(45deg,90deg));\n        opacity: 1;\n}\n}\n@keyframes skew{\nfrom {\n        -webkit-transform: skew(0deg,45deg);\n                transform: skew(0deg,45deg);\n        opacity: 0;\n}\nto{\n        -webkit-transform: skew(45deg,90deg));\n                transform: skew(45deg,90deg));\n        opacity: 1;\n}\n}\n\n", ""]);
 
 // exports
 
