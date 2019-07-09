@@ -9,4 +9,6 @@ issue3:
     -Create sales components
     -add sweetalert2 plugin
 issue4:
-    
+    -Create To declare components
+    -Add Script to run common tasks
+    -Corrected "name" property on inputs from OpenTurn
