@@ -8,7 +8,7 @@
             </div>
             <div class="form-group">
                 <label for="aforador2">AFORADOR 2</label>
-                <input class="form-control" placeholder="VALOR DE ENTRADA DEL AFORADOR 2" type="number" name="aforador1" id="aforador2">
+                <input class="form-control" placeholder="VALOR DE ENTRADA DEL AFORADOR 2" type="number" name="aforador2" id="aforador2">
             </div>
             <div class="form-group">
                 <label for="aforador3">AFORADOR 3</label>
@@ -27,8 +27,8 @@
                 <input class="form-control" placeholder="VALOR DE ENTRADA DEL AFORADOR 6" type="number" name="aforador6" id="aforador6">
             </div>
             <div class="form-group">
-                <label for="aforador6">PMZ</label>
-                <input class="form-control" placeholder="VALOR DE ENTRADA DEL PMZ" type="number" name="aforador6" id="aforador6">
+                <label for="pmz">PMZ</label>
+                <input class="form-control" placeholder="VALOR DE ENTRADA DEL PMZ" type="number" name="pmz" id="pmz">
             </div>
             <button class="btn btn-primary form-control" type="submit">GUARDAR</button>
         </form>
