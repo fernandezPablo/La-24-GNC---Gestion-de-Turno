@@ -1894,6 +1894,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component navbar mounted...');
+    console.log('routeLogin: ' + this.routeLogin);
   },
   methods: {},
   props: {

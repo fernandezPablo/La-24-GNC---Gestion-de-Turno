@@ -21,9 +21,7 @@
 </head>
 <body>
     <div id="app">
-        <div id="sidebar" class="sidebar-expanded">
-            <sidebar-component></sidebar-component>
-        </div>
+        
         <div class="content">
             @guest
                 <navbar-component
@@ -36,6 +34,9 @@
                     :user-name="{{json_encode("")}}">
                 </navbar-component>
             @else
+                <div id="sidebar" class="sidebar-expanded">
+                    <sidebar-component></sidebar-component>
+                </div>
                 <navbar-component 
                     :app-name="{{json_encode('LA 24 GNC')}}"
                     :url="{{json_encode(url('/'))}}" 

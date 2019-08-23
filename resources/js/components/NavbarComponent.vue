@@ -47,6 +47,7 @@
 export default {
     mounted(){
         console.log('Component navbar mounted...');
+        console.log('routeLogin: '+this.routeLogin);
     },
     methods:{
     },
