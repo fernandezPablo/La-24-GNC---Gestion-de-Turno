@@ -1,5 +1,5 @@
 <template>
-    <div class="main-to-declare">
+    <div class="main-div">
         <h2 class="text-center text-white">A DECLARAR</h2>
         <form class="form-card" action="#">
             <div class="form-group">
@@ -160,12 +160,5 @@ export default {
 </script>
 
 <style>
-    .main-to-declare{
-        padding: 40px;
-    }
-
-    btn-modify-declare{
-        font-size: 0.2em!important;
-    }
 
 </style>

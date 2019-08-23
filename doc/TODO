@@ -12,3 +12,5 @@ issue4:
     -Create To declare components
     -Add Script to run common tasks
     -Corrected "name" property on inputs from OpenTurn
+issue5:
+    -add padding to main div on: SalesComponent, OpenTurnComponent and ToDeclareComponent.

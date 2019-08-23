@@ -28,17 +28,20 @@ Vue.component('navbar-component',require('./components/NavbarComponent.vue').def
 Vue.component('sidebar-component',require('./components/SidebarComponent.vue').default);
 Vue.component('open-turn-component',require('./components/OpenTurnComponent.vue').default);
 Vue.component('sales-component',require("./components/SalesComponent.vue").default);
-Vue.component('to-declare-component',require("./components/ToDeclareComponent.vue").default);
+Vue.component('to-declare-component',require('./components/ToDeclareComponent.vue').default);
+Vue.component('close-turn-component',require('./components/CloseTurnComponent.vue'))
 
 import OpenTurn from './components/OpenTurnComponent';
 import Example from './components/ExampleComponent';
 import Sales from './components/SalesComponent';
 import ToDeclare from './components/ToDeclareComponent';
+import CloseTurn from './components/CloseTurnComponent';
 
 const routes = [
     {path: '/abrirTurno', name: 'openTurn', component: OpenTurn},
     {path: '/venta', name: 'venta', component: Sales},
     {path: '/a_declarar', name: 'a_declarar', component: ToDeclare},
+    {path: '/cerrarTurno', name: 'closeTurn', component: CloseTurn}
 ]
 
 const router = new VueRouter({

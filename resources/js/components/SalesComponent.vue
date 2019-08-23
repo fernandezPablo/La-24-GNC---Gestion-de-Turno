@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="main-div">
         <h2 class="text-center text-white">VENTAS</h2>
         <div class="card sales-card" v-for="(product,index) in products" v-bind:key="product.id">
             <div class="card-body d-flex">
