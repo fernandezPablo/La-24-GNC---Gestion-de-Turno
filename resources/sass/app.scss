@@ -39,6 +39,12 @@ li:hover{
     background-color: hsl(0,50%,100%);
 }
 
+.navbar-la24gnc{
+    li:hover{
+        background-color: $red;
+    }
+}
+
 .icon-brand{
     display: inline;
 }
@@ -121,4 +127,25 @@ li:hover{
 
 .main-div{
     padding: 40px;
+}
+
+.test{
+    background-color: $white;
+    color: #000000;
+}
+
+.btn-primary{
+    background-color: $app-primary;
+}
+
+.btn-primary:hover{
+    background-color: $red;
+}
+
+a.link-form{
+    color: $app-primary;
+}
+
+a.link-form:hover{
+    color: $red;
 }

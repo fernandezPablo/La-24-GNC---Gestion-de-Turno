@@ -22,33 +22,38 @@
 <body>
     <div id="app">
         
-        <div class="content">
             @guest
                 <navbar-component
                     :app-name="{{json_encode('LA 24 GNC')}}" 
                     :url="{{json_encode(url('/'))}}" 
-                    :route-login="{{ json_encode(route('login'))}}" 
+                    :route-login="{{ json_encode(route('login')) }}"
                     :asset="{{ json_encode(asset('icons/ic_brand.png'))}}" 
                     :is-guest="{{json_encode(true)}}"
                     :has-register="{{json_encode(false)}}"
                     :user-name="{{json_encode("")}}">
                 </navbar-component>
             @else
-                <div id="sidebar" class="sidebar-expanded">
-                    <sidebar-component></sidebar-component>
+                <div class="content">
+                    <div id="sidebar" class="sidebar-expanded">
+                        <sidebar-component></sidebar-component>
+                    </div>
+                    <navbar-component 
+                        :app-name="{{json_encode('LA 24 GNC')}}"
+                        :url="{{json_encode(url('/'))}}" 
+                        :route-login="{{ json_encode(route('login'))}}"
+                        :route-logout="{{ json_encode(route('logout')) }}"
+                        :asset="{{ json_encode(asset('icons/ic_brand.png'))}}" 
+                        :is-guest="{{json_encode(false)}}"
+                        :has-register="{{json_encode(true)}}"
+                        :user-name="{{json_encode(Auth::user()->name)}}">
+                        @csrf
+                    </navbar-component>
+                    <router-view></router-view>
                 </div>
-                <navbar-component 
-                    :app-name="{{json_encode('LA 24 GNC')}}"
-                    :url="{{json_encode(url('/'))}}" 
-                    :route-login="{{ json_encode(route('login'))}}" 
-                    :asset="{{ json_encode(asset('icons/ic_brand.png'))}}" 
-                    :is-guest="{{json_encode(false)}}"
-                    :has-register="{{json_encode(true)}}"
-                    :user-name="{{json_encode(Auth::user()->name)}}">
-                </navbar-component>
-                <router-view></router-view>
             @endguest
            
+        <div class="mt-5">
+            @yield('content')
         </div>
     </div>
 </body>

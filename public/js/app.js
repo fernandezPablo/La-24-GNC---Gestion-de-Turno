@@ -1891,10 +1891,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component navbar mounted...');
     console.log('routeLogin: ' + this.routeLogin);
+    console.log('routeLogout: ' + this.routeLogout);
   },
   methods: {},
   props: {
@@ -41362,97 +41368,98 @@ var render = function() {
             attrs: { id: "navbarSupportedContent" }
           },
           [
-            _c("ul", { staticClass: "navbar-nav ml-auto" }, [
+            _c("div", { staticClass: "ml-auto" }, [
               this.isGuest
                 ? _c("div", [
-                    _c("li", { staticClass: "nav-item" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "nav-link",
-                          attrs: { href: this.routeLogin }
-                        },
-                        [_vm._v("Login")]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("li", { staticClass: "nav-item" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "nav-link",
-                          attrs: { href: this.routeRegister }
-                        },
-                        [_vm._v("Register")]
-                      )
+                    _c("ul", { staticClass: "navbar-nav" }, [
+                      _c("li", { staticClass: "nav-item" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "nav-link",
+                            attrs: { href: this.routeLogin }
+                          },
+                          [_vm._v("Login")]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("li", { staticClass: "nav-item" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "nav-link",
+                            attrs: { href: this.routeRegister }
+                          },
+                          [_vm._v("Register")]
+                        )
+                      ])
                     ])
                   ])
                 : _c("div", [
-                    _c("li", { staticClass: "nav-item dropdown" }, [
-                      _c(
-                        "a",
-                        {
-                          staticClass: "nav-link dropdown-toggle",
-                          attrs: {
-                            id: "navbarDropdown",
-                            href: "#",
-                            role: "button",
-                            "data-toggle": "dropdown",
-                            "aria-haspopup": "true",
-                            "aria-expanded": "false"
-                          }
-                        },
-                        [
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s(this.userName) +
-                              "\n                        "
-                          )
-                        ]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "div",
-                        {
-                          staticClass: "dropdown-menu dropdown-menu-right",
-                          attrs: { "aria-labelledby": "navbarDropdown" }
-                        },
-                        [
-                          _c(
-                            "a",
-                            {
-                              staticClass: "dropdown-item",
-                              attrs: {
-                                href: this.routeLogout,
-                                onclick:
-                                  "event.preventDefault();\n                                                 document.getElementById('logout-form').submit();"
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                                Logout\n                            "
-                              )
-                            ]
-                          ),
-                          _vm._v(" "),
-                          _c(
-                            "form",
-                            {
-                              staticStyle: { display: "none" },
-                              attrs: {
-                                id: "logout-form",
-                                action: this.routeLogout,
-                                method: "POST"
-                              }
-                            },
-                            [
-                              _vm._v(
-                                "\n                                @csrf\n                            "
-                              )
-                            ]
-                          )
-                        ]
-                      )
+                    _c("ul", { staticClass: "navbar-nav" }, [
+                      _c("li", { staticClass: "nav-item dropdown" }, [
+                        _c(
+                          "a",
+                          {
+                            staticClass: "nav-link dropdown-toggle",
+                            attrs: {
+                              id: "navbarDropdown",
+                              href: "#",
+                              role: "button",
+                              "data-toggle": "dropdown",
+                              "aria-haspopup": "true",
+                              "aria-expanded": "false"
+                            }
+                          },
+                          [
+                            _vm._v(
+                              "\n                                    " +
+                                _vm._s(this.userName) +
+                                "\n                                "
+                            )
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "dropdown-menu dropdown-menu-right",
+                            attrs: { "aria-labelledby": "navbarDropdown" }
+                          },
+                          [
+                            _c(
+                              "a",
+                              {
+                                staticClass: "dropdown-item",
+                                attrs: {
+                                  href: this.routeLogout,
+                                  onclick:
+                                    "event.preventDefault();\n                                                        document.getElementById('logout-form').submit();"
+                                }
+                              },
+                              [
+                                _vm._v(
+                                  "\n                                        Salir\n                                    "
+                                )
+                              ]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "form",
+                              {
+                                staticStyle: { display: "none" },
+                                attrs: {
+                                  id: "logout-form",
+                                  action: this.routeLogout,
+                                  method: "POST"
+                                }
+                              },
+                              [_vm._t("default")],
+                              2
+                            )
+                          ]
+                        )
+                      ])
                     ])
                   ])
             ])
