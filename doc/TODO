@@ -13,4 +13,6 @@ issue4:
     -Add Script to run common tasks
     -Corrected "name" property on inputs from OpenTurn
 issue5:
-    -add padding to main div on: SalesComponent, OpenTurnComponent and ToDeclareComponent.
+    -Add padding to main div on: SalesComponent, OpenTurnComponent and ToDeclareComponent.
+    -Fixed the UI of Login.
+    -Fixed logout issue that prevent close session.
