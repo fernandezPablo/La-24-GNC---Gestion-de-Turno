@@ -115,13 +115,13 @@ li:hover{
     position: relative;
     left: 20%;
     top: 20px;
-    background-image: linear-gradient(to top, hsl(0,0%,80%),hsl(0,0%,30%));
+    background-image: hsl(0,0%,30%);
     border-radius: 20px;
     color: $white;
 }
 
 .form-card{
-    background-color: $grey;
+    background-color: hsl(0,0%,50%);
     padding: 20px;
 }
 

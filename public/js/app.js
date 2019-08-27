@@ -1800,6 +1800,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
@@ -1927,6 +1937,16 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -41173,102 +41193,136 @@ var staticRenderFns = [
       ]),
       _vm._v(" "),
       _c("form", { staticClass: "form", attrs: { action: "" } }, [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "aforador1" } }, [_vm._v("AFORADOR 1")]),
+        _c("div", { staticClass: "form-card mt-1" }, [
+          _c("h2", { staticClass: "text-center" }, [_vm._v("GNC")]),
           _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              placeholder: "VALOR DE SALIDA DEL AFORADOR 1",
-              type: "number",
-              name: "aforador1",
-              id: "aforador1"
-            }
-          })
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "aforador1" } }, [
+              _vm._v("AFORADOR 1")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                placeholder: "VALOR DE SALIDA DEL AFORADOR 1",
+                type: "number",
+                name: "aforador1",
+                id: "aforador1"
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "aforador2" } }, [
+              _vm._v("AFORADOR 2")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                placeholder: "VALOR DE SALIDA DEL AFORADOR 2",
+                type: "number",
+                name: "aforador2",
+                id: "aforador2"
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "aforador3" } }, [
+              _vm._v("AFORADOR 3")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                placeholder: "VALOR DE SALIDA DEL AFORADOR 3",
+                type: "number",
+                name: "aforador3",
+                id: "aforador3"
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "aforador4" } }, [
+              _vm._v("AFORADOR 4")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                placeholder: "VALOR DE SALIDA DEL AFORADOR 4",
+                type: "number",
+                name: "aforador4",
+                id: "aforador4"
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "aforador5" } }, [
+              _vm._v("AFORADOR 5")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                placeholder: "VALOR DE SALIDA DEL AFORADOR 5",
+                type: "number",
+                name: "aforador5",
+                id: "aforador5"
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "aforador6" } }, [
+              _vm._v("AFORADOR 6")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                placeholder: "VALOR DE SALIDA DEL AFORADOR 6",
+                type: "number",
+                name: "aforador6",
+                id: "aforador6"
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "pmz" } }, [_vm._v("PMZ")]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                placeholder: "VALOR DE SALIDA DEL PMZ",
+                type: "number",
+                name: "pmz",
+                id: "pmz"
+              }
+            })
+          ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "aforador2" } }, [_vm._v("AFORADOR 2")]),
+        _c("div", { staticClass: "form-card mt-1 mb-1" }, [
+          _c("h2", { staticClass: "text-center" }, [_vm._v("ACEITE")]),
           _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              placeholder: "VALOR DE SALIDA DEL AFORADOR 2",
-              type: "number",
-              name: "aforador2",
-              id: "aforador2"
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "aforador3" } }, [_vm._v("AFORADOR 3")]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              placeholder: "VALOR DE SALIDA DEL AFORADOR 3",
-              type: "number",
-              name: "aforador3",
-              id: "aforador3"
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "aforador4" } }, [_vm._v("AFORADOR 4")]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              placeholder: "VALOR DE SALIDA DEL AFORADOR 4",
-              type: "number",
-              name: "aforador4",
-              id: "aforador4"
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "aforador5" } }, [_vm._v("AFORADOR 5")]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              placeholder: "VALOR DE SALIDA DEL AFORADOR 5",
-              type: "number",
-              name: "aforador5",
-              id: "aforador5"
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "aforador6" } }, [_vm._v("AFORADOR 6")]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              placeholder: "VALOR DE SALIDA DEL AFORADOR 6",
-              type: "number",
-              name: "aforador6",
-              id: "aforador6"
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "pmz" } }, [_vm._v("PMZ")]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              placeholder: "VALOR DE SALIDA DEL PMZ",
-              type: "number",
-              name: "pmz",
-              id: "pmz"
-            }
-          })
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "pmz" } }, [_vm._v("ACEITE SALIDA")]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                placeholder: "VALOR DE SALIDA DE ACEITE",
+                type: "number",
+                name: "aceite_salida",
+                id: "aceite_salida"
+              }
+            })
+          ])
         ]),
         _vm._v(" "),
         _c(
@@ -41525,102 +41579,136 @@ var staticRenderFns = [
       ]),
       _vm._v(" "),
       _c("form", { staticClass: "form", attrs: { action: "" } }, [
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "aforador1" } }, [_vm._v("AFORADOR 1")]),
+        _c("div", { staticClass: "form-card mt-1" }, [
+          _c("h2", { staticClass: "text-center" }, [_vm._v("GNC")]),
           _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              placeholder: "VALOR DE ENTRADA DEL AFORADOR 1",
-              type: "number",
-              name: "aforador1",
-              id: "aforador1"
-            }
-          })
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "aforador1" } }, [
+              _vm._v("AFORADOR 1")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                placeholder: "VALOR DE ENTRADA DEL AFORADOR 1",
+                type: "number",
+                name: "aforador1",
+                id: "aforador1"
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "aforador2" } }, [
+              _vm._v("AFORADOR 2")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                placeholder: "VALOR DE ENTRADA DEL AFORADOR 2",
+                type: "number",
+                name: "aforador2",
+                id: "aforador2"
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "aforador3" } }, [
+              _vm._v("AFORADOR 3")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                placeholder: "VALOR DE ENTRADA DEL AFORADOR 3",
+                type: "number",
+                name: "aforador3",
+                id: "aforador3"
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "aforador4" } }, [
+              _vm._v("AFORADOR 4")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                placeholder: "VALOR DE ENTRADA DEL AFORADOR 4",
+                type: "number",
+                name: "aforador4",
+                id: "aforador4"
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "aforador5" } }, [
+              _vm._v("AFORADOR 5")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                placeholder: "VALOR DE ENTRADA DEL AFORADOR 5",
+                type: "number",
+                name: "aforador5",
+                id: "aforador5"
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "aforador6" } }, [
+              _vm._v("AFORADOR 6")
+            ]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                placeholder: "VALOR DE ENTRADA DEL AFORADOR 6",
+                type: "number",
+                name: "aforador6",
+                id: "aforador6"
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "pmz" } }, [_vm._v("PMZ")]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                placeholder: "VALOR DE ENTRADA DEL PMZ",
+                type: "number",
+                name: "pmz",
+                id: "pmz"
+              }
+            })
+          ])
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "aforador2" } }, [_vm._v("AFORADOR 2")]),
+        _c("div", { staticClass: "form-card mt-1 mb-1" }, [
+          _c("h2", { staticClass: "text-center" }, [_vm._v("ACEITE")]),
           _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              placeholder: "VALOR DE ENTRADA DEL AFORADOR 2",
-              type: "number",
-              name: "aforador2",
-              id: "aforador2"
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "aforador3" } }, [_vm._v("AFORADOR 3")]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              placeholder: "VALOR DE ENTRADA DEL AFORADOR 3",
-              type: "number",
-              name: "aforador3",
-              id: "aforador3"
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "aforador4" } }, [_vm._v("AFORADOR 4")]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              placeholder: "VALOR DE ENTRADA DEL AFORADOR 4",
-              type: "number",
-              name: "aforador4",
-              id: "aforador4"
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "aforador5" } }, [_vm._v("AFORADOR 5")]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              placeholder: "VALOR DE ENTRADA DEL AFORADOR 5",
-              type: "number",
-              name: "aforador5",
-              id: "aforador5"
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "aforador6" } }, [_vm._v("AFORADOR 6")]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              placeholder: "VALOR DE ENTRADA DEL AFORADOR 6",
-              type: "number",
-              name: "aforador6",
-              id: "aforador6"
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "pmz" } }, [_vm._v("PMZ")]),
-          _vm._v(" "),
-          _c("input", {
-            staticClass: "form-control",
-            attrs: {
-              placeholder: "VALOR DE ENTRADA DEL PMZ",
-              type: "number",
-              name: "pmz",
-              id: "pmz"
-            }
-          })
+          _c("div", { staticClass: "form-group" }, [
+            _c("label", { attrs: { for: "pmz" } }, [_vm._v("ACEITE ENTRADA")]),
+            _vm._v(" "),
+            _c("input", {
+              staticClass: "form-control",
+              attrs: {
+                placeholder: "VALOR DE ENTRADA DE ACEITE",
+                type: "number",
+                name: "aceite_entrada",
+                id: "aceite_entrada"
+              }
+            })
+          ])
         ]),
         _vm._v(" "),
         _c(
