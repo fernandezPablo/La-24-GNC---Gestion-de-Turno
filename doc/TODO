@@ -18,3 +18,5 @@ issue5:
     -Fixed logout issue that prevent close session.
 issue6:
     -Added field Aceite to OpenTurn and CloseTurn view.
+issue7:
+    
