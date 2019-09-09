@@ -21,7 +21,7 @@
 </head>
 <body>
     <div id="app">
-        
+        <div id="load">
             @guest
                 <navbar-component
                     :app-name="{{json_encode('LA 24 GNC')}}" 
@@ -45,7 +45,9 @@
                         :asset="{{ json_encode(asset('icons/ic_brand.png'))}}" 
                         :is-guest="{{json_encode(false)}}"
                         :has-register="{{json_encode(true)}}"
-                        :user-name="{{json_encode(Auth::user()->name)}}">
+                        :user-name="{{json_encode(Auth::user()->name)}}"
+                        :user-id="{{ Auth::user()->id }}"
+                        >
                         @csrf
                     </navbar-component>
                     <router-view></router-view>
@@ -54,6 +56,7 @@
            
         <div class="mt-5">
             @yield('content')
+        </div>
         </div>
     </div>
 </body>

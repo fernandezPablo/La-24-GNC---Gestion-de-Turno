@@ -47,7 +47,10 @@
 
 <script>
 export default {
-    
+    mounted(){
+        console.log('Mounted OpenTurnComponent...');
+        console.log('UserId: '+this.$store.getters.getUserId);
+    },
 }
 </script>
 

@@ -26,3 +26,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/open_turns/{userId}','MainController@findOpenTurn');
+
+Route::get('/users','MainController@indexUsers');

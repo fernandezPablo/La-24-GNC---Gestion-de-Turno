@@ -22,6 +22,12 @@
                         </div>
                         <div v-else>
                             <ul class="navbar-nav">
+                                <li class="nav-link" v-if="!this.withoutTurn">
+                                    Turno: {{this.turnNumber}} - {{this.date}}  
+                                </li>
+                                <li class="nav-link" v-else> 
+                                    NINGUN TURNO ABIERTO
+                                </li>
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         {{this.userName}}
@@ -52,26 +58,65 @@
 export default {
     mounted(){
         console.log('Component navbar mounted...');
-        console.log('routeLogin: '+this.routeLogin);
-        console.log('routeLogout: '+this.routeLogout);
+        var  divLoad = document.getElementById('load');
+        divLoad.classList.add('loading')
+        axios
+        .get('/open_turns/'+this.userId)
+        .then( response => {
+            if(response.data.length != 0){
+                this.turnId = response.data[0].id
+                this.setTurnIdOnState()
+                var dateFormat = require('dateformat')
+                var turnDate = new Date(response.data[0].date)   
+                this.date = dateFormat(turnDate,'dd/mm/yyyy')
+                this.turnNumber = response.data[0].number
+                divLoad.classList.remove('loading')
+            }
+            else{
+                this.withoutTurn = true
+            }
+
+        })
+        .catch( error => (console.log(error)));
+        this.setUserIdOnState();
+        console.log(this.turnId);
+    },
+    data(){
+        return {
+            turnId : 0,
+            date: '',
+            turnNumber: 0,
+            withoutTurn: false
+        }
     },
     methods:{
+        setUserIdOnState(){
+            this.$store.commit('setUserId',this.userId);
+            },
+        setTurnIdOnState(){
+            this.$store.commit('setTurnId',this.turnId);
+        }
+    },
+    computed: {
+        getUserId(){
+            return this.$store.getters.getUserId;
+        }
     },
     props: {
         appName: String,
-        url: String,
+        url: String,    
         routeLogin: String,
         routeRegister: String,
         routeLogout: String,
         asset: String,
         isGuest: Boolean,
         hasRegister: Boolean,
-        userName: String
+        userName: String,
+        userId: Number,
     }
 }
 </script>
 
 <style>
-    
 
 </style>

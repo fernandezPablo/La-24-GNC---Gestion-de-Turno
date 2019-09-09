@@ -38,7 +38,7 @@ class User extends Authenticatable
     ];
 
     public function turns(){
-        return $this->hasMany('App\Turn');
+        return $this->hasMany('La24GNC\Turn');
     }
 
 }

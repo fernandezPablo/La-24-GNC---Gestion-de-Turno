@@ -19,4 +19,6 @@ issue5:
 issue6:
     -Added field Aceite to OpenTurn and CloseTurn view.
 issue7:
-    
+    -Generate migrations
+    -Generate eloquent model
+    -Use axios to get open turn

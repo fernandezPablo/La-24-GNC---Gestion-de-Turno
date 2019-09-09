@@ -9,8 +9,10 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import VueRouter from 'vue-router';
+import Vuex from 'vuex'
 
 Vue.use(VueRouter);
+Vue.use(Vuex);
 
 /**
  * The following block of code may be used to automatically register your
@@ -31,12 +33,14 @@ Vue.component('sales-component',require("./components/SalesComponent.vue").defau
 Vue.component('to-declare-component',require('./components/ToDeclareComponent.vue').default);
 Vue.component('close-turn-component',require('./components/CloseTurnComponent.vue'))
 
+import StoreData from './store';
 import OpenTurn from './components/OpenTurnComponent';
 import Example from './components/ExampleComponent';
 import Sales from './components/SalesComponent';
 import ToDeclare from './components/ToDeclareComponent';
 import CloseTurn from './components/CloseTurnComponent';
 
+//Routes for router-view
 const routes = [
     {path: '/abrirTurno', name: 'openTurn', component: OpenTurn},
     {path: '/venta', name: 'venta', component: Sales},
@@ -46,7 +50,9 @@ const routes = [
 
 const router = new VueRouter({
     routes
-})
+}); 
+
+const store = new Vuex.Store(StoreData);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -55,5 +61,6 @@ const router = new VueRouter({
  */
 const app = new Vue({
     el: '#app',
-    router
+    router,
+    store
 });

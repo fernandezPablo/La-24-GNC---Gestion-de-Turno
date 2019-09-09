@@ -12508,3 +12508,8 @@ a.link-form:hover {
   color: #f79ea1;
 }
 
+.loading {
+  background: #555555;
+  opacity: 30%;
+}
+
