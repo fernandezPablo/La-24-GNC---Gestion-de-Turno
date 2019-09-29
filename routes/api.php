@@ -16,3 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/open_turns/{userId}','MainController@findOpenTurn');
+
+Route::post('/open_turn','TurnController@newTurn');
+
+Route::get('/aforadors_values/{turnId}','TurnController@getAforadorsFromTheLastOpenTurn');

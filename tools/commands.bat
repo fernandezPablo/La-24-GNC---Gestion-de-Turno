@@ -15,3 +15,13 @@ echo --- Ejecutando compilacion automatica de archivos js y scss ---
 echo ***************************************************************
 PAUSE
 START npm run watch
+echo ***************************************************************
+echo --- Abriendo phpmyadmin y el sitio en desarrollo---
+echo ***************************************************************
+set phpmyadmin="http://localhost/phpmyadmin"
+set localhost="http://localhost:8000"
+START firefox.exe %phpmyadmin% %localhost%
+echo ***************************************************************
+echo --- FIN DE LA EJECUCCION PULSE UNA TECLA PARA CONTINUAR---
+echo ***************************************************************
+PAUSE

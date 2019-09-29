@@ -22,3 +22,9 @@ issue7:
     -Generate migrations
     -Generate eloquent model
     -Use axios to get open turn
+    -Add doctrine/bal to composer.json
+    -Add fillable fields to models: Aforador, Sale, Turn
+    -Add timestamps = false on models: Aforador, Sale, Turn
+    -Create Controllers: AforadorControlController, AforadorControler, SaleController, TurnController
+    -Open Turn
+    -Clicking openTurn on sidebar menu showed dialog asking if you want to edit turn when a turn is already open

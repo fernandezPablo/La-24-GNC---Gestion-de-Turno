@@ -55,38 +55,23 @@
 </template>
 
 <script>
+import { async } from 'q';
 export default {
     mounted(){
         console.log('Component navbar mounted...');
-        var  divLoad = document.getElementById('load');
-        divLoad.classList.add('loading')
-        axios
-        .get('/open_turns/'+this.userId)
-        .then( response => {
-            if(response.data.length != 0){
-                this.turnId = response.data[0].id
-                this.setTurnIdOnState()
-                var dateFormat = require('dateformat')
-                var turnDate = new Date(response.data[0].date)   
-                this.date = dateFormat(turnDate,'dd/mm/yyyy')
-                this.turnNumber = response.data[0].number
-                divLoad.classList.remove('loading')
-            }
-            else{
-                this.withoutTurn = true
-            }
-
-        })
-        .catch( error => (console.log(error)));
+        console.log(this.routeLogout);
         this.setUserIdOnState();
-        console.log(this.turnId);
+        this.divLoad.classList.add('loading');
+        this.getTurnData();
+
     },
     data(){
         return {
             turnId : 0,
             date: '',
             turnNumber: 0,
-            withoutTurn: false
+            withoutTurn: false,
+            divLoad: document.getElementById('load')
         }
     },
     methods:{
@@ -95,6 +80,24 @@ export default {
             },
         setTurnIdOnState(){
             this.$store.commit('setTurnId',this.turnId);
+            console.log('Turn Id on NavBar: '+this.$store.getters.getTurnId);
+        },
+        async getTurnData(){
+        console.log('getting data from api...')
+            let response = await axios.get('/api/open_turns/'+this.userId)
+            if(response.data.length != 0){
+                var lastResult = response.data[response.data.length - 1];
+                this.turnId = lastResult.id
+                this.setTurnIdOnState()
+                var dateFormat = require('dateformat')
+                var turnDate = new Date(lastResult.date)   
+                this.date = dateFormat(turnDate,'dd/mm/yyyy HH:MM:ss')
+                this.turnNumber = lastResult.number
+                this.divLoad.classList.remove('loading')
+            }
+            else{
+                this.withoutTurn = true
+            }
         }
     },
     computed: {

@@ -54,9 +54,9 @@
                 </div>
             @endguest
            
-        <div class="mt-5">
-            @yield('content')
-        </div>
+            <div class="mt-5">
+                @yield('content')
+            </div>
         </div>
     </div>
 </body>

@@ -1,14 +1,16 @@
+import axios from "axios";
+
 export default {
     state:{
         userId: 0,
-        tuarnId: 0,
+        turnId: 0,
     },
     mutations: {
         setUserId(state,id){
             state.userId = id;
         },
-        setTurnId(state,id){
-            state.turnId = id
+        async setTurnId(state,id){
+            state.turnId = id;
         }
     },
     getters: {

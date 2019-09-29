@@ -6,11 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class AforadorControl extends Model
 {
+    public $timestamps = false;
+
+    protected $fillable = [
+        'total',
+        'type','
+        id_turn',
+        'pmz_in',
+        'pmz_out',
+        'pmz_difference'
+    ];
+
     public function turn(){
-        return $this->belongsTo('App\Turn');
+        return $this->belongsTo('La24GNC\Turn');
     }
 
     public function aforadors(){
-        return $this->hasMany('App\Aforador');
+        return $this->hasMany('La24GNC\Aforador');
     }
 }
