@@ -22,6 +22,7 @@ issue7:
     -Generate migrations
     -Generate eloquent model
     -Use axios to get open turn
+issue8:
     -Add doctrine/bal to composer.json
     -Add fillable fields to models: Aforador, Sale, Turn
     -Add timestamps = false on models: Aforador, Sale, Turn
