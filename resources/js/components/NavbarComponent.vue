@@ -60,40 +60,46 @@ export default {
     mounted(){
         console.log('Component navbar mounted...');
         console.log(this.routeLogout);
-        this.setUserIdOnState();
-        this.divLoad.classList.add('loading');
-        this.getTurnData();
+        if(this.$store.getters.getUserId == 0){
+            this.setUserIdOnState();
+        }
+        if(typeof this.$store.getters.turn === 'undefined'){
+            console.log('the turn obj is not defined on store...');
+            this.getTurnData();
+        }
+        else{
+            var turn = this.$store.getters.turn;
+            var dateFormat = require('dateformat')
+            var turnDate = new Date(turn.date)   
+            this.date = dateFormat(turnDate,'dd/mm/yyyy HH:MM:ss')
+            this.turnNumber = turn.number
+        }
 
     },
     data(){
         return {
-            turnId : 0,
             date: '',
             turnNumber: 0,
             withoutTurn: false,
-            divLoad: document.getElementById('load')
         }
     },
     methods:{
         setUserIdOnState(){
             this.$store.commit('setUserId',this.userId);
             },
-        setTurnIdOnState(){
-            this.$store.commit('setTurnId',this.turnId);
-            console.log('Turn Id on NavBar: '+this.$store.getters.getTurnId);
+        setTurnOnState(turn){
+            this.$store.commit('setTurn',turn);
         },
         async getTurnData(){
         console.log('getting data from api...')
             let response = await axios.get('/api/open_turns/'+this.userId)
             if(response.data.length != 0){
                 var lastResult = response.data[response.data.length - 1];
-                this.turnId = lastResult.id
-                this.setTurnIdOnState()
                 var dateFormat = require('dateformat')
                 var turnDate = new Date(lastResult.date)   
                 this.date = dateFormat(turnDate,'dd/mm/yyyy HH:MM:ss')
                 this.turnNumber = lastResult.number
-                this.divLoad.classList.remove('loading')
+                this.setTurnOnState(lastResult);
             }
             else{
                 this.withoutTurn = true

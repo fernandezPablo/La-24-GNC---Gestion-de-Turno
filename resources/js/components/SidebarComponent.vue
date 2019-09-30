@@ -7,7 +7,7 @@
                 </h3>
             </div>
             <ul class="list-unstyled">
-                <router-link :to="routes[index]" v-for="(item,index) in items" v-bind:key="item.id">
+                <router-link :to="{path: routes[index], params: {userId: userId}}" v-for="(item,index) in items" v-bind:key="item.id">
                     <li class="sidebar-item">
                         <i id="img-header" class="material-icons icon">{{icons[index]}}</i> <span v-if="expanded">{{item.name}}</span>
                     </li>
@@ -63,6 +63,9 @@ export default {
             expanded: true,
         }
     },
+    props:{
+        userId: Number,
+    }
 }
 </script>
 

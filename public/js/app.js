@@ -1939,26 +1939,37 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   mounted: function mounted() {
     console.log('Component navbar mounted...');
     console.log(this.routeLogout);
-    this.setUserIdOnState();
-    this.divLoad.classList.add('loading');
-    this.getTurnData();
+
+    if (this.$store.getters.getUserId == 0) {
+      this.setUserIdOnState();
+    }
+
+    if (typeof this.$store.getters.turn === 'undefined') {
+      console.log('the turn obj is not defined on store...');
+      this.getTurnData();
+    } else {
+      var turn = this.$store.getters.turn;
+
+      var dateFormat = __webpack_require__(/*! dateformat */ "./node_modules/dateformat/lib/dateformat.js");
+
+      var turnDate = new Date(turn.date);
+      this.date = dateFormat(turnDate, 'dd/mm/yyyy HH:MM:ss');
+      this.turnNumber = turn.number;
+    }
   },
   data: function data() {
     return {
-      turnId: 0,
       date: '',
       turnNumber: 0,
-      withoutTurn: false,
-      divLoad: document.getElementById('load')
+      withoutTurn: false
     };
   },
   methods: {
     setUserIdOnState: function setUserIdOnState() {
       this.$store.commit('setUserId', this.userId);
     },
-    setTurnIdOnState: function setTurnIdOnState() {
-      this.$store.commit('setTurnId', this.turnId);
-      console.log('Turn Id on NavBar: ' + this.$store.getters.getTurnId);
+    setTurnOnState: function setTurnOnState(turn) {
+      this.$store.commit('setTurn', turn);
     },
     getTurnData: function () {
       var _getTurnData = _asyncToGenerator(
@@ -1978,13 +1989,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 if (response.data.length != 0) {
                   lastResult = response.data[response.data.length - 1];
-                  this.turnId = lastResult.id;
-                  this.setTurnIdOnState();
                   dateFormat = __webpack_require__(/*! dateformat */ "./node_modules/dateformat/lib/dateformat.js");
                   turnDate = new Date(lastResult.date);
                   this.date = dateFormat(turnDate, 'dd/mm/yyyy HH:MM:ss');
                   this.turnNumber = lastResult.number;
-                  this.divLoad.classList.remove('loading');
+                  this.setTurnOnState(lastResult);
                 } else {
                   this.withoutTurn = true;
                 }
@@ -2120,9 +2129,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       afGnc: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
       pmz: 0.0,
       afOil: [0.0],
-      userId: 0,
       isEdit: false
     };
+  },
+  props: {
+    userId: Number
   },
   computed: {
     gncAforadors: function gncAforadors() {
@@ -2185,24 +2196,76 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return saveTurn;
     }(),
-    isTurnOpen: function isTurnOpen() {
-      console.log('The turn id is: ' + this.$store.getters.getTurnId);
-      return this.$store.getters.getTurnId != 0;
+    setTurnOnState: function setTurnOnState(turn) {
+      this.$store.commit('setTurn', turn);
     },
-    getAforadorsValues: function () {
-      var _getAforadorsValues = _asyncToGenerator(
+    isTurnOpen: function () {
+      var _isTurnOpen = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var response, i;
+        var response, lastResult;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                _context2.next = 2;
-                return axios.get('/api/aforadors_values/' + this.$store.getters.getTurnId);
+                if (!(typeof this.$store.getters.getTurn === 'undefined')) {
+                  _context2.next = 13;
+                  break;
+                }
+
+                _context2.next = 3;
+                return axios.get('/open_turns/' + this.userId);
+
+              case 3:
+                response = _context2.sent;
+
+                if (!(response.data.length != 0)) {
+                  _context2.next = 10;
+                  break;
+                }
+
+                lastResult = response.data[response.data.length - 1];
+                this.setTurnOnState(lastResult);
+                return _context2.abrupt("return", true);
+
+              case 10:
+                return _context2.abrupt("return", false);
+
+              case 11:
+                _context2.next = 14;
+                break;
+
+              case 13:
+                return _context2.abrupt("return", true);
+
+              case 14:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function isTurnOpen() {
+        return _isTurnOpen.apply(this, arguments);
+      }
+
+      return isTurnOpen;
+    }(),
+    getAforadorsValues: function () {
+      var _getAforadorsValues = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var response, i;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios.get('/api/aforadors_values/' + this.$store.getters.getTurn.id);
 
               case 2:
-                response = _context2.sent;
+                response = _context3.sent;
                 console.log(response.data);
 
                 for (i = 0; i < response.data.length; i++) {
@@ -2219,10 +2282,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 6:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee3, this);
       }));
 
       function getAforadorsValues() {
@@ -2493,6 +2556,9 @@ __webpack_require__.r(__webpack_exports__);
       routes: ['/abrirTurno', '/venta', '/a_declarar', '/cerrarTurno', '/abmProductos', '/consultarTurno'],
       expanded: true
     };
+  },
+  props: {
+    userId: Number
   }
 });
 
@@ -45346,7 +45412,12 @@ var render = function() {
         _vm._l(_vm.items, function(item, index) {
           return _c(
             "router-link",
-            { key: item.id, attrs: { to: _vm.routes[index] } },
+            {
+              key: item.id,
+              attrs: {
+                to: { path: _vm.routes[index], params: { userId: _vm.userId } }
+              }
+            },
             [
               _c("li", { staticClass: "sidebar-item" }, [
                 _c(
@@ -62136,57 +62207,28 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_1__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   state: {
     userId: 0,
-    turnId: 0
+    turn: {}
   },
   mutations: {
     setUserId: function setUserId(state, id) {
       state.userId = id;
     },
-    setTurnId: function () {
-      var _setTurnId = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee(state, id) {
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                state.turnId = id;
-
-              case 1:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee);
-      }));
-
-      function setTurnId(_x, _x2) {
-        return _setTurnId.apply(this, arguments);
-      }
-
-      return setTurnId;
-    }()
+    setTurn: function setTurn(state, turn) {
+      state.turn = turn;
+    }
   },
   getters: {
     getUserId: function getUserId(state) {
       return state.userId;
     },
-    getTurnId: function getTurnId(state) {
-      return state.turnId;
+    getTurn: function getTurn(state) {
+      return state.turn;
     }
   },
   actions: {}

@@ -35,7 +35,10 @@
             @else
                 <div class="content">
                     <div id="sidebar" class="sidebar-expanded">
-                        <sidebar-component></sidebar-component>
+                        <sidebar-component
+                            :user-id="{{ Auth::user()->id }}"
+                        >
+                        </sidebar-component>
                     </div>
                     <navbar-component 
                         :app-name="{{json_encode('LA 24 GNC')}}"

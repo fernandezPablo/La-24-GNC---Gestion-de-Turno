@@ -73,9 +73,11 @@ export default {
             afGnc: [0.0,0.0,0.0,0.0,0.0,0.0],
             pmz: 0.0,
             afOil: [0.0],
-            userId: 0,
             isEdit: false
         }
+    },
+    props:{
+        userId: Number
     },
     computed:{
         gncAforadors(){
@@ -105,12 +107,27 @@ export default {
             
             this.$router.push("/");
         },
-        isTurnOpen(){
-            console.log('The turn id is: '+this.$store.getters.getTurnId);
-            return this.$store.getters.getTurnId != 0;
+         setTurnOnState(turn){
+            this.$store.commit('setTurn',turn);
+        },
+        async isTurnOpen(){
+            if(typeof this.$store.getters.getTurn === 'undefined'){
+                let response = await axios.get('/open_turns/'+this.userId);
+                if(response.data.length != 0){
+                    var lastResult = response.data[response.data.length - 1];
+                    this.setTurnOnState(lastResult);
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            else {
+                return true;
+            }
         },
         async getAforadorsValues(){
-            let response = await axios.get('/api/aforadors_values/'+this.$store.getters.getTurnId);
+            let response = await axios.get('/api/aforadors_values/'+this.$store.getters.getTurn.id);
             console.log(response.data);
             for(var i=0;i<response.data.length;i++){
                 if(i < 6){
