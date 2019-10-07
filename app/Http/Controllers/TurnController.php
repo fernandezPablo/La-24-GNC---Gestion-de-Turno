@@ -55,7 +55,7 @@ class TurnController extends Controller
         //AFORADOR CONTROL OIL
         $aforadorControlController->newAforadorControl($turn->id,"OIL",$request->aforadorOil,0);
 
-        return $turn->id;
+        return $turn;
 
     }
 
@@ -73,6 +73,27 @@ class TurnController extends Controller
             }
         }
         return json_encode($aforadorsValues);
+    }
+
+    public function editTurn(Request $request){
+        $turn = Turn::find($request->turnId);
+       
+        foreach($turn->aforadorControls as $aforadorControl){
+            $index = 0;
+            if($aforadorControl->type == "GNC"){
+                $aforadorControl->pmz = $request->pmz;
+            }
+            foreach($aforadorControl->aforadors as $aforador){
+                if($aforador->type == "GNC"){
+                    $aforador->valueIn = $request->aforadorsGnc[$index];
+                }
+                else{
+                    $aforador->valueIn = $request->aforadorOil[$index];
+                }
+                $aforador->save();
+                $index++;
+            }
+        }
     }
 
 }

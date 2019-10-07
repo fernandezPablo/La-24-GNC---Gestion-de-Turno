@@ -30,4 +30,7 @@ issue8:
     -Open Turn
     -Clicking openTurn on sidebar menu showed dialog asking if you want to edit turn when a turn is already open
 issue9:
+    commit 1:
     -Every componet must request the data wich need to use
+    commit 2:
+    -function to edit turn is available

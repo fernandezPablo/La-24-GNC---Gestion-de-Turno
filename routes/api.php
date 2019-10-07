@@ -22,3 +22,5 @@ Route::get('/open_turns/{userId}','MainController@findOpenTurn');
 Route::post('/open_turn','TurnController@newTurn');
 
 Route::get('/aforadors_values/{turnId}','TurnController@getAforadorsFromTheLastOpenTurn');
+
+Route::post('/edit_open_turn','TurnController@editTurn');

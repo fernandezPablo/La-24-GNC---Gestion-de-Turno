@@ -2154,7 +2154,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   user_id: this.userId,
                   aforadorsGnc: this.afGnc,
                   aforadorOil: this.afOil,
-                  pmz: this.pmz
+                  pmz: this.pmz,
+                  turnId: 0
                 };
 
                 if (this.isEdit) {
@@ -2167,22 +2168,33 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 4:
                 response = _context.sent;
-                this.$store.commit('setTurnId', response.data);
+                this.$store.commit('setTurn', response.data);
                 swal.fire({
                   type: 'success',
                   title: 'Turno Abierto',
                   text: 'Turno Abierto Correctamente'
                 });
-                _context.next = 10;
+                _context.next = 15;
                 break;
 
               case 9:
+                data.turnId = this.$store.getters.getTurn.id;
                 console.log('Editing...');
+                console.log(data.turn);
+                _context.next = 14;
+                return axios.post('/api/edit_open_turn', data);
 
-              case 10:
+              case 14:
+                swal.fire({
+                  type: 'success',
+                  title: 'Turno Editado',
+                  text: 'Turno Editado Correctamente'
+                });
+
+              case 15:
                 this.$router.push("/");
 
-              case 11:
+              case 16:
               case "end":
                 return _context.stop();
             }

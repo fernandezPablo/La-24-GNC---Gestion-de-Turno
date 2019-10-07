@@ -90,11 +90,12 @@ export default {
                 user_id: this.userId,
                 aforadorsGnc: this.afGnc,
                 aforadorOil: this.afOil,
-                pmz: this.pmz
+                pmz: this.pmz,
+                turnId: 0
             };
             if(!this.isEdit){
                 let response = await axios.post('/api/open_turn',data);
-                this.$store.commit('setTurnId',response.data);
+                this.$store.commit('setTurn',response.data);
                 swal.fire({
                     type: 'success',
                     title: 'Turno Abierto',
@@ -102,7 +103,15 @@ export default {
                 });
             }
             else{
+                data.turnId = this.$store.getters.getTurn.id;
                 console.log('Editing...');
+                console.log(data.turn);
+                await axios.post('/api/edit_open_turn',data);
+                swal.fire({
+                    type: 'success',
+                    title: 'Turno Editado',
+                    text: 'Turno Editado Correctamente',
+                });
             }
             
             this.$router.push("/");
