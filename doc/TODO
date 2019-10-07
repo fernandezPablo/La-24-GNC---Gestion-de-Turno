@@ -34,3 +34,5 @@ issue9:
     -Every componet must request the data wich need to use
     commit 2:
     -function to edit turn is available
+    commit 3:
+    -Return button on modal dialog in openTurnComponent work now

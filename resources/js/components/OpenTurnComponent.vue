@@ -53,20 +53,23 @@ export default {
     mounted(){
         console.log('Mounted OpenTurnComponent...');
          if(this.isTurnOpen()){
-                swal.fire({
-                    title: 'Ya existe un turno abierto',
-                    text: 'Desea editar el turno actual?',
-                    type: 'info',
-                    showCancelButton: true,
-                    cancelButtonText: 'Regresar',
-                    confirmButtonText: 'Editar',
-                }).then( result => {
+            swal.fire({
+                title: 'Ya existe un turno abierto',
+                text: 'Desea editar el turno actual?',
+                type: 'info',
+                showCancelButton: true,
+                cancelButtonText: 'Regresar',
+                confirmButtonText: 'Editar',
+            }).then( result => {
                     if(result.value){
                         this.isEdit = true;
                         this.getAforadorsValues();
                     }
-            });
-        }
+                    else if (result.dismiss === swal.DismissReason.cancel) {
+                        this.$router.push("/");
+                    }
+                });
+            }
     },
     data(){
         return {

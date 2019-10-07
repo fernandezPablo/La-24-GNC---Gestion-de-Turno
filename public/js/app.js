@@ -2120,6 +2120,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           _this.isEdit = true;
 
           _this.getAforadorsValues();
+        } else if (result.dismiss === swal.DismissReason.cancel) {
+          _this.$router.push("/");
         }
       });
     }
