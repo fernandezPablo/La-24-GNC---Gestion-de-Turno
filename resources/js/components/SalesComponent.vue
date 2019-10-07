@@ -104,7 +104,7 @@ export default {
     },
     data(){
         return{
-            products: [{id: 1, description: 'Aceite', price: 150.0},{id: 2, description: 'Agua destilada x 1lts', price: 40.0},{id: 3, description: 'Agua destilada x 5lts',price: 85.0},
+            products: [{id: 2, description: 'Agua destilada x 1lts', price: 40.0},{id: 3, description: 'Agua destilada x 5lts',price: 85.0},
             {id: 4, description: 'Refrigerante x 1lts',price: 45.0},{id: 5, description: 'Refrigerante x 5lts',price: 100.0},{id: 6, description: 'Liquido de Frenos',price: 60.0},
             {id: 7, description: 'Hielo x 5kg',price: 80.0}, {id: 8, description: 'Hielo x 15kg',price: 140.0}],
             ls: {product: {id: 0, description: '', price: 0.0}, amount: 0.0, total: 0.0},

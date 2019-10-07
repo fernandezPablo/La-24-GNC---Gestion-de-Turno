@@ -2433,10 +2433,6 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       products: [{
-        id: 1,
-        description: 'Aceite',
-        price: 150.0
-      }, {
         id: 2,
         description: 'Agua destilada x 1lts',
         price: 40.0

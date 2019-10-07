@@ -36,3 +36,7 @@ issue9:
     -function to edit turn is available
     commit 3:
     -Return button on modal dialog in openTurnComponent work now
+issue10:
+    On this issue is resolved everithing related with SalesComponent
+    commit 1:
+    Populate the products table with ProductTableSeeder class
