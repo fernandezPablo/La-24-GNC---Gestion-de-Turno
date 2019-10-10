@@ -40,3 +40,7 @@ issue10:
     On this issue is resolved everithing related with SalesComponent
     commit 1:
     Populate the products table with ProductTableSeeder class
+    commit 2:
+    -Create new sale line
+    -Increment amount on sale line
+    -Load lines of sale on view

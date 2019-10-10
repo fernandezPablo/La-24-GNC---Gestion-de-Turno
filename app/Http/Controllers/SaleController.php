@@ -23,4 +23,8 @@ class SaleController extends Controller
         return $sale->id;
 
     }
+
+    public function getSale($turnId){
+        return Sale::where('turn_id',$turnId)->get();
+    }
 }

@@ -2322,6 +2322,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -2352,28 +2360,42 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get('/api/products').then(function (result) {
+      result.data.forEach(function (element) {
+        if (element.id != 1 && element.id != 2) {
+          _this.products.push(element);
+        }
+      });
+
+      _this.getCurrentSale();
+    });
+  },
   methods: {
     sellProduct: function sellProduct(index) {
-      //debugger
       console.log("Adding product to Line of Sale from index: " + index);
+      console.log('Product: ' + this.products[index].description);
       var indexFind = this.findProductOnLineOfSale(this.products[index]);
       console.log("IndexFind: " + indexFind);
 
       if (indexFind != -1) {
         this.linesOfSale[indexFind].amount++;
         this.linesOfSale[indexFind].total = this.linesOfSale[indexFind].amount * this.linesOfSale[indexFind].product.price;
+        this.changeAmount(this.linesOfSale[indexFind]);
         return;
       } //if the line Of Sale don't exists, do the next tasks
 
 
       console.log('adding line of sale at first time...');
-      var newLine = {
+      var saleLine = {
         product: this.products[index],
         amount: 1.0,
         total: 0.0
       };
-      newLine.total = newLine.amount * newLine.product.price;
-      this.linesOfSale.push(newLine);
+      saleLine.total = saleLine.amount * saleLine.product.price;
+      this.newLine(saleLine);
     },
     cancelSell: function cancelSell(index) {
       var indexFind = this.findProductOnLineOfSale(this.products[index]);
@@ -2382,6 +2404,8 @@ __webpack_require__.r(__webpack_exports__);
         if (this.linesOfSale[indexFind].amount != 0) {
           this.linesOfSale[indexFind].amount--;
           this.linesOfSale[indexFind].total -= this.products[index].price;
+          this.changeAmount(this.linesOfSale[indexFind]);
+          return;
         } else {
           swal.fire({
             type: 'error',
@@ -2428,39 +2452,128 @@ __webpack_require__.r(__webpack_exports__);
       }
 
       return 0;
+    },
+    getAllSaleLines: function getAllSaleLines() {
+      var _this2 = this;
+
+      axios.get('/api/get_sale_lines/' + this.sale.id).then(function (result) {
+        //debugger
+        console.log(result.data);
+        result.data.forEach(function (element) {
+          element.product = _this2.getProductById(element.product_id);
+
+          _this2.linesOfSale.push(element);
+        });
+      });
+    },
+    newLine: function newLine(saleLine) {
+      var _this3 = this;
+
+      var data = {
+        amount: saleLine.amount,
+        sale_id: this.sale.id,
+        product_id: saleLine.product.id,
+        total: saleLine.total
+      };
+      axios.post('/api/new_sale_line', data).then(function (result) {
+        result.data.product = saleLine.product;
+        console.log(result.data);
+
+        _this3.linesOfSale.push(result.data);
+      });
+    },
+    changeAmount: function changeAmount(saleLine) {
+      var data = {
+        id: saleLine.id,
+        amount: saleLine.amount,
+        total: saleLine.total
+      };
+      axios.post('/api/increment_sale_line', data);
+    },
+    isTurnOpen: function () {
+      var _isTurnOpen = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var response, lastResult;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (!(typeof this.$store.getters.getTurn === 'undefined')) {
+                  _context.next = 13;
+                  break;
+                }
+
+                _context.next = 3;
+                return axios.get('/open_turns/' + this.userId);
+
+              case 3:
+                response = _context.sent;
+
+                if (!(response.data.length != 0)) {
+                  _context.next = 10;
+                  break;
+                }
+
+                lastResult = response.data[response.data.length - 1];
+                this.$store.commit('setTurn', lastResult);
+                return _context.abrupt("return", true);
+
+              case 10:
+                return _context.abrupt("return", false);
+
+              case 11:
+                _context.next = 14;
+                break;
+
+              case 13:
+                return _context.abrupt("return", true);
+
+              case 14:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function isTurnOpen() {
+        return _isTurnOpen.apply(this, arguments);
+      }
+
+      return isTurnOpen;
+    }(),
+    getCurrentSale: function getCurrentSale() {
+      var _this4 = this;
+
+      if (this.isTurnOpen()) {
+        var turnId = this.$store.getters.getTurn.id;
+        axios.get('/api/find_sale/' + turnId).then(function (result) {
+          _this4.sale = result.data[0];
+
+          _this4.getAllSaleLines();
+        });
+      }
+    },
+    getProductById: function getProductById(id) {
+      var productFind = {};
+      this.products.forEach(function (product) {
+        if (product.id == id) {
+          productFind = product;
+        }
+      });
+      return productFind;
     }
   },
   data: function data() {
     return {
-      products: [{
-        id: 2,
-        description: 'Agua destilada x 1lts',
-        price: 40.0
-      }, {
-        id: 3,
-        description: 'Agua destilada x 5lts',
-        price: 85.0
-      }, {
-        id: 4,
-        description: 'Refrigerante x 1lts',
-        price: 45.0
-      }, {
-        id: 5,
-        description: 'Refrigerante x 5lts',
-        price: 100.0
-      }, {
-        id: 6,
-        description: 'Liquido de Frenos',
-        price: 60.0
-      }, {
-        id: 7,
-        description: 'Hielo x 5kg',
-        price: 80.0
-      }, {
-        id: 8,
-        description: 'Hielo x 15kg',
-        price: 140.0
-      }],
+      /** 
+       * [{id: 2, description: 'Agua destilada x 1lts', price: 40.0},{id: 3, description: 'Agua destilada x 5lts',price: 85.0},
+      {id: 4, description: 'Refrigerante x 1lts',price: 45.0},{id: 5, description: 'Refrigerante x 5lts',price: 100.0},{id: 6, description: 'Liquido de Frenos',price: 60.0},
+      {id: 7, description: 'Hielo x 5kg',price: 80.0}, {id: 8, description: 'Hielo x 15kg',price: 140.0}],
+       * 
+      */
+      products: [],
       ls: {
         product: {
           id: 0,
@@ -2470,8 +2583,12 @@ __webpack_require__.r(__webpack_exports__);
         amount: 0.0,
         total: 0.0
       },
-      linesOfSale: []
+      linesOfSale: [],
+      sale: {}
     };
+  },
+  props: {
+    userId: Number
   }
 });
 

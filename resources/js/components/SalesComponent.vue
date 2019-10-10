@@ -30,22 +30,36 @@
 <script>
 
 export default {
+    mounted(){
+        axios.get('/api/products')
+        .then(result =>{
+            result.data.forEach(element => {
+                if(element.id != 1 && element.id != 2){
+                    this.products.push(element);
+                }
+            });
+            this.getCurrentSale();
+        });
+
+    },
     methods: {
         sellProduct(index){
-            //debugger
             console.log("Adding product to Line of Sale from index: "+index)
+            console.log('Product: '+this.products[index].description)
             var indexFind = this.findProductOnLineOfSale(this.products[index])
             console.log("IndexFind: "+indexFind)
             if(indexFind != -1){
                 this.linesOfSale[indexFind].amount ++
                 this.linesOfSale[indexFind].total = this.linesOfSale[indexFind].amount * this.linesOfSale[indexFind].product.price
+                this.changeAmount(this.linesOfSale[indexFind])
                 return
             }
             //if the line Of Sale don't exists, do the next tasks
             console.log('adding line of sale at first time...')
-            var newLine = {product: this.products[index], amount: 1.0, total: 0.0}
-            newLine.total = newLine.amount * newLine.product.price
-            this.linesOfSale.push(newLine)
+            var saleLine = {product: this.products[index], amount: 1.0, total: 0.0}
+            saleLine.total = saleLine.amount * saleLine.product.price
+            this.newLine(saleLine);
+            
         },
         cancelSell(index){
             var indexFind = this.findProductOnLineOfSale(this.products[index])
@@ -53,6 +67,8 @@ export default {
                 if(this.linesOfSale[indexFind].amount != 0){
                     this.linesOfSale[indexFind].amount --
                     this.linesOfSale[indexFind].total -= this.products[index].price
+                    this.changeAmount(this.linesOfSale[indexFind])
+                    return
                 }
                 else{
                     swal.fire({
@@ -100,17 +116,96 @@ export default {
                 }
             }
             return 0
+        },
+        getAllSaleLines(){
+            axios.get('/api/get_sale_lines/'+this.sale.id).then(
+                result => {
+                    //debugger
+                    console.log(result.data);
+                    result.data.forEach( element => {
+                        element.product = this.getProductById(element.product_id);
+                        this.linesOfSale.push(element);
+                    });
+                }
+            );
+        },
+        newLine(saleLine){
+            var data = {
+                amount: saleLine.amount,
+                sale_id: this.sale.id,
+                product_id: saleLine.product.id,
+                total: saleLine.total
+            };
+            axios.post('/api/new_sale_line',data).then(
+                result => {
+                    result.data.product = saleLine.product
+                    console.log(result.data);
+                    this.linesOfSale.push(result.data)
+                }
+            );
+        },
+        changeAmount(saleLine){
+            var data = {
+                id: saleLine.id,
+                amount: saleLine.amount,
+                total: saleLine.total
+            };
+            axios.post('/api/increment_sale_line',data);
+        },
+        async isTurnOpen(){
+            if(typeof this.$store.getters.getTurn === 'undefined'){
+                let response = await axios.get('/open_turns/'+this.userId);
+                if(response.data.length != 0){
+                    var lastResult = response.data[response.data.length - 1];
+                    this.$store.commit('setTurn',lastResult);
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            else {
+                return true;
+            }
+        },
+        getCurrentSale(){
+            if(this.isTurnOpen()){
+                var turnId = this.$store.getters.getTurn.id;
+                axios.get('/api/find_sale/'+turnId).then( result => {
+                    this.sale = result.data[0];
+                    this.getAllSaleLines();
+                });
+            }
+        },
+        getProductById(id){
+            var productFind = {}
+            this.products.forEach(
+                product => {
+                    if(product.id == id){
+                        productFind = product
+                    }
+                }
+            );
+            return productFind
         }
     },
     data(){
         return{
-            products: [{id: 2, description: 'Agua destilada x 1lts', price: 40.0},{id: 3, description: 'Agua destilada x 5lts',price: 85.0},
+            /** 
+             * [{id: 2, description: 'Agua destilada x 1lts', price: 40.0},{id: 3, description: 'Agua destilada x 5lts',price: 85.0},
             {id: 4, description: 'Refrigerante x 1lts',price: 45.0},{id: 5, description: 'Refrigerante x 5lts',price: 100.0},{id: 6, description: 'Liquido de Frenos',price: 60.0},
             {id: 7, description: 'Hielo x 5kg',price: 80.0}, {id: 8, description: 'Hielo x 15kg',price: 140.0}],
+             * 
+            */
+            products: [],
             ls: {product: {id: 0, description: '', price: 0.0}, amount: 0.0, total: 0.0},
-            linesOfSale: []
+            linesOfSale: [],
+            sale: {}
         }
     },
+    props: {
+        userId: Number
+    }
 }
 </script>
 

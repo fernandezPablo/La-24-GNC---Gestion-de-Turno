@@ -24,3 +24,13 @@ Route::post('/open_turn','TurnController@newTurn');
 Route::get('/aforadors_values/{turnId}','TurnController@getAforadorsFromTheLastOpenTurn');
 
 Route::post('/edit_open_turn','TurnController@editTurn');
+
+Route::get('/products','ProductController@getProducts');
+
+Route::get('/find_sale/{turnId}','SaleController@getSale');
+
+Route::post('/new_sale_line','SaleLineController@newSaleLine');
+
+Route::post('/increment_sale_line','SaleLineController@changeAmountSaleLine');
+
+Route::get('/get_sale_lines/{saleId}','SaleLineController@getAllLineSaleFor');
