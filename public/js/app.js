@@ -7331,7 +7331,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n#productImage{\n    width: 150px;\n    height: 150px;\n    background-color: hsl(0,0%,50%);\n}\n#description{\n    font-size: 1.8em;\n}\n.sales-card{\n    margin: 50px;\n}\n.right-side-card{\n    width: 100%;\n    font-size: 1.2em;\n}\nspan.ml-auto{\n        font-weight: bold;\n}\n@media (max-width: 770px){\n#description{\n        font-size: 1.5em;\n}\n}\n@media (max-width: 500px){\n#productImage{\n        width: 50px;\n        height: 50px;\n}\n}\n", ""]);
+exports.push([module.i, "\n#productImage{\n    width: 150px;\n    height: 150px;\n    background-color: hsl(0,0%,100%);\n    -o-object-fit: contain;\n       object-fit: contain;\n}\n#description{\n    font-size: 1.8em;\n}\n.sales-card{\n    margin: 50px;\n}\n.right-side-card{\n    width: 100%;\n    font-size: 1.2em;\n}\nspan.ml-auto{\n        font-weight: bold;\n}\n@media (max-width: 770px){\n#description{\n        font-size: 1.5em;\n}\n}\n@media (max-width: 500px){\n#productImage{\n        width: 50px;\n        height: 50px;\n}\n}\n", ""]);
 
 // exports
 
@@ -45414,7 +45414,16 @@ var render = function() {
       _vm._l(_vm.products, function(product, index) {
         return _c("div", { key: product.id, staticClass: "card sales-card" }, [
           _c("div", { staticClass: "card-body d-flex" }, [
-            _vm._m(0, true),
+            _c("div", { staticClass: "d-flex" }, [
+              _c("img", {
+                staticClass: "align-self-stretch",
+                attrs: {
+                  id: "productImage",
+                  src: product.url_image,
+                  alt: "productImage"
+                }
+              })
+            ]),
             _vm._v(" "),
             _c(
               "div",
@@ -45486,19 +45495,7 @@ var render = function() {
     2
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "d-flex" }, [
-      _c("img", {
-        staticClass: "align-self-stretch",
-        attrs: { id: "productImage", src: "", alt: "productImage" }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 

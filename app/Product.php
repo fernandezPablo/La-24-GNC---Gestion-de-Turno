@@ -11,7 +11,8 @@ class Product extends Model
     protected $fillable = [
         'description',
         'price',
-        'discount'
+        'discount',
+        'url_image'
     ];
 
     public function saleLine(){

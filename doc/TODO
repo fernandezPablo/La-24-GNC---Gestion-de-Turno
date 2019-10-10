@@ -44,3 +44,8 @@ issue10:
     -Create new sale line
     -Increment amount on sale line
     -Load lines of sale on view
+issue11:
+    On this issue load the products images on the sales components
+    commit 1:
+    - generated migration to add the url image column
+    - added image on the img tag on sales component

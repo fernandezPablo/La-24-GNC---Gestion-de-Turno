@@ -4,7 +4,7 @@
         <div class="card sales-card" v-for="(product,index) in products" v-bind:key="product.id">
             <div class="card-body d-flex">
                 <div class="d-flex">
-                    <img id="productImage" class="align-self-stretch" src="" alt="productImage">
+                    <img id="productImage" class="align-self-stretch" :src="product.url_image" alt="productImage">
                 </div>
                 <div class="d-flex flex-column p-4 right-side-card">
                     <h2 id="description">
@@ -213,7 +213,8 @@ export default {
     #productImage{
         width: 150px;
         height: 150px;
-        background-color: hsl(0,0%,50%);
+        background-color: hsl(0,0%,100%);
+        object-fit: contain;
     }
     #description{
         font-size: 1.8em;
