@@ -33,4 +33,9 @@ class ToDeclareController extends Controller
 
         $toDeclareElement->save();
     }
+
+    public function deleteToDeclareElement(Request $request){
+        $toDeclareElement = ToDeclare::find($request->id);
+        $toDeclareElement->delete();
+    }
 }

@@ -186,8 +186,7 @@ export default {
                 closeOnCancel: false 
             }).then((result) => {
                 if(result.value){
-                        swal.fire("Elemento eliminado!", "Se elimino el elemento", "success");
-                        this.elementsToDeclare.splice(index,1)
+                        this.deleteToDeclareElement(index)
                     }
                 })
             },
@@ -257,6 +256,18 @@ export default {
                     })
                 }
             )
+        },
+        deleteToDeclareElement(index){
+            var data = {
+                id: this.elementsToDeclare[index].id
+            }
+            console.log(data.id)
+            axios.delete('/api/delete_element_to_declare',{data}).then(
+                result => {
+                    this.elementsToDeclare.splice(index,1)
+                    swal.fire("Elemento eliminado!", "Se elimino el elemento", "success");
+                }
+            )            
         },
         toString(element){
             return '{'+element.type+' - '+element.description+' - '+element.amount+'}'

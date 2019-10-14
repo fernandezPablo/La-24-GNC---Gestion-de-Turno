@@ -35,8 +35,10 @@ Route::post('/increment_sale_line','SaleLineController@changeAmountSaleLine');
 
 Route::get('/get_sale_lines/{saleId}','SaleLineController@getAllLineSaleFor');
 
-Route::get('get_to_declare_elements/{saleId}','ToDeclareController@getToDeclareElements');
+Route::get('/get_to_declare_elements/{saleId}','ToDeclareController@getToDeclareElements');
 
-Route::post('new_element_to_declare','ToDeclareController@newToDeclareElement');
+Route::post('/new_element_to_declare','ToDeclareController@newToDeclareElement');
 
-Route::post('update_element_to_declare','ToDeclareController@updateToDeclareElement');
+Route::post('/update_element_to_declare','ToDeclareController@updateToDeclareElement');
+
+Route::delete('/delete_element_to_declare','ToDeclareController@deleteToDeclareElement');

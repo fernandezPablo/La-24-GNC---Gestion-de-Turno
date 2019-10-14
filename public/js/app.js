@@ -2911,9 +2911,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         closeOnCancel: false
       }).then(function (result) {
         if (result.value) {
-          swal.fire("Elemento eliminado!", "Se elimino el elemento", "success");
-
-          _this.elementsToDeclare.splice(index, 1);
+          _this.deleteToDeclareElement(index);
         }
       });
     },
@@ -3023,6 +3021,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           title: 'Editado',
           text: _this5.toString(element) + ' editado correctamente!'
         });
+      });
+    },
+    deleteToDeclareElement: function deleteToDeclareElement(index) {
+      var _this6 = this;
+
+      var data = {
+        id: this.elementsToDeclare[index].id
+      };
+      console.log(data.id);
+      axios["delete"]('/api/delete_element_to_declare', {
+        data: data
+      }).then(function (result) {
+        _this6.elementsToDeclare.splice(index, 1);
+
+        swal.fire("Elemento eliminado!", "Se elimino el elemento", "success");
       });
     },
     toString: function toString(element) {
