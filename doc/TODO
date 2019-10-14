@@ -53,3 +53,5 @@ issue12:
     On this issue is resolved the load data on ToDeclareComponent and save data to database
     commit 1:
     -Stored and updated ToDeclareElements on database
+    commit 2:
+    -Deleted ToDeclareElements on database
