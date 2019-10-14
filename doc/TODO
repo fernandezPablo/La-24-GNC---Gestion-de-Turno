@@ -49,3 +49,7 @@ issue11:
     commit 1:
     - generated migration to add the url image column
     - added image on the img tag on sales component
+issue12:
+    On this issue is resolved the load data on ToDeclareComponent and save data to database
+    commit 1:
+    -Stored and updated ToDeclareElements on database

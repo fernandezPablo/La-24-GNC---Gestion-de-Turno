@@ -12,8 +12,8 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="ammount">MONTO: </label>
-                <input class="form-control" type="number" name="ammount" id="ammount" placeholder="Ingrese el monto..." v-model="ammount">
+                <label for="amount">MONTO: </label>
+                <input class="form-control" type="number" name="amount" id="amount" placeholder="Ingrese el monto..." v-model="amount">
             </div>
             <div class="form-group">
                 <label for="description">DESCRIPCIÓN: </label>
@@ -36,7 +36,7 @@
                     </div>
                     <div class="d-flex mt-1">
                         <span>MONTO: </span>
-                        <span class="ml-auto">{{element.ammount}}</span>
+                        <span class="ml-auto">{{element.amount}}</span>
                     </div>
                 </div>
                 <div class="d-flex flex-column ml-5">
@@ -58,18 +58,27 @@
 
 <script>
 export default {
+    mounted(){
+        console.log('ToDeclareComponent mounted...');
+        this.getCurrentSale();
+    },
+     props: {
+        userId: Number
+    },
     data(){
         return{
             options: [
-                {id: 1, name: 'BUZON'},
+                {id: 1, name: 'EFECTIVO'},
                 {id: 2, name: 'VALE'},
-                {id: 3, name: 'CUENTA CORRIENTE'}
+                {id: 3, name: 'CUENTA_CORRIENTE'}
                 ],
             elementsToDeclare: [],
             selected: '--- SELECCIONE EL ELEMENTO A DECLARAR ---',
-            ammount: '',
+            amount: '',
             description: '',
             elementId: 0,
+            editIndex: -1,
+            sale: {}
         }
     },
     computed:{
@@ -78,12 +87,39 @@ export default {
         }
     },
     methods: {
+
         addElementToDeclare(){
-            var elementToDeclare = {id: 0, type: '', ammount: 0.0, description: ''}
+            var isValid = this.validateFields()
+            if(isValid == 1){
+                if(this.editIndex == -1){
+                    var elementToDeclare = {id: 0, type: this.selected, amount: this.amount, description: this.description != '' ? this.description : '(Sin descripcion)' }
+                    this.newToDeclareElement(elementToDeclare)
+                }
+                else{
+                    this.elementsToDeclare[this.editIndex].description = this.description
+                    this.elementsToDeclare[this.editIndex].type = this.selected
+                    this.elementsToDeclare[this.editIndex].amount = this.amount
+                    this.editToDeclareElement(this.elementsToDeclare[this.editIndex])
+                }
+                this.selected = '--- SELECCIONE EL ELEMENTO A DECLARAR ---'
+                this.amount = ''
+                this.description = ''
+            }
+            else{
+                swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: isValid,
+                        footer: 'Complete correctamente los campos para continuar'
+                    })
+            }
+        },
+        addElementToDeclare2(){
+            var elementToDeclare = {id: 0, type: '', amount: 0.0, description: ''}
             var isValid = this.validateFields()
             if(isValid == 1){
                 elementToDeclare.type = this.selected
-                elementToDeclare.ammount = this.ammount
+                elementToDeclare.amount = this.amount
                 elementToDeclare.description = this.description != '' ? this.description : '(Sin descripcion)'
                 if(this.elementId == 0){
                     //the id was equal at the last id + 1
@@ -99,7 +135,7 @@ export default {
                 }
                 this.elementId = 0
                 this.selected = '--- SELECCIONE EL ELEMENTO A DECLARAR ---'
-                this.ammount = ''
+                this.amount = ''
                 this.description = ''
             }
             else{
@@ -115,17 +151,17 @@ export default {
             if(this.selected == '--- SELECCIONE EL ELEMENTO A DECLARAR ---'){
                 return 'Debe seleccionar un tipo de elemento a declarar'
             }
-            if(this.ammount <= 0){
+            if(this.amount <= 0){
                 return 'El monto a ingresar no puede ser menor o igual a 0 (cero)'
             }
             return 1
         },
         editElementToDeclare(index){
-            console.log('Index: '+index)
-            this.elementId = this.elementsToDeclare[index].id
+            //this.elementId = this.elementsToDeclare[index].id
+            this.editIndex = index
             this.selected = this.elementsToDeclare[index].type
             this.description = this.elementsToDeclare[index].description
-            this.ammount = this.elementsToDeclare[index].ammount
+            this.amount = this.elementsToDeclare[index].amount
             this.btnAdd.innerText = "Editar"
         },
         findElementToDeclare(id){
@@ -139,7 +175,7 @@ export default {
         },
         deleteElementToDeclare(index){
             swal.fire({
-                title: "Esta seguro de eliminar "+ this.elementsToDeclare[index].type+" - "+this.elementsToDeclare[index].description +" por $"+this.elementsToDeclare[index].ammount+"?",
+                title: "Esta seguro de eliminar "+ this.elementsToDeclare[index].type+" - "+this.elementsToDeclare[index].description +" por $"+this.elementsToDeclare[index].amount+"?",
                 text: "No se podrá recuperar el elemento una vez borrado!",
                 type: "warning",
                 showCancelButton: true,
@@ -152,10 +188,80 @@ export default {
                 if(result.value){
                         swal.fire("Elemento eliminado!", "Se elimino el elemento", "success");
                         this.elementsToDeclare.splice(index,1)
+                    }
+                })
+            },
+        async isTurnOpen(){
+            if(typeof this.$store.getters.getTurn === 'undefined'){
+                let response = await axios.get('/open_turns/'+this.userId);
+                if(response.data.length != 0){
+                    var lastResult = response.data[response.data.length - 1];
+                    this.$store.commit('setTurn',lastResult);
+                    return true;
                 }
-            })
+                else{
+                    return false;
+                }
+            }
+            else {
+                return true;
+            }
         },
-    },
+        getCurrentSale(){
+            if(this.isTurnOpen()){
+                var turnId = this.$store.getters.getTurn.id;
+                axios.get('/api/find_sale/'+turnId).then( result => {
+                    this.sale = result.data[0];
+                    this.getToDeclareElements();
+                });
+            }
+        },
+        getToDeclareElements(){
+            axios.get('/api/get_to_declare_elements/'+this.sale.id).then(
+                result => {
+                    this.elementsToDeclare = result.data;
+                }
+            );
+        },
+        newToDeclareElement(element){
+            var data = {
+                description: element.description,
+                amount: element.amount,
+                type: element.type,
+                saleId: this.sale.id
+            }
+            axios.post('/api/new_element_to_declare',data).then(
+                result => {
+                    this.elementsToDeclare.push(result.data)
+                    swal.fire({
+                        type: 'success',
+                        title: 'Agregado',
+                        text: this.toString(element) +' agregado correctamente!',
+                    })
+                }
+            )
+        },
+        editToDeclareElement(element){
+            var data = {
+                id: element.id,
+                description: element.description,
+                type: element.type,
+                amount: element.amount
+            }
+            axios.post('/api/update_element_to_declare',data).then(
+                result => {
+                    swal.fire({
+                        type: 'success',
+                        title: 'Editado',
+                        text: this.toString(element) +' editado correctamente!',
+                    })
+                }
+            )
+        },
+        toString(element){
+            return '{'+element.type+' - '+element.description+' - '+element.amount+'}'
+        }
+    }
 }
 </script>
 

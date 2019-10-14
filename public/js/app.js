@@ -2700,6 +2700,14 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -2759,23 +2767,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  mounted: function mounted() {
+    console.log('ToDeclareComponent mounted...');
+    this.getCurrentSale();
+  },
+  props: {
+    userId: Number
+  },
   data: function data() {
     return {
       options: [{
         id: 1,
-        name: 'BUZON'
+        name: 'EFECTIVO'
       }, {
         id: 2,
         name: 'VALE'
       }, {
         id: 3,
-        name: 'CUENTA CORRIENTE'
+        name: 'CUENTA_CORRIENTE'
       }],
       elementsToDeclare: [],
       selected: '--- SELECCIONE EL ELEMENTO A DECLARAR ---',
-      ammount: '',
+      amount: '',
       description: '',
-      elementId: 0
+      elementId: 0,
+      editIndex: -1,
+      sale: {}
     };
   },
   computed: {
@@ -2785,17 +2802,48 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     addElementToDeclare: function addElementToDeclare() {
+      var isValid = this.validateFields();
+
+      if (isValid == 1) {
+        if (this.editIndex == -1) {
+          var elementToDeclare = {
+            id: 0,
+            type: this.selected,
+            amount: this.amount,
+            description: this.description != '' ? this.description : '(Sin descripcion)'
+          };
+          this.newToDeclareElement(elementToDeclare);
+        } else {
+          this.elementsToDeclare[this.editIndex].description = this.description;
+          this.elementsToDeclare[this.editIndex].type = this.selected;
+          this.elementsToDeclare[this.editIndex].amount = this.amount;
+          this.editToDeclareElement(this.elementsToDeclare[this.editIndex]);
+        }
+
+        this.selected = '--- SELECCIONE EL ELEMENTO A DECLARAR ---';
+        this.amount = '';
+        this.description = '';
+      } else {
+        swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: isValid,
+          footer: 'Complete correctamente los campos para continuar'
+        });
+      }
+    },
+    addElementToDeclare2: function addElementToDeclare2() {
       var elementToDeclare = {
         id: 0,
         type: '',
-        ammount: 0.0,
+        amount: 0.0,
         description: ''
       };
       var isValid = this.validateFields();
 
       if (isValid == 1) {
         elementToDeclare.type = this.selected;
-        elementToDeclare.ammount = this.ammount;
+        elementToDeclare.amount = this.amount;
         elementToDeclare.description = this.description != '' ? this.description : '(Sin descripcion)';
 
         if (this.elementId == 0) {
@@ -2811,7 +2859,7 @@ __webpack_require__.r(__webpack_exports__);
 
         this.elementId = 0;
         this.selected = '--- SELECCIONE EL ELEMENTO A DECLARAR ---';
-        this.ammount = '';
+        this.amount = '';
         this.description = '';
       } else {
         swal.fire({
@@ -2827,18 +2875,18 @@ __webpack_require__.r(__webpack_exports__);
         return 'Debe seleccionar un tipo de elemento a declarar';
       }
 
-      if (this.ammount <= 0) {
+      if (this.amount <= 0) {
         return 'El monto a ingresar no puede ser menor o igual a 0 (cero)';
       }
 
       return 1;
     },
     editElementToDeclare: function editElementToDeclare(index) {
-      console.log('Index: ' + index);
-      this.elementId = this.elementsToDeclare[index].id;
+      //this.elementId = this.elementsToDeclare[index].id
+      this.editIndex = index;
       this.selected = this.elementsToDeclare[index].type;
       this.description = this.elementsToDeclare[index].description;
-      this.ammount = this.elementsToDeclare[index].ammount;
+      this.amount = this.elementsToDeclare[index].amount;
       this.btnAdd.innerText = "Editar";
     },
     findElementToDeclare: function findElementToDeclare(id) {
@@ -2852,7 +2900,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       swal.fire({
-        title: "Esta seguro de eliminar " + this.elementsToDeclare[index].type + " - " + this.elementsToDeclare[index].description + " por $" + this.elementsToDeclare[index].ammount + "?",
+        title: "Esta seguro de eliminar " + this.elementsToDeclare[index].type + " - " + this.elementsToDeclare[index].description + " por $" + this.elementsToDeclare[index].amount + "?",
         text: "No se podrá recuperar el elemento una vez borrado!",
         type: "warning",
         showCancelButton: true,
@@ -2868,6 +2916,117 @@ __webpack_require__.r(__webpack_exports__);
           _this.elementsToDeclare.splice(index, 1);
         }
       });
+    },
+    isTurnOpen: function () {
+      var _isTurnOpen = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var response, lastResult;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (!(typeof this.$store.getters.getTurn === 'undefined')) {
+                  _context.next = 13;
+                  break;
+                }
+
+                _context.next = 3;
+                return axios.get('/open_turns/' + this.userId);
+
+              case 3:
+                response = _context.sent;
+
+                if (!(response.data.length != 0)) {
+                  _context.next = 10;
+                  break;
+                }
+
+                lastResult = response.data[response.data.length - 1];
+                this.$store.commit('setTurn', lastResult);
+                return _context.abrupt("return", true);
+
+              case 10:
+                return _context.abrupt("return", false);
+
+              case 11:
+                _context.next = 14;
+                break;
+
+              case 13:
+                return _context.abrupt("return", true);
+
+              case 14:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function isTurnOpen() {
+        return _isTurnOpen.apply(this, arguments);
+      }
+
+      return isTurnOpen;
+    }(),
+    getCurrentSale: function getCurrentSale() {
+      var _this2 = this;
+
+      if (this.isTurnOpen()) {
+        var turnId = this.$store.getters.getTurn.id;
+        axios.get('/api/find_sale/' + turnId).then(function (result) {
+          _this2.sale = result.data[0];
+
+          _this2.getToDeclareElements();
+        });
+      }
+    },
+    getToDeclareElements: function getToDeclareElements() {
+      var _this3 = this;
+
+      axios.get('/api/get_to_declare_elements/' + this.sale.id).then(function (result) {
+        _this3.elementsToDeclare = result.data;
+      });
+    },
+    newToDeclareElement: function newToDeclareElement(element) {
+      var _this4 = this;
+
+      var data = {
+        description: element.description,
+        amount: element.amount,
+        type: element.type,
+        saleId: this.sale.id
+      };
+      axios.post('/api/new_element_to_declare', data).then(function (result) {
+        _this4.elementsToDeclare.push(result.data);
+
+        swal.fire({
+          type: 'success',
+          title: 'Agregado',
+          text: _this4.toString(element) + ' agregado correctamente!'
+        });
+      });
+    },
+    editToDeclareElement: function editToDeclareElement(element) {
+      var _this5 = this;
+
+      var data = {
+        id: element.id,
+        description: element.description,
+        type: element.type,
+        amount: element.amount
+      };
+      axios.post('/api/update_element_to_declare', data).then(function (result) {
+        swal.fire({
+          type: 'success',
+          title: 'Editado',
+          text: _this5.toString(element) + ' editado correctamente!'
+        });
+      });
+    },
+    toString: function toString(element) {
+      return '{' + element.type + ' - ' + element.description + ' - ' + element.amount + '}';
     }
   }
 });
@@ -45666,31 +45825,31 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "ammount" } }, [_vm._v("MONTO: ")]),
+          _c("label", { attrs: { for: "amount" } }, [_vm._v("MONTO: ")]),
           _vm._v(" "),
           _c("input", {
             directives: [
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.ammount,
-                expression: "ammount"
+                value: _vm.amount,
+                expression: "amount"
               }
             ],
             staticClass: "form-control",
             attrs: {
               type: "number",
-              name: "ammount",
-              id: "ammount",
+              name: "amount",
+              id: "amount",
               placeholder: "Ingrese el monto..."
             },
-            domProps: { value: _vm.ammount },
+            domProps: { value: _vm.amount },
             on: {
               input: function($event) {
                 if ($event.target.composing) {
                   return
                 }
-                _vm.ammount = $event.target.value
+                _vm.amount = $event.target.value
               }
             }
           })
@@ -45765,7 +45924,7 @@ var render = function() {
                 _c("span", [_vm._v("MONTO: ")]),
                 _vm._v(" "),
                 _c("span", { staticClass: "ml-auto" }, [
-                  _vm._v(_vm._s(element.ammount))
+                  _vm._v(_vm._s(element.amount))
                 ])
               ])
             ]),
