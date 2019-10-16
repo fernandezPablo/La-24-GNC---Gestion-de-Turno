@@ -14,9 +14,12 @@
 // SweetAlert2
 @import 'node_modules/sweetalert2/dist/sweetalert2';
 
+//Vuetify
+@import '~vuetify/dist/vuetify.min.css';
+
 body{
     font-family: Roboto;
-    background-image: radial-gradient(hsl(0,0%,20%),hsl(0,0%,70%));
+    background-image: radial-gradient(hsl(0,0%,20%),hsl(0,0%,70%)) !important;
 }
 
 .navbar-la24gnc {
@@ -76,7 +79,7 @@ li:hover{
 }
 
 .content{
-    height: 100vh;
+    height: 100vh !important;
     margin-left: 250px;
     transition: margin-left 1s;
 }
@@ -126,6 +129,7 @@ li:hover{
 }
 
 .main-div{
+    background-color: hsl(0,0%,40%);
     padding: 40px;
 }
 
@@ -150,7 +154,8 @@ a.link-form:hover{
     color: $red;
 }
 
-.loading{
-    background: #555555;
-    opacity: 30%;
+.progress{
+    color: hsl(0, 100%, 50%);
+    background-color: rgba(0,0,0,.0);
+    border-style: none;
 }

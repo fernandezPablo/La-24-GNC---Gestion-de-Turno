@@ -24,6 +24,16 @@
                 </div>
             </div>
         </div>
+
+        <v-overlay :value="overlay">
+            <v-progress-circular
+                class="progress"
+                indeterminate
+                :size="64"
+                :width="5"
+            ></v-progress-circular>
+        </v-overlay>
+
     </div>    
 </template>
 
@@ -31,6 +41,7 @@
 
 export default {
     mounted(){
+        this.overlay = true
         axios.get('/api/products')
         .then(result =>{
             result.data.forEach(element => {
@@ -125,6 +136,7 @@ export default {
                     result.data.forEach( element => {
                         element.product = this.getProductById(element.product_id);
                         this.linesOfSale.push(element);
+                        this.overlay = false
                     });
                 }
             );
@@ -200,7 +212,8 @@ export default {
             products: [],
             ls: {product: {id: 0, description: '', price: 0.0}, amount: 0.0, total: 0.0},
             linesOfSale: [],
-            sale: {}
+            sale: {},
+            overlay: false
         }
     },
     props: {

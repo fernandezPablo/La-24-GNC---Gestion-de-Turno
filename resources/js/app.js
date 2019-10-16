@@ -9,10 +9,18 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import VueRouter from 'vue-router';
-import Vuex from 'vuex'
+import Vuex from 'vuex';
+import Vuetify from 'vuetify';
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
+Vue.use(Vuetify,{
+    theme: {
+        primary: '#ff0000',
+        success: '#00ff00'
+    }
+});
+
 
 /**
  * The following block of code may be used to automatically register your

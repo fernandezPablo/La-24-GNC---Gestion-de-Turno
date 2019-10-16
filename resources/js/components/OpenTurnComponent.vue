@@ -45,6 +45,14 @@
             </div>
             <button class="btn btn-primary form-control" type="submit">GUARDAR</button>
         </form>
+        <v-overlay :value="overlay">
+            <v-progress-circular
+                class="progress"
+                indeterminate
+                :size="64"
+                :width="5"
+            ></v-progress-circular>
+        </v-overlay>
     </div>
 </template>
 
@@ -62,6 +70,7 @@ export default {
                 confirmButtonText: 'Editar',
             }).then( result => {
                     if(result.value){
+                        this.overlay = true;
                         this.isEdit = true;
                         this.getAforadorsValues();
                     }
@@ -76,7 +85,8 @@ export default {
             afGnc: [0.0,0.0,0.0,0.0,0.0,0.0],
             pmz: 0.0,
             afOil: [0.0],
-            isEdit: false
+            isEdit: false,
+            overlay: false
         }
     },
     props:{
@@ -155,6 +165,7 @@ export default {
                 }
             }
             console.log(this.afGnc);
+            this.overlay = false;
         },
     },
 }

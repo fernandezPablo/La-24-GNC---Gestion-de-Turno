@@ -23,6 +23,9 @@
                 <button id="btn-add" class="btn btn-primary form-control" type="button" v-on:click="addElementToDeclare">Agregar</button>
             </div>
         </form>
+
+         <v-divider></v-divider>
+
         <div class="card mt-4" v-for="(element,index) in elementsToDeclare" v-bind:key="element.id">
             <div class="card-body d-flex">
                 <div class="d-flex flex-column flex-fill">
@@ -52,13 +55,24 @@
                     </button>
                 </div>
             </div>
+         
         </div>
+        <v-overlay :value="overlay">
+            <v-progress-circular
+                class="progress"
+                indeterminate
+                :size="64"
+                :width="5"
+            ></v-progress-circular>
+        </v-overlay>
+        
     </div>    
 </template>
 
 <script>
 export default {
     mounted(){
+        this.overlay = !this.overlay
         console.log('ToDeclareComponent mounted...');
         this.getCurrentSale();
     },
@@ -78,7 +92,8 @@ export default {
             description: '',
             elementId: 0,
             editIndex: -1,
-            sale: {}
+            sale: {},
+            overlay: false,
         }
     },
     computed:{
@@ -91,6 +106,7 @@ export default {
         addElementToDeclare(){
             var isValid = this.validateFields()
             if(isValid == 1){
+                this.overlay = true
                 if(this.editIndex == -1){
                     var elementToDeclare = {id: 0, type: this.selected, amount: this.amount, description: this.description != '' ? this.description : '(Sin descripcion)' }
                     this.newToDeclareElement(elementToDeclare)
@@ -104,39 +120,7 @@ export default {
                 this.selected = '--- SELECCIONE EL ELEMENTO A DECLARAR ---'
                 this.amount = ''
                 this.description = ''
-            }
-            else{
-                swal.fire({
-                        type: 'error',
-                        title: 'Oops...',
-                        text: isValid,
-                        footer: 'Complete correctamente los campos para continuar'
-                    })
-            }
-        },
-        addElementToDeclare2(){
-            var elementToDeclare = {id: 0, type: '', amount: 0.0, description: ''}
-            var isValid = this.validateFields()
-            if(isValid == 1){
-                elementToDeclare.type = this.selected
-                elementToDeclare.amount = this.amount
-                elementToDeclare.description = this.description != '' ? this.description : '(Sin descripcion)'
-                if(this.elementId == 0){
-                    //the id was equal at the last id + 1
-                    elementToDeclare.id = (this.elementsToDeclare.length != 0) ? 
-                                        this.elementsToDeclare[this.elementsToDeclare.length - 1].id + 1 : 1
-                    this.elementsToDeclare.push(elementToDeclare)    
-                }
-                else{
-                    elementToDeclare.id = this.elementId
-                    var index = this.findElementToDeclare(elementToDeclare.id)
-                    this.elementsToDeclare[index] = elementToDeclare
-                    this.btnAdd.innerText = 'Agregar'
-                }
-                this.elementId = 0
-                this.selected = '--- SELECCIONE EL ELEMENTO A DECLARAR ---'
-                this.amount = ''
-                this.description = ''
+                this.btnAdd.innerText = 'AGREGAR'
             }
             else{
                 swal.fire({
@@ -157,7 +141,6 @@ export default {
             return 1
         },
         editElementToDeclare(index){
-            //this.elementId = this.elementsToDeclare[index].id
             this.editIndex = index
             this.selected = this.elementsToDeclare[index].type
             this.description = this.elementsToDeclare[index].description
@@ -186,6 +169,7 @@ export default {
                 closeOnCancel: false 
             }).then((result) => {
                 if(result.value){
+                        this.overlay = true
                         this.deleteToDeclareElement(index)
                     }
                 })
@@ -219,6 +203,7 @@ export default {
             axios.get('/api/get_to_declare_elements/'+this.sale.id).then(
                 result => {
                     this.elementsToDeclare = result.data;
+                    this.overlay = false
                 }
             );
         },
@@ -237,6 +222,7 @@ export default {
                         title: 'Agregado',
                         text: this.toString(element) +' agregado correctamente!',
                     })
+                    this.overlay = false
                 }
             )
         },
@@ -266,16 +252,20 @@ export default {
                 result => {
                     this.elementsToDeclare.splice(index,1)
                     swal.fire("Elemento eliminado!", "Se elimino el elemento", "success");
+                    this.overlay = false
                 }
             )            
         },
         toString(element){
             return '{'+element.type+' - '+element.description+' - '+element.amount+'}'
         }
-    }
+    },
+    watch: {
+    
+    },
 }
 </script>
 
 <style>
-
+    
 </style>
