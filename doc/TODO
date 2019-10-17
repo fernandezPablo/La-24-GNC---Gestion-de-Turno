@@ -65,3 +65,4 @@ issue13:
     the user try to edit an existing element and the user try to delete an exisiting element
     commit 2:
     -solved issue that not allowed input a decimal number on amount field in the ToDeclareComponent
+    -added link to the home page on the Name of app in the sidebar
