@@ -13,7 +13,7 @@
             </div>
             <div class="form-group">
                 <label for="amount">MONTO: </label>
-                <input class="form-control" type="number" name="amount" id="amount" placeholder="Ingrese el monto..." v-model="amount">
+                <input class="form-control" type="number" step="0.01" name="amount" id="amount" placeholder="Ingrese el monto..." v-model="amount">
             </div>
             <div class="form-group">
                 <label for="description">DESCRIPCIÓN: </label>
@@ -62,7 +62,7 @@
                 class="progress"
                 indeterminate
                 :size="64"
-                :width="5"
+                :width="10"
             ></v-progress-circular>
         </v-overlay>
         

@@ -3,7 +3,12 @@
         <nav>
             <div>
                 <h3 id="sidebar-header">
-                   <img id="img-header" src="img/icon-brand.png" v-on:click="expandSidebar"> <span v-if="expanded">LA 24 GNC</span>
+                    <img id="img-header" src="img/icon-brand.png" v-on:click="expandSidebar"> 
+                        <span v-if="expanded">
+                            <a href="/home">
+                                LA 24 GNC
+                            </a>
+                        </span>
                 </h3>
             </div>
             <ul class="list-unstyled">
@@ -39,6 +44,7 @@ export default {
             }
         },
         expandSidebar(){
+            let sidebar = document.getElementById("sidebar")
             if(!this.expanded){
                 console.log('expand sidebar')
                 sidebar.classList.remove("sidebar-minimized")
@@ -61,6 +67,7 @@ export default {
             icons: ['open_in_new','credit_card','local_atm','exit_to_app','assignment','search'],
             routes: ['/abrirTurno','/venta','/a_declarar','/cerrarTurno','/abmProductos','/consultarTurno'],
             expanded: true,
+            
         }
     },
     props:{

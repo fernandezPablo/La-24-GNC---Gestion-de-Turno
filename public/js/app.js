@@ -2648,6 +2648,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Sidebar Mounted...');
@@ -2668,6 +2673,8 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     expandSidebar: function expandSidebar() {
+      var sidebar = document.getElementById("sidebar");
+
       if (!this.expanded) {
         console.log('expand sidebar');
         sidebar.classList.remove("sidebar-minimized");
@@ -45739,7 +45746,15 @@ var render = function() {
             on: { click: _vm.expandSidebar }
           }),
           _vm._v(" "),
-          _vm.expanded ? _c("span", [_vm._v("LA 24 GNC")]) : _vm._e()
+          _vm.expanded
+            ? _c("span", [
+                _c("a", { attrs: { href: "/home" } }, [
+                  _vm._v(
+                    "\n                            LA 24 GNC\n                        "
+                  )
+                ])
+              ])
+            : _vm._e()
         ])
       ]),
       _vm._v(" "),
@@ -45893,6 +45908,7 @@ var render = function() {
             staticClass: "form-control",
             attrs: {
               type: "number",
+              step: "0.01",
               name: "amount",
               id: "amount",
               placeholder: "Ingrese el monto..."
@@ -46034,7 +46050,7 @@ var render = function() {
         [
           _c("v-progress-circular", {
             staticClass: "progress",
-            attrs: { indeterminate: "", size: 64, width: 5 }
+            attrs: { indeterminate: "", size: 64, width: 10 }
           })
         ],
         1

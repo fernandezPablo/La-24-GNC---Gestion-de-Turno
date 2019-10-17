@@ -63,3 +63,5 @@ issue13:
     -show loading animation on SalesComponent when the component is waiting for data about sale lines and products from server
     -show loading animation on ToDeclareComponent when: the component is waiting for data about elements to declare from server, the user try to add a new element,
     the user try to edit an existing element and the user try to delete an exisiting element
+    commit 2:
+    -solved issue that not allowed input a decimal number on amount field in the ToDeclareComponent
