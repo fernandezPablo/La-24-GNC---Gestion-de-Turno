@@ -9,7 +9,7 @@
                 </div>
                 <div class="form-group">
                     <label for="aforador1">AFORADOR 1</label>
-                    <input class="form-control" placeholder="VALOR DE ENTRADA DEL AFORADOR 1" type="number" step="0.01" name="aforador1" id="aforador1" v-model="gncAforadors[0]">
+                    <input class="form-control" placeholder="VALOR DE ENTRADA DEL AFORADOR 1" type="number" step="0.01" name="aforador1" id="aforador1" v-model="afGnc[0]">
                 </div>
                 <div class="form-group">
                     <label for="aforador2">AFORADOR 2</label>
@@ -33,7 +33,7 @@
                 </div>
                 <div class="form-group">
                     <label for="pmz">PMZ</label>
-                    <input class="form-control" placeholder="VALOR DE ENTRADA DEL PMZ" type="number" name="pmz" id="pmz" v-model="pmz">
+                    <input class="form-control" placeholder="VALOR DE ENTRADA DEL PMZ" type="number" step="0.01" name="pmz" id="pmz" v-model="pmz">
                 </div>
             </div>
             <div class="form-card mt-1 mb-1">

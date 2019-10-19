@@ -6,6 +6,11 @@ echo ********************************
 PAUSE 
 START F:\xampp\mysql\bin\mysqld
 echo ********************************
+echo --- Abriendo servidor apache ---
+echo ********************************
+PAUSE 
+START F:\xampp\apache\bin\httpd.exe
+echo ********************************
 echo --- Abriendo servidor php ---
 echo ********************************
 PAUSE
@@ -18,6 +23,7 @@ START npm run watch
 echo ***************************************************************
 echo --- Abriendo phpmyadmin y el sitio en desarrollo---
 echo ***************************************************************
+PAUSE
 set phpmyadmin="http://localhost/phpmyadmin"
 set localhost="http://localhost:8000"
 START firefox.exe %phpmyadmin% %localhost%

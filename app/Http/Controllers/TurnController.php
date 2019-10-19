@@ -81,7 +81,8 @@ class TurnController extends Controller
         foreach($turn->aforadorControls as $aforadorControl){
             $index = 0;
             if($aforadorControl->type == "GNC"){
-                $aforadorControl->pmz = $request->pmz;
+                $aforadorControl->pmz_in = $request->pmz;
+                $aforadorControl->save();
             }
             foreach($aforadorControl->aforadors as $aforador){
                 if($aforador->type == "GNC"){
@@ -89,6 +90,32 @@ class TurnController extends Controller
                 }
                 else{
                     $aforador->valueIn = $request->aforadorOil[$index];
+                }
+                $aforador->save();
+                $index++;
+            }
+        }
+    }
+
+    public function closeTurn(Request $request){
+        //CHANGE STATE
+        $turn = Turn::find($request->turnId);
+        $turn->state = "CLOSE";
+        $turn->save();
+
+        //ADD PMZ_OUT AND VALUES_OUT
+        foreach($turn->aforadorControls as $aforadorControl){
+            $index = 0;
+            if($aforadorControl->type == "GNC"){
+                $aforadorControl->pmz_out = $request->pmz;
+                $aforadorControl->save();
+            }
+            foreach($aforadorControl->aforadors as $aforador){
+                if($aforador->type == "GNC"){
+                    $aforador->valueOut = $request->aforadorsGnc[$index];
+                }
+                else{
+                    $aforador->valueOut = $request->aforadorOil[$index];
                 }
                 $aforador->save();
                 $index++;

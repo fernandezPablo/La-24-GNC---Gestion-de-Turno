@@ -7,8 +7,8 @@ use La24GNC\ToDeclare;
 
 class ToDeclareController extends Controller
 {
-    public function getToDeclareElements(){
-        return ToDeclare::all();
+    public function getToDeclareElements($saleId){
+        return ToDeclare::where('sale_id',$saleId)->get();
     }
 
     public function newToDeclareElement(Request $request){

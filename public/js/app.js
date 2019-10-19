@@ -1775,6 +1775,14 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 //
 //
 //
@@ -1822,7 +1830,110 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    userId: Number
+  },
+  data: function data() {
+    return {
+      afGnc: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+      pmz: 0.0,
+      afOil: [0.0]
+    };
+  },
+  mounted: function mounted() {
+    console.log('CloseTurnComponent mounted...');
+  },
+  methods: {
+    isTurnOpen: function () {
+      var _isTurnOpen = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var response, lastResult;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                if (!(typeof this.$store.getters.getTurn === 'undefined')) {
+                  _context.next = 13;
+                  break;
+                }
+
+                _context.next = 3;
+                return axios.get('/open_turns/' + this.userId);
+
+              case 3:
+                response = _context.sent;
+
+                if (!(response.data.length != 0)) {
+                  _context.next = 10;
+                  break;
+                }
+
+                lastResult = response.data[response.data.length - 1];
+                this.setTurnOnState(lastResult);
+                return _context.abrupt("return", true);
+
+              case 10:
+                return _context.abrupt("return", false);
+
+              case 11:
+                _context.next = 14;
+                break;
+
+              case 13:
+                return _context.abrupt("return", true);
+
+              case 14:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function isTurnOpen() {
+        return _isTurnOpen.apply(this, arguments);
+      }
+
+      return isTurnOpen;
+    }(),
+    closeTurn: function closeTurn() {
+      var _this = this;
+
+      swal.fire({
+        title: 'Cerrando el turno',
+        text: 'Esta seguro que desea cerrar el turno actual?',
+        type: 'warning',
+        showCancelButton: true,
+        cancelButtonText: 'Cancelar',
+        confirmButtonText: 'Confirmar'
+      }).then(function (result) {
+        if (result.value) {
+          var data = {
+            turnId: _this.$store.getters.getTurn.id,
+            pmz: _this.pmz,
+            aforadorsGnc: _this.afGnc,
+            aforadorOil: _this.afOil
+          };
+          axios.post('/api/close_turn', data).then(function (result) {
+            _this.$store.commit('setTurn', {});
+
+            swal.fire({
+              type: 'success',
+              title: 'Turno Cerrado',
+              text: 'Turno Cerrado Correctamente'
+            });
+
+            _this.$store.commit('setTurn', {});
+
+            window.location.href = "/";
+          });
+        }
+      });
+    }
+  }
+});
 
 /***/ }),
 
@@ -2479,15 +2590,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       axios.get('/api/get_sale_lines/' + this.sale.id).then(function (result) {
-        //debugger
+        console.log('Sales lines...');
         console.log(result.data);
         result.data.forEach(function (element) {
           element.product = _this2.getProductById(element.product_id);
 
           _this2.linesOfSale.push(element);
-
-          _this2.overlay = false;
         });
+        _this2.overlay = false;
       });
     },
     newLine: function newLine(saleLine) {
@@ -2573,10 +2683,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       if (this.isTurnOpen()) {
         var turnId = this.$store.getters.getTurn.id;
         axios.get('/api/find_sale/' + turnId).then(function (result) {
+          console.log('Current Sale...');
           _this4.sale = result.data[0];
 
           _this4.getAllSaleLines();
         });
+      } else {
+        this.overlay = false;
       }
     },
     getProductById: function getProductById(id) {
@@ -44841,19 +44954,24 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "main-div" }, [
-      _c("h2", { staticClass: "text-center text-white" }, [
-        _vm._v("CERRAR TURNO")
-      ]),
-      _vm._v(" "),
-      _c("form", { staticClass: "form", attrs: { action: "" } }, [
+  return _c("div", { staticClass: "main-div" }, [
+    _c("h2", { staticClass: "text-center text-white" }, [
+      _vm._v("CERRAR TURNO")
+    ]),
+    _vm._v(" "),
+    _c(
+      "form",
+      {
+        staticClass: "form",
+        attrs: { action: "#", method: "post" },
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.closeTurn($event)
+          }
+        }
+      },
+      [
         _c("div", { staticClass: "form-card mt-1" }, [
           _c("h2", { staticClass: "text-center" }, [_vm._v("GNC")]),
           _vm._v(" "),
@@ -44863,12 +44981,30 @@ var staticRenderFns = [
             ]),
             _vm._v(" "),
             _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.afGnc[0],
+                  expression: "afGnc[0]"
+                }
+              ],
               staticClass: "form-control",
               attrs: {
                 placeholder: "VALOR DE SALIDA DEL AFORADOR 1",
                 type: "number",
+                step: "0.01",
                 name: "aforador1",
                 id: "aforador1"
+              },
+              domProps: { value: _vm.afGnc[0] },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.afGnc, 0, $event.target.value)
+                }
               }
             })
           ]),
@@ -44879,12 +45015,30 @@ var staticRenderFns = [
             ]),
             _vm._v(" "),
             _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.afGnc[1],
+                  expression: "afGnc[1]"
+                }
+              ],
               staticClass: "form-control",
               attrs: {
                 placeholder: "VALOR DE SALIDA DEL AFORADOR 2",
                 type: "number",
+                step: "0.01",
                 name: "aforador2",
                 id: "aforador2"
+              },
+              domProps: { value: _vm.afGnc[1] },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.afGnc, 1, $event.target.value)
+                }
               }
             })
           ]),
@@ -44895,12 +45049,30 @@ var staticRenderFns = [
             ]),
             _vm._v(" "),
             _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.afGnc[2],
+                  expression: "afGnc[2]"
+                }
+              ],
               staticClass: "form-control",
               attrs: {
                 placeholder: "VALOR DE SALIDA DEL AFORADOR 3",
                 type: "number",
+                step: "0.01",
                 name: "aforador3",
                 id: "aforador3"
+              },
+              domProps: { value: _vm.afGnc[2] },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.afGnc, 2, $event.target.value)
+                }
               }
             })
           ]),
@@ -44911,12 +45083,30 @@ var staticRenderFns = [
             ]),
             _vm._v(" "),
             _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.afGnc[3],
+                  expression: "afGnc[3]"
+                }
+              ],
               staticClass: "form-control",
               attrs: {
                 placeholder: "VALOR DE SALIDA DEL AFORADOR 4",
                 type: "number",
+                step: "0.01",
                 name: "aforador4",
                 id: "aforador4"
+              },
+              domProps: { value: _vm.afGnc[3] },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.afGnc, 3, $event.target.value)
+                }
               }
             })
           ]),
@@ -44927,12 +45117,30 @@ var staticRenderFns = [
             ]),
             _vm._v(" "),
             _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.afGnc[4],
+                  expression: "afGnc[4]"
+                }
+              ],
               staticClass: "form-control",
               attrs: {
                 placeholder: "VALOR DE SALIDA DEL AFORADOR 5",
                 type: "number",
+                step: "0.01",
                 name: "aforador5",
                 id: "aforador5"
+              },
+              domProps: { value: _vm.afGnc[4] },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.afGnc, 4, $event.target.value)
+                }
               }
             })
           ]),
@@ -44943,12 +45151,30 @@ var staticRenderFns = [
             ]),
             _vm._v(" "),
             _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.afGnc[5],
+                  expression: "afGnc[5]"
+                }
+              ],
               staticClass: "form-control",
               attrs: {
                 placeholder: "VALOR DE SALIDA DEL AFORADOR 6",
                 type: "number",
+                step: "0.01",
                 name: "aforador6",
                 id: "aforador6"
+              },
+              domProps: { value: _vm.afGnc[5] },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.afGnc, 5, $event.target.value)
+                }
               }
             })
           ]),
@@ -44957,12 +45183,30 @@ var staticRenderFns = [
             _c("label", { attrs: { for: "pmz" } }, [_vm._v("PMZ")]),
             _vm._v(" "),
             _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.pmz,
+                  expression: "pmz"
+                }
+              ],
               staticClass: "form-control",
               attrs: {
                 placeholder: "VALOR DE SALIDA DEL PMZ",
                 type: "number",
+                step: "0.01",
                 name: "pmz",
                 id: "pmz"
+              },
+              domProps: { value: _vm.pmz },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.pmz = $event.target.value
+                }
               }
             })
           ])
@@ -44975,12 +45219,30 @@ var staticRenderFns = [
             _c("label", { attrs: { for: "pmz" } }, [_vm._v("ACEITE SALIDA")]),
             _vm._v(" "),
             _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.afOil[0],
+                  expression: "afOil[0]"
+                }
+              ],
               staticClass: "form-control",
               attrs: {
                 placeholder: "VALOR DE SALIDA DE ACEITE",
                 type: "number",
+                step: "0.01",
                 name: "aceite_salida",
                 id: "aceite_salida"
+              },
+              domProps: { value: _vm.afOil[0] },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.afOil, 0, $event.target.value)
+                }
               }
             })
           ])
@@ -44994,10 +45256,11 @@ var staticRenderFns = [
           },
           [_vm._v("GUARDAR")]
         )
-      ])
-    ])
-  }
-]
+      ]
+    )
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -45301,8 +45564,8 @@ var render = function() {
                   {
                     name: "model",
                     rawName: "v-model",
-                    value: _vm.gncAforadors[0],
-                    expression: "gncAforadors[0]"
+                    value: _vm.afGnc[0],
+                    expression: "afGnc[0]"
                   }
                 ],
                 staticClass: "form-control",
@@ -45313,13 +45576,13 @@ var render = function() {
                   name: "aforador1",
                   id: "aforador1"
                 },
-                domProps: { value: _vm.gncAforadors[0] },
+                domProps: { value: _vm.afGnc[0] },
                 on: {
                   input: function($event) {
                     if ($event.target.composing) {
                       return
                     }
-                    _vm.$set(_vm.gncAforadors, 0, $event.target.value)
+                    _vm.$set(_vm.afGnc, 0, $event.target.value)
                   }
                 }
               })
@@ -45511,6 +45774,7 @@ var render = function() {
                 attrs: {
                   placeholder: "VALOR DE ENTRADA DEL PMZ",
                   type: "number",
+                  step: "0.01",
                   name: "pmz",
                   id: "pmz"
                 },

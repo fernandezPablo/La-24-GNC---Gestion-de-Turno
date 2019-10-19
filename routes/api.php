@@ -42,3 +42,5 @@ Route::post('/new_element_to_declare','ToDeclareController@newToDeclareElement')
 Route::post('/update_element_to_declare','ToDeclareController@updateToDeclareElement');
 
 Route::delete('/delete_element_to_declare','ToDeclareController@deleteToDeclareElement');
+
+Route::post('/close_turn','TurnController@CloseTurn');

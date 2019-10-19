@@ -131,13 +131,13 @@ export default {
         getAllSaleLines(){
             axios.get('/api/get_sale_lines/'+this.sale.id).then(
                 result => {
-                    //debugger
+                    console.log('Sales lines...');
                     console.log(result.data);
                     result.data.forEach( element => {
                         element.product = this.getProductById(element.product_id);
                         this.linesOfSale.push(element);
-                        this.overlay = false
                     });
+                    this.overlay = false
                 }
             );
         },
@@ -184,9 +184,13 @@ export default {
             if(this.isTurnOpen()){
                 var turnId = this.$store.getters.getTurn.id;
                 axios.get('/api/find_sale/'+turnId).then( result => {
+                    console.log('Current Sale...');
                     this.sale = result.data[0];
                     this.getAllSaleLines();
                 });
+            }
+            else{
+                this.overlay = false;
             }
         },
         getProductById(id){

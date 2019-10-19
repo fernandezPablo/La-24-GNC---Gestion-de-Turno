@@ -66,3 +66,8 @@ issue13:
     commit 2:
     -solved issue that not allowed input a decimal number on amount field in the ToDeclareComponent
     -added link to the home page on the Name of app in the sidebar
+issue14:
+    On this issue is implemented the save of data about the turn closing
+    commit 1:
+    - valueOut for aforadors stored on database
+    - modify the state of the turn in the database
