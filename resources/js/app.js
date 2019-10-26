@@ -47,12 +47,13 @@ import Example from './components/ExampleComponent';
 import Sales from './components/SalesComponent';
 import ToDeclare from './components/ToDeclareComponent';
 import CloseTurn from './components/CloseTurnComponent';
+import Axios from 'axios';
 
 //Routes for router-view
 const routes = [
     {path: '/abrirTurno', name: 'openTurn', component: OpenTurn},
-    {path: '/venta', name: 'venta', component: Sales},
-    {path: '/a_declarar', name: 'a_declarar', component: ToDeclare},
+    {path: '/venta', name: 'sales', component: Sales},
+    {path: '/a_declarar', name: 'to_declare', component: ToDeclare},
     {path: '/cerrarTurno', name: 'closeTurn', component: CloseTurn}
 ]
 
@@ -62,6 +63,8 @@ const router = new VueRouter({
 
 const store = new Vuex.Store(StoreData);
 
+
+Axios.defaults.timeout = 3000
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application

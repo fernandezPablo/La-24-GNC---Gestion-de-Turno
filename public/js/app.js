@@ -2222,28 +2222,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
-    var _this = this;
-
     console.log('Mounted OpenTurnComponent...');
+    console.log(this.msg);
 
-    if (this.isTurnOpen()) {
-      swal.fire({
-        title: 'Ya existe un turno abierto',
-        text: 'Desea editar el turno actual?',
-        type: 'info',
-        showCancelButton: true,
-        cancelButtonText: 'Regresar',
-        confirmButtonText: 'Editar'
-      }).then(function (result) {
-        if (result.value) {
-          _this.overlay = true;
-          _this.isEdit = true;
-
-          _this.getAforadorsValues();
-        } else if (result.dismiss === swal.DismissReason.cancel) {
-          _this.$router.push("/");
-        }
-      });
+    if (this.isTurnOpenOnStore()) {
+      this.callToEdit();
+    } else {
+      this.isTurnOpenOnDataBase();
     }
   },
   data: function data() {
@@ -2343,37 +2328,39 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                if (!(typeof this.$store.getters.getTurn === 'undefined')) {
-                  _context2.next = 13;
+                if (!(this.$store.getters.getTurn.id == 0)) {
+                  _context2.next = 15;
                   break;
                 }
 
-                _context2.next = 3;
+                console.log('Turn id: 0');
+                _context2.next = 4;
                 return axios.get('/open_turns/' + this.userId);
 
-              case 3:
+              case 4:
                 response = _context2.sent;
 
                 if (!(response.data.length != 0)) {
-                  _context2.next = 10;
+                  _context2.next = 12;
                   break;
                 }
 
+                console.log('response.data.length != 0');
                 lastResult = response.data[response.data.length - 1];
                 this.setTurnOnState(lastResult);
                 return _context2.abrupt("return", true);
 
-              case 10:
+              case 12:
                 return _context2.abrupt("return", false);
 
-              case 11:
-                _context2.next = 14;
+              case 13:
+                _context2.next = 16;
                 break;
 
-              case 13:
+              case 15:
                 return _context2.abrupt("return", true);
 
-              case 14:
+              case 16:
               case "end":
                 return _context2.stop();
             }
@@ -2387,6 +2374,52 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return isTurnOpen;
     }(),
+    isTurnOpenOnStore: function isTurnOpenOnStore() {
+      return this.$store.getters.getTurn.id == 0 ? false : true;
+    },
+    isTurnOpenOnDataBase: function isTurnOpenOnDataBase() {
+      var _this = this;
+
+      this.overlay = true;
+      var response = axios.get('/open_turns/' + this.userId).then(function (response) //CHECK THIS METHOD
+      {
+        if (response.data.length != 0) {
+          var lastResult = response.data[response.data.length - 1];
+
+          _this.setTurnOnState(lastResult);
+
+          _this.overlay = false;
+
+          _this.callToEdit();
+        } else {
+          _this.overlay = false;
+        }
+      })["catch"](function (error) {
+        _this.overlay = false;
+        console.log(error);
+      });
+    },
+    callToEdit: function callToEdit() {
+      var _this2 = this;
+
+      swal.fire({
+        title: 'Ya existe un turno abierto',
+        text: 'Desea editar el turno actual?',
+        type: 'info',
+        showCancelButton: true,
+        cancelButtonText: 'Regresar',
+        confirmButtonText: 'Editar'
+      }).then(function (result) {
+        if (result.value) {
+          _this2.overlay = true;
+          _this2.isEdit = true;
+
+          _this2.getAforadorsValues();
+        } else if (result.dismiss === swal.DismissReason.cancel) {
+          _this2.$router.push("/");
+        }
+      });
+    },
     getAforadorsValues: function () {
       var _getAforadorsValues = _asyncToGenerator(
       /*#__PURE__*/
@@ -2769,6 +2802,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Sidebar Mounted...');
+    console.log('UserId: ' + this.userId);
     window.addEventListener('resize', this.onResize);
   },
   methods: {
@@ -2826,6 +2860,7 @@ __webpack_require__.r(__webpack_exports__);
       }],
       icons: ['open_in_new', 'credit_card', 'local_atm', 'exit_to_app', 'assignment', 'search'],
       routes: ['/abrirTurno', '/venta', '/a_declarar', '/cerrarTurno', '/abmProductos', '/consultarTurno'],
+      namedRoutes: ['openTurn', 'sales', 'to_declare', 'closeTurn'],
       expanded: true
     };
   },
@@ -46031,7 +46066,10 @@ var render = function() {
             {
               key: item.id,
               attrs: {
-                to: { path: _vm.routes[index], params: { userId: _vm.userId } }
+                to: {
+                  name: _vm.namedRoutes[index],
+                  params: { userId: _vm.userId }
+                }
               }
             },
             [
@@ -99455,6 +99493,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_SalesComponent__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/SalesComponent */ "./resources/js/components/SalesComponent.vue");
 /* harmony import */ var _components_ToDeclareComponent__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/ToDeclareComponent */ "./resources/js/components/ToDeclareComponent.vue");
 /* harmony import */ var _components_CloseTurnComponent__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/CloseTurnComponent */ "./resources/js/components/CloseTurnComponent.vue");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_9__);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -99496,6 +99536,7 @@ Vue.component('close-turn-component', __webpack_require__(/*! ./components/Close
 
 
 
+
  //Routes for router-view
 
 var routes = [{
@@ -99504,11 +99545,11 @@ var routes = [{
   component: _components_OpenTurnComponent__WEBPACK_IMPORTED_MODULE_4__["default"]
 }, {
   path: '/venta',
-  name: 'venta',
+  name: 'sales',
   component: _components_SalesComponent__WEBPACK_IMPORTED_MODULE_6__["default"]
 }, {
   path: '/a_declarar',
-  name: 'a_declarar',
+  name: 'to_declare',
   component: _components_ToDeclareComponent__WEBPACK_IMPORTED_MODULE_7__["default"]
 }, {
   path: '/cerrarTurno',
@@ -99519,6 +99560,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
   routes: routes
 });
 var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store(_store__WEBPACK_IMPORTED_MODULE_3__["default"]);
+axios__WEBPACK_IMPORTED_MODULE_9___default.a.defaults.timeout = 3000;
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -100108,7 +100150,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   state: {
     userId: 0,
-    turn: {}
+    turn: {
+      id: 0,
+      number: 0,
+      state: "CLOSE",
+      user_id: 0,
+      sales_id: 0
+    }
   },
   mutations: {
     setUserId: function setUserId(state, id) {

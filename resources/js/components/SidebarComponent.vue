@@ -12,7 +12,7 @@
                 </h3>
             </div>
             <ul class="list-unstyled">
-                <router-link :to="{path: routes[index], params: {userId: userId}}" v-for="(item,index) in items" v-bind:key="item.id">
+                <router-link :to="{name: namedRoutes[index], params: {userId: userId}}"  v-for="(item,index) in items" v-bind:key="item.id">
                     <li class="sidebar-item">
                         <i id="img-header" class="material-icons icon">{{icons[index]}}</i> <span v-if="expanded">{{item.name}}</span>
                     </li>
@@ -27,6 +27,7 @@
 export default {
     mounted(){
         console.log('Sidebar Mounted...')
+        console.log('UserId: '+this.userId)
         window.addEventListener('resize',this.onResize)
     },
     methods:{
@@ -66,6 +67,7 @@ export default {
             items: [{id: 1, name: 'ABRIR TURNO'},{id: 2, name: 'VENTA'},{id: 3, name: 'A DECLARAR'},{id: 4, name: 'CERRAR TURNO'},{id: 5, name: 'ABM PRODUCTOS'},{id: 1, name: 'CONSULTAR TURNO'}],
             icons: ['open_in_new','credit_card','local_atm','exit_to_app','assignment','search'],
             routes: ['/abrirTurno','/venta','/a_declarar','/cerrarTurno','/abmProductos','/consultarTurno'],
+            namedRoutes: ['openTurn','sales','to_declare','closeTurn'],
             expanded: true,
             
         }

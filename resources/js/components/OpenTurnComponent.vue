@@ -60,25 +60,13 @@
 export default {
     mounted(){
         console.log('Mounted OpenTurnComponent...');
-         if(this.isTurnOpen()){
-            swal.fire({
-                title: 'Ya existe un turno abierto',
-                text: 'Desea editar el turno actual?',
-                type: 'info',
-                showCancelButton: true,
-                cancelButtonText: 'Regresar',
-                confirmButtonText: 'Editar',
-            }).then( result => {
-                    if(result.value){
-                        this.overlay = true;
-                        this.isEdit = true;
-                        this.getAforadorsValues();
-                    }
-                    else if (result.dismiss === swal.DismissReason.cancel) {
-                        this.$router.push("/");
-                    }
-                });
-            }
+        console.log(this.msg);
+         if(this.isTurnOpenOnStore()){
+            this.callToEdit()
+        }
+        else{
+            this.isTurnOpenOnDataBase()
+        }
     },
     data(){
         return {
@@ -133,9 +121,11 @@ export default {
             this.$store.commit('setTurn',turn);
         },
         async isTurnOpen(){
-            if(typeof this.$store.getters.getTurn === 'undefined'){
+            if(this.$store.getters.getTurn.id == 0){
+                console.log('Turn id: 0');
                 let response = await axios.get('/open_turns/'+this.userId);
                 if(response.data.length != 0){
+                    console.log('response.data.length != 0');
                     var lastResult = response.data[response.data.length - 1];
                     this.setTurnOnState(lastResult);
                     return true;
@@ -147,6 +137,50 @@ export default {
             else {
                 return true;
             }
+        },
+        isTurnOpenOnStore(){
+            return (this.$store.getters.getTurn.id == 0) ? false : true
+        },
+        isTurnOpenOnDataBase(){
+            this.overlay = true
+            let response = axios.get('/open_turns/'+this.userId).then(
+                    response => 
+                    //CHECK THIS METHOD
+                    {
+                        if(response.data.length != 0){
+                            var lastResult = response.data[response.data.length - 1];
+                            this.setTurnOnState(lastResult);
+                            this.overlay = false;
+                            this.callToEdit();
+                        }
+                        else{
+                            this.overlay = false;
+                        }
+                }
+            ).catch( error => {
+                this.overlay = false
+                console.log(error)
+            })
+                
+        },
+        callToEdit(){
+            swal.fire({
+                        title: 'Ya existe un turno abierto',
+                        text: 'Desea editar el turno actual?',
+                        type: 'info',
+                        showCancelButton: true,
+                        cancelButtonText: 'Regresar',
+                        confirmButtonText: 'Editar',
+                        }).then( result => {
+                                if(result.value){
+                                    this.overlay = true;
+                                    this.isEdit = true;
+                                    this.getAforadorsValues();
+                                }
+                                else if (result.dismiss === swal.DismissReason.cancel) {
+                                    this.$router.push("/");
+                                }
+                        });
         },
         async getAforadorsValues(){
             let response = await axios.get('/api/aforadors_values/'+this.$store.getters.getTurn.id);

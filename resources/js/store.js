@@ -3,7 +3,13 @@ import axios from "axios";
 export default {
     state:{
         userId: 0,
-        turn: {},
+        turn: {
+            id: 0,
+            number: 0,
+            state: "CLOSE",
+            user_id: 0,
+            sales_id: 0
+        },
     },
     mutations: {
         setUserId(state,id){
