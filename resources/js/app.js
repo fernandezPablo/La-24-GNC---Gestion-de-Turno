@@ -51,10 +51,12 @@ import Axios from 'axios';
 
 //Routes for router-view
 const routes = [
-    {path: '/abrirTurno', name: 'openTurn', component: OpenTurn},
-    {path: '/venta', name: 'sales', component: Sales},
-    {path: '/a_declarar', name: 'to_declare', component: ToDeclare},
-    {path: '/cerrarTurno', name: 'closeTurn', component: CloseTurn}
+    {path: '/abrirTurno', name: 'openTurn', component: OpenTurn, props: true},
+    {path: '/venta', name: 'sales', component: Sales, props: true},
+    {path: '/a_declarar', name: 'to_declare', component: ToDeclare, props: true},
+    {path: '/cerrarTurno', name: 'closeTurn', component: CloseTurn, props: true},
+    {path: '/abmProductos', name: 'abmProducts', component: Example, props: true},
+    {path: '/consultarTurno', name: 'checkTurn', component: Example, props: true}
 ]
 
 const router = new VueRouter({

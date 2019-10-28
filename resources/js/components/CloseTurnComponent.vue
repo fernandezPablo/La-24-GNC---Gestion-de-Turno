@@ -59,23 +59,40 @@ export default {
     },
     mounted(){
         console.log('CloseTurnComponent mounted...');
+        if(!this.isTurnOpenOnStore()){
+            this.isTurnOpenOnDataBase();
+        }
     },
     methods:{
-        async isTurnOpen(){
-            if(typeof this.$store.getters.getTurn === 'undefined'){
-                let response = await axios.get('/open_turns/'+this.userId);
-                if(response.data.length != 0){
-                    var lastResult = response.data[response.data.length - 1];
-                    this.setTurnOnState(lastResult);
-                    return true;
-                }
-                else{
-                    return false;
-                }
-            }
-            else {
-                return true;
-            }
+        isTurnOpenOnStore(){
+            return (this.$store.getters.getTurn.id == 0) ? false : true
+        },
+        isTurnOpenOnDataBase(){
+            this.overlay = true
+            console.log('UserId: '+this.userId);
+            axios.get('api/open_turns/'+this.userId).then(
+                    response => 
+                    {
+                        if(response.data.length != 0){
+                            var lastResult = response.data[response.data.length - 1];
+                            this.$store.commit('setTurn',lastResult);
+                            this.overlay = false;
+                        }
+                        else{
+                            this.overlay = false;
+                            swal.fire({
+                                type: 'warning',
+                                title: 'Sin Turno Abierto',
+                                text: 'Debe abrir el turno primero para realizar el cierre del mismo',
+                            }).then(result => {
+                                this.$router.push("/");
+                            })
+                        }
+                    }
+            ).catch( error => {
+                this.overlay = false
+                console.log(error)
+            })   
         },
         closeTurn(){
             swal.fire({

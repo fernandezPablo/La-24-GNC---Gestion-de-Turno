@@ -1775,14 +1775,6 @@ module.exports = {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -1843,63 +1835,44 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   mounted: function mounted() {
     console.log('CloseTurnComponent mounted...');
+
+    if (!this.isTurnOpenOnStore()) {
+      this.isTurnOpenOnDataBase();
+    }
   },
   methods: {
-    isTurnOpen: function () {
-      var _isTurnOpen = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var response, lastResult;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!(typeof this.$store.getters.getTurn === 'undefined')) {
-                  _context.next = 13;
-                  break;
-                }
-
-                _context.next = 3;
-                return axios.get('/open_turns/' + this.userId);
-
-              case 3:
-                response = _context.sent;
-
-                if (!(response.data.length != 0)) {
-                  _context.next = 10;
-                  break;
-                }
-
-                lastResult = response.data[response.data.length - 1];
-                this.setTurnOnState(lastResult);
-                return _context.abrupt("return", true);
-
-              case 10:
-                return _context.abrupt("return", false);
-
-              case 11:
-                _context.next = 14;
-                break;
-
-              case 13:
-                return _context.abrupt("return", true);
-
-              case 14:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function isTurnOpen() {
-        return _isTurnOpen.apply(this, arguments);
-      }
-
-      return isTurnOpen;
-    }(),
-    closeTurn: function closeTurn() {
+    isTurnOpenOnStore: function isTurnOpenOnStore() {
+      return this.$store.getters.getTurn.id == 0 ? false : true;
+    },
+    isTurnOpenOnDataBase: function isTurnOpenOnDataBase() {
       var _this = this;
+
+      this.overlay = true;
+      console.log('UserId: ' + this.userId);
+      axios.get('api/open_turns/' + this.userId).then(function (response) {
+        if (response.data.length != 0) {
+          var lastResult = response.data[response.data.length - 1];
+
+          _this.$store.commit('setTurn', lastResult);
+
+          _this.overlay = false;
+        } else {
+          _this.overlay = false;
+          swal.fire({
+            type: 'warning',
+            title: 'Sin Turno Abierto',
+            text: 'Debe abrir el turno primero para realizar el cierre del mismo'
+          }).then(function (result) {
+            _this.$router.push("/");
+          });
+        }
+      })["catch"](function (error) {
+        _this.overlay = false;
+        console.log(error);
+      });
+    },
+    closeTurn: function closeTurn() {
+      var _this2 = this;
 
       swal.fire({
         title: 'Cerrando el turno',
@@ -1911,13 +1884,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }).then(function (result) {
         if (result.value) {
           var data = {
-            turnId: _this.$store.getters.getTurn.id,
-            pmz: _this.pmz,
-            aforadorsGnc: _this.afGnc,
-            aforadorOil: _this.afOil
+            turnId: _this2.$store.getters.getTurn.id,
+            pmz: _this2.pmz,
+            aforadorsGnc: _this2.afGnc,
+            aforadorOil: _this2.afOil
           };
           axios.post('/api/close_turn', data).then(function (result) {
-            _this.$store.commit('setTurn', {});
+            _this2.$store.commit('setTurn', {});
 
             swal.fire({
               type: 'success',
@@ -1925,7 +1898,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               text: 'Turno Cerrado Correctamente'
             });
 
-            _this.$store.commit('setTurn', {});
+            _this2.$store.commit('setTurn', {});
 
             window.location.href = "/";
           });
@@ -2220,10 +2193,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Mounted OpenTurnComponent...');
-    console.log(this.msg);
 
     if (this.isTurnOpenOnStore()) {
       this.callToEdit();
@@ -2319,61 +2293,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     setTurnOnState: function setTurnOnState(turn) {
       this.$store.commit('setTurn', turn);
     },
-    isTurnOpen: function () {
-      var _isTurnOpen = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
-        var response, lastResult;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                if (!(this.$store.getters.getTurn.id == 0)) {
-                  _context2.next = 15;
-                  break;
-                }
-
-                console.log('Turn id: 0');
-                _context2.next = 4;
-                return axios.get('/open_turns/' + this.userId);
-
-              case 4:
-                response = _context2.sent;
-
-                if (!(response.data.length != 0)) {
-                  _context2.next = 12;
-                  break;
-                }
-
-                console.log('response.data.length != 0');
-                lastResult = response.data[response.data.length - 1];
-                this.setTurnOnState(lastResult);
-                return _context2.abrupt("return", true);
-
-              case 12:
-                return _context2.abrupt("return", false);
-
-              case 13:
-                _context2.next = 16;
-                break;
-
-              case 15:
-                return _context2.abrupt("return", true);
-
-              case 16:
-              case "end":
-                return _context2.stop();
-            }
-          }
-        }, _callee2, this);
-      }));
-
-      function isTurnOpen() {
-        return _isTurnOpen.apply(this, arguments);
-      }
-
-      return isTurnOpen;
-    }(),
     isTurnOpenOnStore: function isTurnOpenOnStore() {
       return this.$store.getters.getTurn.id == 0 ? false : true;
     },
@@ -2381,7 +2300,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       this.overlay = true;
-      var response = axios.get('/open_turns/' + this.userId).then(function (response) //CHECK THIS METHOD
+      console.log('UserId: ' + this.userId);
+      axios.get('api/open_turns/' + this.userId).then(function (response) //CHECK THIS METHOD
       {
         if (response.data.length != 0) {
           var lastResult = response.data[response.data.length - 1];
@@ -2423,17 +2343,17 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     getAforadorsValues: function () {
       var _getAforadorsValues = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
         var response, i;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context3.prev = _context3.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
-                _context3.next = 2;
+                _context2.next = 2;
                 return axios.get('/api/aforadors_values/' + this.$store.getters.getTurn.id);
 
               case 2:
-                response = _context3.sent;
+                response = _context2.sent;
                 console.log(response.data);
 
                 for (i = 0; i < response.data.length; i++) {
@@ -2451,10 +2371,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 7:
               case "end":
-                return _context3.stop();
+                return _context2.stop();
             }
           }
-        }, _callee3, this);
+        }, _callee2, this);
       }));
 
       function getAforadorsValues() {
@@ -2477,14 +2397,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -2526,18 +2438,14 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
-    var _this = this;
-
     this.overlay = true;
-    axios.get('/api/products').then(function (result) {
-      result.data.forEach(function (element) {
-        if (element.id != 1 && element.id != 2) {
-          _this.products.push(element);
-        }
-      });
 
-      _this.getCurrentSale();
-    });
+    if (!this.isTurnOpenOnStore()) {
+      this.isTurnOpenOnDataBase();
+    } else {
+      this.prepareForSale();
+      this.overlay = false;
+    }
   },
   methods: {
     sellProduct: function sellProduct(index) {
@@ -2620,21 +2528,21 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return 0;
     },
     getAllSaleLines: function getAllSaleLines() {
-      var _this2 = this;
+      var _this = this;
 
       axios.get('/api/get_sale_lines/' + this.sale.id).then(function (result) {
         console.log('Sales lines...');
         console.log(result.data);
         result.data.forEach(function (element) {
-          element.product = _this2.getProductById(element.product_id);
+          element.product = _this.getProductById(element.product_id);
 
-          _this2.linesOfSale.push(element);
+          _this.linesOfSale.push(element);
         });
-        _this2.overlay = false;
+        _this.overlay = false;
       });
     },
     newLine: function newLine(saleLine) {
-      var _this3 = this;
+      var _this2 = this;
 
       var data = {
         amount: saleLine.amount,
@@ -2646,7 +2554,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         result.data.product = saleLine.product;
         console.log(result.data);
 
-        _this3.linesOfSale.push(result.data);
+        _this2.linesOfSale.push(result.data);
       });
     },
     changeAmount: function changeAmount(saleLine) {
@@ -2657,69 +2565,61 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       };
       axios.post('/api/increment_sale_line', data);
     },
-    isTurnOpen: function () {
-      var _isTurnOpen = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var response, lastResult;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!(typeof this.$store.getters.getTurn === 'undefined')) {
-                  _context.next = 13;
-                  break;
-                }
+    isTurnOpenOnStore: function isTurnOpenOnStore() {
+      return this.$store.getters.getTurn.id == 0 ? false : true;
+    },
+    isTurnOpenOnDataBase: function isTurnOpenOnDataBase() {
+      var _this3 = this;
 
-                _context.next = 3;
-                return axios.get('/open_turns/' + this.userId);
+      this.overlay = true;
+      console.log('UserId: ' + this.userId);
+      axios.get('api/open_turns/' + this.userId).then(function (response) {
+        if (response.data.length != 0) {
+          var lastResult = response.data[response.data.length - 1];
 
-              case 3:
-                response = _context.sent;
+          _this3.$store.commit('setTurn', lastResult);
 
-                if (!(response.data.length != 0)) {
-                  _context.next = 10;
-                  break;
-                }
+          _this3.overlay = false;
 
-                lastResult = response.data[response.data.length - 1];
-                this.$store.commit('setTurn', lastResult);
-                return _context.abrupt("return", true);
-
-              case 10:
-                return _context.abrupt("return", false);
-
-              case 11:
-                _context.next = 14;
-                break;
-
-              case 13:
-                return _context.abrupt("return", true);
-
-              case 14:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function isTurnOpen() {
-        return _isTurnOpen.apply(this, arguments);
-      }
-
-      return isTurnOpen;
-    }(),
-    getCurrentSale: function getCurrentSale() {
+          _this3.prepareForSale();
+        } else {
+          _this3.overlay = false;
+          swal.fire({
+            type: 'warning',
+            title: 'Sin Turno Abierto',
+            text: 'Debe abrir el turno primero para realizar una venta'
+          }).then(function (result) {
+            _this3.$router.push("/");
+          });
+        }
+      })["catch"](function (error) {
+        _this3.overlay = false;
+        console.log(error);
+      });
+    },
+    prepareForSale: function prepareForSale() {
       var _this4 = this;
+
+      axios.get('/api/products').then(function (result) {
+        result.data.forEach(function (element) {
+          if (element.id != 1 && element.id != 2) {
+            _this4.products.push(element);
+          }
+        });
+
+        _this4.getCurrentSale();
+      });
+    },
+    getCurrentSale: function getCurrentSale() {
+      var _this5 = this;
 
       if (this.isTurnOpen()) {
         var turnId = this.$store.getters.getTurn.id;
         axios.get('/api/find_sale/' + turnId).then(function (result) {
           console.log('Current Sale...');
-          _this4.sale = result.data[0];
+          _this5.sale = result.data[0];
 
-          _this4.getAllSaleLines();
+          _this5.getAllSaleLines();
         });
       } else {
         this.overlay = false;
@@ -2855,12 +2755,12 @@ __webpack_require__.r(__webpack_exports__);
         id: 5,
         name: 'ABM PRODUCTOS'
       }, {
-        id: 1,
+        id: 6,
         name: 'CONSULTAR TURNO'
       }],
       icons: ['open_in_new', 'credit_card', 'local_atm', 'exit_to_app', 'assignment', 'search'],
       routes: ['/abrirTurno', '/venta', '/a_declarar', '/cerrarTurno', '/abmProductos', '/consultarTurno'],
-      namedRoutes: ['openTurn', 'sales', 'to_declare', 'closeTurn'],
+      namedRoutes: ['openTurn', 'sales', 'to_declare', 'closeTurn', 'abmProducts', 'checkTurn'],
       expanded: true
     };
   },
@@ -2880,14 +2780,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
-/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 //
 //
 //
@@ -2963,7 +2855,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   mounted: function mounted() {
     this.overlay = !this.overlay;
     console.log('ToDeclareComponent mounted...');
-    this.getCurrentSale();
+
+    if (!this.isTurnOpenOnStore()) {
+      this.isTurnOpenOnDataBase();
+    } else {
+      this.getCurrentSale();
+      this.overlay = false;
+    }
   },
   props: {
     userId: Number
@@ -3076,81 +2974,58 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }
       });
     },
-    isTurnOpen: function () {
-      var _isTurnOpen = _asyncToGenerator(
-      /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var response, lastResult;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!(typeof this.$store.getters.getTurn === 'undefined')) {
-                  _context.next = 13;
-                  break;
-                }
-
-                _context.next = 3;
-                return axios.get('/open_turns/' + this.userId);
-
-              case 3:
-                response = _context.sent;
-
-                if (!(response.data.length != 0)) {
-                  _context.next = 10;
-                  break;
-                }
-
-                lastResult = response.data[response.data.length - 1];
-                this.$store.commit('setTurn', lastResult);
-                return _context.abrupt("return", true);
-
-              case 10:
-                return _context.abrupt("return", false);
-
-              case 11:
-                _context.next = 14;
-                break;
-
-              case 13:
-                return _context.abrupt("return", true);
-
-              case 14:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      function isTurnOpen() {
-        return _isTurnOpen.apply(this, arguments);
-      }
-
-      return isTurnOpen;
-    }(),
-    getCurrentSale: function getCurrentSale() {
+    isTurnOpenOnStore: function isTurnOpenOnStore() {
+      return this.$store.getters.getTurn.id == 0 ? false : true;
+    },
+    isTurnOpenOnDataBase: function isTurnOpenOnDataBase() {
       var _this2 = this;
 
-      if (this.isTurnOpen()) {
-        var turnId = this.$store.getters.getTurn.id;
-        axios.get('/api/find_sale/' + turnId).then(function (result) {
-          _this2.sale = result.data[0];
+      this.overlay = true;
+      console.log('UserId: ' + this.userId);
+      axios.get('api/open_turns/' + this.userId).then(function (response) {
+        if (response.data.length != 0) {
+          var lastResult = response.data[response.data.length - 1];
 
-          _this2.getToDeclareElements();
-        });
-      }
+          _this2.$store.commit('setTurn', lastResult);
+
+          _this2.overlay = false;
+
+          _this2.getCurrentSale();
+        } else {
+          _this2.overlay = false;
+          swal.fire({
+            type: 'warning',
+            title: 'Sin Turno Abierto',
+            text: 'Debe abrir el turno primero para ingresar elementos a declarar'
+          }).then(function (result) {
+            _this2.$router.push("/");
+          });
+        }
+      })["catch"](function (error) {
+        _this2.overlay = false;
+        console.log(error);
+      });
     },
-    getToDeclareElements: function getToDeclareElements() {
+    getCurrentSale: function getCurrentSale() {
       var _this3 = this;
 
+      var turnId = this.$store.getters.getTurn.id;
+      axios.get('/api/find_sale/' + turnId).then(function (result) {
+        _this3.sale = result.data[0];
+
+        _this3.getToDeclareElements();
+      });
+    },
+    getToDeclareElements: function getToDeclareElements() {
+      var _this4 = this;
+
       axios.get('/api/get_to_declare_elements/' + this.sale.id).then(function (result) {
-        _this3.elementsToDeclare = result.data;
-        _this3.overlay = false;
+        _this4.elementsToDeclare = result.data;
+        _this4.overlay = false;
       });
     },
     newToDeclareElement: function newToDeclareElement(element) {
-      var _this4 = this;
+      var _this5 = this;
 
       var data = {
         description: element.description,
@@ -3159,18 +3034,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         saleId: this.sale.id
       };
       axios.post('/api/new_element_to_declare', data).then(function (result) {
-        _this4.elementsToDeclare.push(result.data);
+        _this5.elementsToDeclare.push(result.data);
 
         swal.fire({
           type: 'success',
           title: 'Agregado',
-          text: _this4.toString(element) + ' agregado correctamente!'
+          text: _this5.toString(element) + ' agregado correctamente!'
         });
-        _this4.overlay = false;
+        _this5.overlay = false;
       });
     },
     editToDeclareElement: function editToDeclareElement(element) {
-      var _this5 = this;
+      var _this6 = this;
 
       var data = {
         id: element.id,
@@ -3182,12 +3057,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         swal.fire({
           type: 'success',
           title: 'Editado',
-          text: _this5.toString(element) + ' editado correctamente!'
+          text: _this6.toString(element) + ' editado correctamente!'
         });
       });
     },
     deleteToDeclareElement: function deleteToDeclareElement(index) {
-      var _this6 = this;
+      var _this7 = this;
 
       var data = {
         id: this.elementsToDeclare[index].id
@@ -3196,10 +3071,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       axios["delete"]('/api/delete_element_to_declare', {
         data: data
       }).then(function (result) {
-        _this6.elementsToDeclare.splice(index, 1);
+        _this7.elementsToDeclare.splice(index, 1);
 
         swal.fire("Elemento eliminado!", "Se elimino el elemento", "success");
-        _this6.overlay = false;
+        _this7.overlay = false;
       });
     },
     toString: function toString(element) {
@@ -99542,19 +99417,33 @@ Vue.component('close-turn-component', __webpack_require__(/*! ./components/Close
 var routes = [{
   path: '/abrirTurno',
   name: 'openTurn',
-  component: _components_OpenTurnComponent__WEBPACK_IMPORTED_MODULE_4__["default"]
+  component: _components_OpenTurnComponent__WEBPACK_IMPORTED_MODULE_4__["default"],
+  props: true
 }, {
   path: '/venta',
   name: 'sales',
-  component: _components_SalesComponent__WEBPACK_IMPORTED_MODULE_6__["default"]
+  component: _components_SalesComponent__WEBPACK_IMPORTED_MODULE_6__["default"],
+  props: true
 }, {
   path: '/a_declarar',
   name: 'to_declare',
-  component: _components_ToDeclareComponent__WEBPACK_IMPORTED_MODULE_7__["default"]
+  component: _components_ToDeclareComponent__WEBPACK_IMPORTED_MODULE_7__["default"],
+  props: true
 }, {
   path: '/cerrarTurno',
   name: 'closeTurn',
-  component: _components_CloseTurnComponent__WEBPACK_IMPORTED_MODULE_8__["default"]
+  component: _components_CloseTurnComponent__WEBPACK_IMPORTED_MODULE_8__["default"],
+  props: true
+}, {
+  path: '/abmProductos',
+  name: 'abmProducts',
+  component: _components_ExampleComponent__WEBPACK_IMPORTED_MODULE_5__["default"],
+  props: true
+}, {
+  path: '/consultarTurno',
+  name: 'checkTurn',
+  component: _components_ExampleComponent__WEBPACK_IMPORTED_MODULE_5__["default"],
+  props: true
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
   routes: routes

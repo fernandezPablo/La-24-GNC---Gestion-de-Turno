@@ -41,17 +41,15 @@
 
 export default {
     mounted(){
-        this.overlay = true
-        axios.get('/api/products')
-        .then(result =>{
-            result.data.forEach(element => {
-                if(element.id != 1 && element.id != 2){
-                    this.products.push(element);
-                }
-            });
-            this.getCurrentSale();
-        });
-
+        this.overlay = true;
+        if(!this.isTurnOpenOnStore()){
+          this.isTurnOpenOnDataBase();  
+        }
+        else{
+          this.prepareForSale();
+          this.overlay = false;
+        }
+        
     },
     methods: {
         sellProduct(index){
@@ -164,21 +162,48 @@ export default {
             };
             axios.post('/api/increment_sale_line',data);
         },
-        async isTurnOpen(){
-            if(typeof this.$store.getters.getTurn === 'undefined'){
-                let response = await axios.get('/open_turns/'+this.userId);
-                if(response.data.length != 0){
-                    var lastResult = response.data[response.data.length - 1];
-                    this.$store.commit('setTurn',lastResult);
-                    return true;
-                }
-                else{
-                    return false;
-                }
-            }
-            else {
-                return true;
-            }
+        isTurnOpenOnStore(){
+            return (this.$store.getters.getTurn.id == 0) ? false : true
+        },
+        isTurnOpenOnDataBase(){
+            this.overlay = true
+            console.log('UserId: '+this.userId);
+            axios.get('api/open_turns/'+this.userId).then(
+                    response => 
+                    {
+                        if(response.data.length != 0){
+                            var lastResult = response.data[response.data.length - 1];
+                            this.$store.commit('setTurn',lastResult);
+                            this.overlay = false;
+                            this.prepareForSale();
+                        }
+                        else{
+                            this.overlay = false;
+                            swal.fire({
+                                type: 'warning',
+                                title: 'Sin Turno Abierto',
+                                text: 'Debe abrir el turno primero para realizar una venta',
+                            }).then(result => {
+                                this.$router.push("/");
+                            })
+                        }
+                    }
+            ).catch( error => {
+                this.overlay = false
+                console.log(error)
+            })   
+        },
+        prepareForSale(){
+            axios.get('/api/products')
+                .then(result =>
+                {
+                    result.data.forEach(element => {
+                    if(element.id != 1 && element.id != 2){
+                        this.products.push(element);
+                    }
+                    });
+                    this.getCurrentSale();
+                });
         },
         getCurrentSale(){
             if(this.isTurnOpen()){

@@ -45,6 +45,7 @@
             </div>
             <button class="btn btn-primary form-control" type="submit">GUARDAR</button>
         </form>
+
         <v-overlay :value="overlay">
             <v-progress-circular
                 class="progress"
@@ -53,6 +54,7 @@
                 :width="5"
             ></v-progress-circular>
         </v-overlay>
+
     </div>
 </template>
 
@@ -60,7 +62,7 @@
 export default {
     mounted(){
         console.log('Mounted OpenTurnComponent...');
-        console.log(this.msg);
+
          if(this.isTurnOpenOnStore()){
             this.callToEdit()
         }
@@ -120,30 +122,13 @@ export default {
          setTurnOnState(turn){
             this.$store.commit('setTurn',turn);
         },
-        async isTurnOpen(){
-            if(this.$store.getters.getTurn.id == 0){
-                console.log('Turn id: 0');
-                let response = await axios.get('/open_turns/'+this.userId);
-                if(response.data.length != 0){
-                    console.log('response.data.length != 0');
-                    var lastResult = response.data[response.data.length - 1];
-                    this.setTurnOnState(lastResult);
-                    return true;
-                }
-                else{
-                    return false;
-                }
-            }
-            else {
-                return true;
-            }
-        },
         isTurnOpenOnStore(){
             return (this.$store.getters.getTurn.id == 0) ? false : true
         },
         isTurnOpenOnDataBase(){
             this.overlay = true
-            let response = axios.get('/open_turns/'+this.userId).then(
+            console.log('UserId: '+this.userId);
+            axios.get('api/open_turns/'+this.userId).then(
                     response => 
                     //CHECK THIS METHOD
                     {

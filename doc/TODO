@@ -71,3 +71,5 @@ issue14:
     commit 1:
     - valueOut for aforadors stored on database
     - modify the state of the turn in the database
+    commit 2:
+    - Fixed issue when the turn is not open OpenTurn dont allow open a new turn and SalesComponent and ToDeclareComponent fail without open turn

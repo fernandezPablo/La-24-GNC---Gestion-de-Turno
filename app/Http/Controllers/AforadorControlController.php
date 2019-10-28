@@ -12,7 +12,7 @@ class AforadorControlController extends Controller
     
         $aforadorControl->total = 0;
         $aforadorControl->type = $type;
-        $aforadorControl->id_turn = $turnId;
+        $aforadorControl->turn_id = $turnId;
         $aforadorControl->pmz_in = $pmzIn;
         $aforadorControl->pmz_out = 0.0;
         $aforadorControl->pmz_difference = 0.0;

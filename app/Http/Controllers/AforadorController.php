@@ -24,7 +24,7 @@ class AforadorController extends Controller
             $aforador->id_product = $_OIL;
         }
         $aforador->difference = 0.0;
-        $aforador->id_aforador_control = $aforadorControlId;
+        $aforador->aforador_control_id = $aforadorControlId;
 
         $aforador->save();
     }
