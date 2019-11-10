@@ -16,6 +16,7 @@ class AforadorControlController extends Controller
         $aforadorControl->pmz_in = $pmzIn;
         $aforadorControl->pmz_out = 0.0;
         $aforadorControl->pmz_difference = 0.0;
+        $aforadorControl->total_m3 = 0.0;
 
         $aforadorControl->save();
         
@@ -36,4 +37,5 @@ class AforadorControlController extends Controller
             $aforadorController->newAforador($index,$aforadors[0],"OIL",$idAforadorControl);
         }
     }
+
 }

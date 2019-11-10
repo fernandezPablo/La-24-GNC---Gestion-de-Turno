@@ -38,4 +38,15 @@ class ToDeclareController extends Controller
         $toDeclareElement = ToDeclare::find($request->id);
         $toDeclareElement->delete();
     }
+
+    public function getTotalCurrentAccount($saleId){
+        $elements = ToDeclare::where('sale_id',$saleId)->get();
+        $total = 0;
+        foreach($elements as $element){
+            if($element->type == 'CUENTA_CORRIENTE'){
+                $total += $element->amount;
+            }
+        }
+        return $total;
+    }
 }

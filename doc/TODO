@@ -73,3 +73,5 @@ issue14:
     - modify the state of the turn in the database
     commit 2:
     - Fixed issue when the turn is not open OpenTurn dont allow open a new turn and SalesComponent and ToDeclareComponent fail without open turn
+    issue15:
+    On this issue is implemented the saved of the total values of sales

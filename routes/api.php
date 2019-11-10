@@ -44,3 +44,5 @@ Route::post('/update_element_to_declare','ToDeclareController@updateToDeclareEle
 Route::delete('/delete_element_to_declare','ToDeclareController@deleteToDeclareElement');
 
 Route::post('/close_turn','TurnController@CloseTurn');
+
+Route::get('/to_declare/total/{saleId}','ToDeclareController@getTotalCurrentAccount');

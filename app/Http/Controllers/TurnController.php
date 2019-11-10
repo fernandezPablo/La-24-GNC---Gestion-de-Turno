@@ -7,6 +7,13 @@ use La24GNC\Turn;
 
 class TurnController extends Controller
 {
+    private $productController;
+    private $toDeclareController;
+
+    public function __construct(){
+        $this->productController = new ProductController;
+        $this->toDeclareController = new ToDeclareController;
+    }
 
     private function getCurrentDate(){
         date_default_timezone_set('America/Argentina/Tucuman');
@@ -108,6 +115,8 @@ class TurnController extends Controller
             $index = 0;
             if($aforadorControl->type == "GNC"){
                 $aforadorControl->pmz_out = $request->pmz;
+                //ESTABLISH PMZ DIFFERENCE
+                $this->setPmzDifference($aforadorControl);
                 $aforadorControl->save();
             }
             foreach($aforadorControl->aforadors as $aforador){
@@ -117,10 +126,50 @@ class TurnController extends Controller
                 else{
                     $aforador->valueOut = $request->aforadorOil[$index];
                 }
+                $this->setAforadorsDifference($aforador);
                 $aforador->save();
                 $index++;
             }
         }
+        //TOTAL GNC
+        $gncPrice = $this->productController->getProduct(1)->price;
+        $turn->sale->total_gnc = $this->getTotalM3Gnc($turn) * $gncPrice;
+        
+        //TOTAL CURRENT ACCOUNT
+        $totalCurrentAccount = $this->toDeclareController->getTotalCurrentAccount($turn->sales_id);
+
+        //TOTAL GNC WHITOUT CURRENT ACCOUNT
+        $turn->sale->total_gnc_wca = $turn->sale->total_gnc - $totalCurrentAccount;
+
+        //TOTAL GNC WITH DISSCOUNT
+        $turn->sale->total_gnc_with_discount = $turn->sale->total_gnc_wca * (1 - ($this->productController->getProduct(1)->discount/100));
+
+        //SAVE SALES
+        $turn->sale->save();
+
     }
 
+    public function setPmzDifference($aforadorControl){
+        $aforadorControl->pmz_difference = $aforadorControl->pmz_out - $aforadorControl->pmz_in;
+    }
+
+    public function setAforadorsDifference($aforador){
+        $aforador->difference = $aforador->valueOut - $aforador->valueIn;
+    }
+
+    public function getTotalM3Gnc($turn){
+        $totalM3 = 0;
+        foreach($turn->aforadorControls as $aforadorControl){
+            if($aforadorControl->type == "GNC"){
+                foreach($aforadorControl->aforadors as $aforador){
+                    if($aforador->type == "GNC"){
+                        $totalM3 += $aforador->difference;
+                    }
+                }
+                $aforadorControl->total_m3 = $totalM3;
+                $aforadorControl->save();
+            }
+        }
+        return $totalM3;
+    }
 }
