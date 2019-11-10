@@ -144,6 +144,10 @@ class TurnController extends Controller
         //TOTAL GNC WITH DISSCOUNT
         $turn->sale->total_gnc_with_discount = $turn->sale->total_gnc_wca * (1 - ($this->productController->getProduct(1)->discount/100));
 
+        //TOTAL OIL
+        $oilPrice = $this->productController->getProduct(2)->price;
+        $turn->sale->total_oil = $this->getTotalLtsOil($turn) * $oilPrice;
+
         //SAVE SALES
         $turn->sale->save();
 
@@ -171,5 +175,21 @@ class TurnController extends Controller
             }
         }
         return $totalM3;
+    }
+
+    public function getTotalLtsOil($turn){
+        $totalLts = 0;
+        foreach($turn->aforadorControls as $aforadorControl){
+            if($aforadorControl->type == "OIL"){
+                foreach($aforadorControl->aforadors as $aforador){
+                    if($aforador->type == "OIL"){
+                        $totalLts += $aforador->difference;
+                    }
+                }
+                $aforadorControl->total_lts = $totalLts;
+                $aforadorControl->save();
+            }
+        }
+        return $totalLts;
     }
 }

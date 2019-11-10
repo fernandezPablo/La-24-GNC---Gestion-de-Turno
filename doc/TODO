@@ -75,3 +75,8 @@ issue14:
     - Fixed issue when the turn is not open OpenTurn dont allow open a new turn and SalesComponent and ToDeclareComponent fail without open turn
     issue15:
     On this issue is implemented the saved of the total values of sales
+    commit 1:
+    - Totales of Gnc saved: gnc total, gnc total without current account y gnc total with discount
+    commit 2:
+    - Totales of Oil saved
+    - Generated migration to add total_lts column to aforador_controls table

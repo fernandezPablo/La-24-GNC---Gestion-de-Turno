@@ -14,7 +14,9 @@ class AforadorControl extends Model
         id_turn',
         'pmz_in',
         'pmz_out',
-        'pmz_difference'
+        'pmz_difference',
+        'total_m3',
+        'total_lts'
     ];
 
     public function turn(){

@@ -17,6 +17,7 @@ class AforadorControlController extends Controller
         $aforadorControl->pmz_out = 0.0;
         $aforadorControl->pmz_difference = 0.0;
         $aforadorControl->total_m3 = 0.0;
+        $aforadorControl->total_lts = 0.0;
 
         $aforadorControl->save();
         
