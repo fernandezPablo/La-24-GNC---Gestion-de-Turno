@@ -9,10 +9,12 @@ class TurnController extends Controller
 {
     private $productController;
     private $toDeclareController;
+    private $saleController;
 
     public function __construct(){
         $this->productController = new ProductController;
         $this->toDeclareController = new ToDeclareController;
+        $this->saleController = new SaleController;
     }
 
     private function getCurrentDate(){
@@ -141,12 +143,22 @@ class TurnController extends Controller
         //TOTAL GNC WHITOUT CURRENT ACCOUNT
         $turn->sale->total_gnc_wca = $turn->sale->total_gnc - $totalCurrentAccount;
 
+        //DISCOUNT
+        $discount = $turn->sale->total_gnc_wca * ($this->productController->getProduct(1)->discount/100);
+        $turn->sale->discount = $discount;
+
         //TOTAL GNC WITH DISSCOUNT
-        $turn->sale->total_gnc_with_discount = $turn->sale->total_gnc_wca * (1 - ($this->productController->getProduct(1)->discount/100));
+        $turn->sale->total_gnc_with_discount = $turn->sale->total_gnc_wca - $discount;
 
         //TOTAL OIL
         $oilPrice = $this->productController->getProduct(2)->price;
         $turn->sale->total_oil = $this->getTotalLtsOil($turn) * $oilPrice;
+
+        //TOTAL VARIOUS
+        $turn->sale->total_various = $this->saleController->getTotalVarious($turn->sale->id);
+
+        //TOTAL SALES
+        $turn->sale->total_sales = $turn->sale->total_gnc_with_discount + $turn->sale->total_various + $turn->sale->total_oil;
 
         //SAVE SALES
         $turn->sale->save();

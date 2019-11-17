@@ -80,3 +80,7 @@ issue14:
     commit 2:
     - Totales of Oil saved
     - Generated migration to add total_lts column to aforador_controls table
+    commit 3:
+    - implemented the stored of the discount that apply to gnc sale (generated new migration that add the discount column to sales table)
+    - implemented the stored of the total of sales various
+    - implemented the stored of the total of sales

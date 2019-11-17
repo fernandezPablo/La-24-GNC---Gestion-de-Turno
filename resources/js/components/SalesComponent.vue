@@ -206,17 +206,12 @@ export default {
                 });
         },
         getCurrentSale(){
-            if(this.isTurnOpen()){
-                var turnId = this.$store.getters.getTurn.id;
-                axios.get('/api/find_sale/'+turnId).then( result => {
-                    console.log('Current Sale...');
-                    this.sale = result.data[0];
-                    this.getAllSaleLines();
-                });
-            }
-            else{
-                this.overlay = false;
-            }
+            var turnId = this.$store.getters.getTurn.id;
+            axios.get('/api/find_sale/'+turnId).then( result => {
+                console.log('Current Sale...');
+                this.sale = result.data[0];
+                this.getAllSaleLines();
+            });
         },
         getProductById(id){
             var productFind = {}

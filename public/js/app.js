@@ -2613,17 +2613,13 @@ __webpack_require__.r(__webpack_exports__);
     getCurrentSale: function getCurrentSale() {
       var _this5 = this;
 
-      if (this.isTurnOpen()) {
-        var turnId = this.$store.getters.getTurn.id;
-        axios.get('/api/find_sale/' + turnId).then(function (result) {
-          console.log('Current Sale...');
-          _this5.sale = result.data[0];
+      var turnId = this.$store.getters.getTurn.id;
+      axios.get('/api/find_sale/' + turnId).then(function (result) {
+        console.log('Current Sale...');
+        _this5.sale = result.data[0];
 
-          _this5.getAllSaleLines();
-        });
-      } else {
-        this.overlay = false;
-      }
+        _this5.getAllSaleLines();
+      });
     },
     getProductById: function getProductById(id) {
       var productFind = {};

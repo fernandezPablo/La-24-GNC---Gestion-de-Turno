@@ -22,6 +22,7 @@ class SaleController extends Controller
         $sale->total_various = 0;
         $sale->total_oil = 0;
         $sale->total_sales = 0;
+        $sale->discount = 0;
 
         $sale->save();
 
@@ -37,5 +38,16 @@ class SaleController extends Controller
         $sale = Sale::find($saleId);
         $sale->total_gnc = $totalM3 * $GNC_PRICE;
         $sale->save();
+    }
+
+    public function getTotalVarious($saleId){
+        $total = 0;
+        $sale = Sale::find($saleId);
+        
+        foreach($sale->saleLines as $saleLine){
+            $total += $saleLine->total;
+        }
+
+        return $total;
     }
 }
