@@ -84,3 +84,6 @@ issue14:
     - implemented the stored of the discount that apply to gnc sale (generated new migration that add the discount column to sales table)
     - implemented the stored of the total of sales various
     - implemented the stored of the total of sales
+    commit 4:
+    - Generated the discount vale
+    - Generated the final buzon
