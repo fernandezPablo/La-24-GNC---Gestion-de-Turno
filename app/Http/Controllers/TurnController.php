@@ -138,7 +138,8 @@ class TurnController extends Controller
         $turn->sale->total_gnc = $this->getTotalM3Gnc($turn) * $gncPrice;
         
         //TOTAL CURRENT ACCOUNT
-        $totalCurrentAccount = $this->toDeclareController->getTotalCurrentAccount($turn->sales_id);
+        $typeCurrentAccount = [0 => "CUENTA_CORRIENTE"];
+        $totalCurrentAccount = $this->toDeclareController->getTotalElementForType($turn->sales_id,$typeCurrentAccount);
 
         //TOTAL GNC WHITOUT CURRENT ACCOUNT
         $turn->sale->total_gnc_wca = $turn->sale->total_gnc - $totalCurrentAccount;
@@ -146,6 +147,12 @@ class TurnController extends Controller
         //DISCOUNT
         $discount = $turn->sale->total_gnc_wca * ($this->productController->getProduct(1)->discount/100);
         $turn->sale->discount = $discount;
+        $request = new Request();
+        $request->description = "Descuento";
+        $request->amount = $discount;
+        $request->type = "VALE";
+        $request->saleId = $turn->sale->id;
+        $this->toDeclareController->newToDeclareElement($request);
 
         //TOTAL GNC WITH DISSCOUNT
         $turn->sale->total_gnc_with_discount = $turn->sale->total_gnc_wca - $discount;
@@ -159,6 +166,16 @@ class TurnController extends Controller
 
         //TOTAL SALES
         $turn->sale->total_sales = $turn->sale->total_gnc_with_discount + $turn->sale->total_various + $turn->sale->total_oil;
+
+        //FINAL BUZON
+        $types = [0 => "EFECTIVO", 1 => "VALE"];
+        $totalBuzonVale = $this->toDeclareController->getTotalElementForType($turn->sale->id, $types);
+        $requestBuzon = new Request();
+        $requestBuzon->description = "Buzon";
+        $requestBuzon->amount = $turn->sale->total_sales - $totalBuzonVale + $discount;
+        $requestBuzon->type = "EFECTIVO";
+        $requestBuzon->saleId = $turn->sale->id;
+        $this->toDeclareController->newToDeclareElement($requestBuzon);
 
         //SAVE SALES
         $turn->sale->save();

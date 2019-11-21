@@ -39,12 +39,15 @@ class ToDeclareController extends Controller
         $toDeclareElement->delete();
     }
 
-    public function getTotalCurrentAccount($saleId){
+    public function getTotalElementForType($saleId,$types){
         $elements = ToDeclare::where('sale_id',$saleId)->get();
         $total = 0;
         foreach($elements as $element){
-            if($element->type == 'CUENTA_CORRIENTE'){
-                $total += $element->amount;
+            foreach($types as $type){
+                if($element->type == $type){
+                    $total += $element->amount;
+                break;
+                }
             }
         }
         return $total;
