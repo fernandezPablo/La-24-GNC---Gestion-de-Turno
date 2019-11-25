@@ -14,7 +14,7 @@
         "bootstrap": "^4.0.0",
         "cross-env": "^5.1",
         "jquery": "^3.2",
-        "laravel-mix": "^4.0.7",
+        "laravel-mix": "^4.1.4",
         "lodash": "^4.17.5",
         "popper.js": "^1.12",
         "resolve-url-loader": "^2.3.1",
@@ -25,6 +25,7 @@
     },
     "dependencies": {
         "dateformat": "^3.0.3",
+        "npm-check-updates": "^3.2.1",
         "sweetalert2": "^8.13.0",
         "vue-router": "^3.0.6",
         "vuetify": "^2.1.3",

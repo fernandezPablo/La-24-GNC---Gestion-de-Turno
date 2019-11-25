@@ -119,7 +119,8 @@ export default {
                                     text: 'Turno Cerrado Correctamente',
                                 })
                                 this.$store.commit('setTurn',{});
-                                window.location.href = "/"
+                                //window.location.href = "/"
+                                this.$router.push({name: 'resultTurn'})
                             }
                         )                        
                     }
