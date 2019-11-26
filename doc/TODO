@@ -91,3 +91,5 @@ issue14:
     On this issue is implemented the result of turn
     commit 1:
     established the gui for result component
+    commit 2:
+    was separated the result component on 5 new components

@@ -40,6 +40,11 @@ Vue.component('sales-component',require("./components/SalesComponent.vue").defau
 Vue.component('to-declare-component',require('./components/ToDeclareComponent.vue').default);
 Vue.component('close-turn-component',require('./components/CloseTurnComponent.vue').default);
 Vue.component('result-turn-component',require("./components/ResultTurnComponent.vue").default);
+Vue.component('gnc-table-component',require('./components/GncTableComponent.vue').default);
+Vue.component('oil-table-component',require('./components/OilTableComponent.vue').default);
+Vue.component('various-table-component',require('./components/VariousTableComponent.vue').default);
+Vue.component('totals-table-component',require('./components/TotalsTableComponent.vue').default);
+Vue.component('to-declare-table-component',require('./components/ToDeclareTableComponent.vue').default);
 
 import StoreData from './store';
 import OpenTurn from './components/OpenTurnComponent';
@@ -48,6 +53,11 @@ import Sales from './components/SalesComponent';
 import ToDeclare from './components/ToDeclareComponent';
 import CloseTurn from './components/CloseTurnComponent';
 import ResultTurn from './components/ResultTurnComponent';
+import GncTable from './components/GncTableComponent';
+import OilTable from './components/OilTableComponent';
+import VariousTable from './components/VariousTableComponent';
+import TotalsTable from './components/TotalsTableComponent';
+import ToDeclareTable from './components/ToDeclareTableComponent';
 import Axios from 'axios';
 
 //Routes for router-view
