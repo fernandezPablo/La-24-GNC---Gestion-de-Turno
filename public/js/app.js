@@ -1890,20 +1890,19 @@ __webpack_require__.r(__webpack_exports__);
             aforadorOil: _this2.afOil
           };
           axios.post('/api/close_turn', data).then(function (result) {
-            _this2.$store.commit('setTurn', {});
-
             swal.fire({
               type: 'success',
               title: 'Turno Cerrado',
               text: 'Turno Cerrado Correctamente'
             });
 
-            _this2.$store.commit('setTurn', {}); //window.location.href = "/"
-
-
             _this2.$router.push({
-              name: 'resultTurn'
-            });
+              name: 'resultTurn',
+              params: {
+                turnId: _this2.$store.getters.getTurn.id
+              }
+            }); //this.$store.commit('setTurn',{});
+
           });
         }
       });
@@ -2014,11 +2013,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  mounted: function mounted() {
+    console.log(this.resultGnc);
+  },
   data: function data() {
     return {
-      headersGnc: ['Valor inicial aforador', 'Valor final aforador', 'diferencia']
+      headersGnc: ['Número surtidor', 'Valor inicial aforador', 'Valor final aforador', 'diferencia']
     };
+  },
+  props: {
+    resultGnc: Object
   }
 });
 
@@ -2539,9 +2553,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
-    console.log(this.$vuetify.breakpoint);
+    var _this = this;
+
     document.getElementById('gnc').style.display = "block";
     document.getElementsByClassName('tablinks')[0].className += " active";
+    axios.get('/api/get_result_gnc/' + this.turnId).then(function (response) {
+      console.log('Initials aforadors: ' + response.data);
+      _this.resultGnc = response.data;
+    });
   },
   methods: {
     openTabContent: function openTabContent(tabName) {
@@ -2569,10 +2588,11 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       tabs: ['GNC', 'ACEITE', 'VARIOS', 'TOTALES', 'A DECLARAR'],
-      afGncIni: [],
-      afGncFin: [],
-      difAfGnc: []
+      resultGnc: {}
     };
+  },
+  props: {
+    turnId: Number
   }
 });
 
@@ -45742,7 +45762,91 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _vm._m(0)
+    _c(
+      "tbody",
+      [
+        _vm._l(_vm.resultGnc.aforadorsIn, function(element, index) {
+          return _c("tr", { key: index }, [
+            _c("td", [_vm._v(_vm._s(index + 1))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(_vm.resultGnc.aforadorsIn[index]) + " ")]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(_vm.resultGnc.aforadorsOut[index]))]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(_vm.resultGnc.difference[index]))])
+          ])
+        }),
+        _vm._v(" "),
+        _vm._m(0),
+        _vm._v(" "),
+        _c("tr", [
+          _c("th", [_vm._v("PMZ ")]),
+          _vm._v(" "),
+          _c("td", [_vm._v(_vm._s(_vm.resultGnc.pmzIn))]),
+          _vm._v(" "),
+          _c("td", [_vm._v(_vm._s(_vm.resultGnc.pmzOut))]),
+          _vm._v(" "),
+          _c("td", [_vm._v(_vm._s(_vm.resultGnc.pmzDifference))])
+        ]),
+        _vm._v(" "),
+        _vm._m(1),
+        _vm._v(" "),
+        _c("tr", [
+          _c("td", { staticClass: "table-active" }),
+          _vm._v(" "),
+          _c("td", { staticClass: "table-active" }),
+          _vm._v(" "),
+          _c("th", [_vm._v("m3")]),
+          _vm._v(" "),
+          _c("td", [_vm._v(_vm._s(_vm.resultGnc.m3))])
+        ]),
+        _vm._v(" "),
+        _c("tr", [
+          _c("td", { staticClass: "table-active" }),
+          _vm._v(" "),
+          _c("td", { staticClass: "table-active" }),
+          _vm._v(" "),
+          _c("th", { staticClass: "table-success" }, [_vm._v("$ GNC")]),
+          _vm._v(" "),
+          _c("td", { staticClass: "table-success" }, [
+            _vm._v(_vm._s(_vm.resultGnc.saleResult[0].total_gnc))
+          ])
+        ]),
+        _vm._v(" "),
+        _c("tr", [
+          _c("td", { staticClass: "table-active" }),
+          _vm._v(" "),
+          _c("td", { staticClass: "table-active" }),
+          _vm._v(" "),
+          _c("th", [_vm._v("$ GNC s c/c")]),
+          _vm._v(" "),
+          _c("td", [_vm._v(_vm._s(_vm.resultGnc.saleResult[0].total_gnc_wca))])
+        ]),
+        _vm._v(" "),
+        _c("tr", [
+          _c("td", { staticClass: "table-active" }),
+          _vm._v(" "),
+          _c("td", { staticClass: "table-active" }),
+          _vm._v(" "),
+          _c("th", [_vm._v("descuento")]),
+          _vm._v(" "),
+          _c("td", [_vm._v(_vm._s(_vm.resultGnc.saleResult[0].discount))])
+        ]),
+        _vm._v(" "),
+        _c("tr", [
+          _c("td", { staticClass: "table-active" }),
+          _vm._v(" "),
+          _c("td", { staticClass: "table-active" }),
+          _vm._v(" "),
+          _c("th", [_vm._v("$ GNC c/descuento")]),
+          _vm._v(" "),
+          _c("td", [
+            _vm._v(_vm._s(_vm.resultGnc.saleResult[0].total_gnc_with_discount))
+          ])
+        ])
+      ],
+      2
+    )
   ])
 }
 var staticRenderFns = [
@@ -45750,78 +45854,28 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("tbody", [
-      _c("tr", [
-        _c("td", [_vm._v("123")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("456")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("333")])
-      ]),
+    return _c("tr", { staticClass: "table-active" }, [
+      _c("td"),
       _vm._v(" "),
-      _c("tr", [
-        _c("td", [_vm._v("123")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("456")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("333")])
-      ]),
+      _c("td"),
       _vm._v(" "),
-      _c("tr", [
-        _c("td", [_vm._v("123")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("456")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("333")])
-      ]),
+      _c("td"),
       _vm._v(" "),
-      _c("tr", { staticClass: "table-active" }, [
-        _c("td"),
-        _vm._v(" "),
-        _c("td"),
-        _vm._v(" "),
-        _c("td")
-      ]),
+      _c("td")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", { staticClass: "table-active" }, [
+      _c("td"),
       _vm._v(" "),
-      _c("tr", [
-        _c("td", { staticClass: "table-active" }),
-        _vm._v(" "),
-        _c("th", [_vm._v("m3")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("789")])
-      ]),
+      _c("td"),
       _vm._v(" "),
-      _c("tr", [
-        _c("td", { staticClass: "table-active" }),
-        _vm._v(" "),
-        _c("th", { staticClass: "table-success" }, [_vm._v("$ GNC")]),
-        _vm._v(" "),
-        _c("td", { staticClass: "table-success" }, [_vm._v("15369")])
-      ]),
+      _c("td"),
       _vm._v(" "),
-      _c("tr", [
-        _c("td", { staticClass: "table-active" }),
-        _vm._v(" "),
-        _c("th", [_vm._v("$ GNC s c/c")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("13253")])
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("td", { staticClass: "table-active" }),
-        _vm._v(" "),
-        _c("th", [_vm._v("descuento")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("1325.3")])
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("td", { staticClass: "table-active" }),
-        _vm._v(" "),
-        _c("th", [_vm._v("$ GNC c/descuento")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("11265")])
-      ])
+      _c("td")
     ])
   }
 ]
@@ -46542,7 +46596,7 @@ var render = function() {
     _c(
       "div",
       { staticClass: "tabcontent", attrs: { id: "gnc" } },
-      [_c("gnc-table-component")],
+      [_c("gnc-table-component", { attrs: { "result-gnc": _vm.resultGnc } })],
       1
     ),
     _vm._v(" "),

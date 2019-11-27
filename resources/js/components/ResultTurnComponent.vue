@@ -22,7 +22,7 @@
 
         <!-- tab content -->
         <div class="tabcontent" id="gnc">
-            <gnc-table-component></gnc-table-component>            
+            <gnc-table-component :result-gnc="resultGnc"></gnc-table-component>            
         </div>
 
         <div class="tabcontent" id="oil">
@@ -47,10 +47,14 @@
 <script>
 export default {
     mounted(){
-        console.log(this.$vuetify.breakpoint)
         document.getElementById('gnc').style.display = "block";
         document.getElementsByClassName('tablinks')[0].className += " active";
-
+        axios.get('/api/get_result_gnc/'+this.turnId).then(
+            response => {
+                console.log('Initials aforadors: '+ response.data);
+                this.resultGnc = response.data;
+            }
+        )
     },
     methods: {
             openTabContent(tabName) {
@@ -77,10 +81,11 @@ export default {
     data(){
         return {
             tabs: ['GNC','ACEITE','VARIOS','TOTALES','A DECLARAR'],
-            afGncIni: [],
-            afGncFin: [],
-            difAfGnc: []
+            resultGnc: {},
         }
+    },
+    props: {
+        turnId: Number
     }
 }
 </script>

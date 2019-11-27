@@ -5,6 +5,7 @@ namespace La24GNC\Http\Controllers;
 use Illuminate\Http\Request;
 use La24GNC\Sale;
 use La24GNC\Product;
+use \stdClass;
 
 define('$GNC_PRICE', Product::find(1));
 define('$OIL_PRICE', Product::find(2));
@@ -49,5 +50,18 @@ class SaleController extends Controller
         }
 
         return $total;
+    }
+
+    /**
+     * return:
+     * total_gnc
+     * total_gnc_wca
+     * discount
+     * total_gnc_with_discount
+     */
+    public function getResultTurnGncSale($turnId){
+        $sale = Sale::where('turn_id',$turnId)->get();
+        
+        return $resultGnc;
     }
 }

@@ -93,3 +93,5 @@ issue14:
     established the gui for result component
     commit 2:
     was separated the result component on 5 new components
+    commit 3:
+    Loaded data on the gnc table
