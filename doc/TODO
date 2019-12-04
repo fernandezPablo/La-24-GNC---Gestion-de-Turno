@@ -87,3 +87,13 @@ issue14:
     commit 4:
     - Generated the discount vale
     - Generated the final buzon
+    issue16:
+    On this issue is implemented the result of turn
+    commit 1:
+    established the gui for result component
+    commit 2:
+    was separated the result component on 5 new components
+    commit 3:
+    Loaded data on the gnc table
+    commit 4:
+    Loaded data on oil table, table various, table to Declare, and totals table.

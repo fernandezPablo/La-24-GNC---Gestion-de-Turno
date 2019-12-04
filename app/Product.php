@@ -15,7 +15,7 @@ class Product extends Model
         'url_image'
     ];
 
-    public function saleLine(){
-        return $this->belongsTo('App\SaleLine');
+    public function saleLines(){
+        return $this->hasMany('La24GNC\SaleLine');
     }
 }

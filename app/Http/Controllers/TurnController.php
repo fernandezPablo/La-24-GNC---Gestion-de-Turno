@@ -4,17 +4,20 @@ namespace La24GNC\Http\Controllers;
 
 use Illuminate\Http\Request;
 use La24GNC\Turn;
+use \stdClass;
 
 class TurnController extends Controller
 {
     private $productController;
     private $toDeclareController;
     private $saleController;
+    private $aforadorControlController;
 
     public function __construct(){
         $this->productController = new ProductController;
         $this->toDeclareController = new ToDeclareController;
         $this->saleController = new SaleController;
+        $this->aforadorControlController = new AforadorControlController;
     }
 
     private function getCurrentDate(){
@@ -220,5 +223,22 @@ class TurnController extends Controller
             }
         }
         return $totalLts;
+    }
+
+    public function getResultClosedTurn($turnId){
+        $result = new stdClass;
+        $totals = new stdClass;
+
+        $result->gnc = $this->aforadorControlController->getResultAforadors($turnId, "GNC");
+        $result->oil = $this->aforadorControlController->getResultAforadors($turnId, "OIL");
+        $result->various = $this->saleController->getResultVarious($turnId);
+        $result->toDeclares = $this->saleController->getResultToDeclares($turnId);
+        $totals->gnc = $result->gnc->totalGnc;
+        $totals->oil = $result->oil->totalOil;
+        $totals->various = $result->various->total;
+        $totals->total = $totals->gnc + $totals->oil + $totals->various;
+        $result->totals = $totals;
+
+        return json_encode($result);
     }
 }

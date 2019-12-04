@@ -112,14 +112,13 @@ export default {
                         }
                         axios.post('/api/close_turn',data).then(
                             result => {
-                                this.$store.commit('setTurn',{});
                                 swal.fire({
                                     type: 'success',
                                     title: 'Turno Cerrado',
                                     text: 'Turno Cerrado Correctamente',
                                 })
-                                this.$store.commit('setTurn',{});
-                                window.location.href = "/"
+                                this.$router.push({name: 'resultTurn', params: {turnId: this.$store.getters.getTurn.id}})
+                                //this.$store.commit('setTurn',{});
                             }
                         )                        
                     }

@@ -16,10 +16,10 @@ class SaleLine extends Model
     ];
 
     public function sale(){
-        return $this->belongsTo('App\Sale');
+        return $this->belongsTo('La24GNC\Sale');
     }
 
-    public function products(){
-        return $this->hasOne('App\Product');
+    public function product(){
+        return $this->belongsTo('La24GNC\Product');
     }
 }
