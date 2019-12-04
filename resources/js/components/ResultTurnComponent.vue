@@ -22,39 +22,49 @@
 
         <!-- tab content -->
         <div class="tabcontent" id="gnc">
-            <gnc-table-component :result-gnc="resultGnc"></gnc-table-component>            
+            <gnc-table-component :result-gnc="result.gnc"></gnc-table-component>            
         </div>
 
         <div class="tabcontent" id="oil">
-            <oil-table-component></oil-table-component>
+            <oil-table-component :result-oil="result.oil"></oil-table-component>
         </div>
 
         <div class="tabcontent" id="various">
-            <various-table-component></various-table-component>
-        </div>
-        
-        <div class="tabcontent" id="totals">
-           <totals-table-component></totals-table-component>
+            <various-table-component :result-various="result.various"></various-table-component>
         </div>
 
-        <div class="tabcontent" id="to-declare">
-            <to-declare-table-component></to-declare-table-component>
+        <div class="tabcontent" id="totals">
+           <totals-table-component :totals="result.totals"></totals-table-component>
         </div>
         
+        <div class="tabcontent" id="to-declare">
+            <to-declare-table-component :result-to-declares="result.toDeclares"></to-declare-table-component>
+        </div>
+
+        <v-overlay :value="overlay">
+            <v-progress-circular
+                class="progress"
+                indeterminate
+                :size="64"
+                :width="5"
+            ></v-progress-circular>
+        </v-overlay>
     </div>
 </template>
 
 <script>
 export default {
     mounted(){
+        this.overlay = true;
         document.getElementById('gnc').style.display = "block";
         document.getElementsByClassName('tablinks')[0].className += " active";
-        axios.get('/api/get_result_gnc/'+this.turnId).then(
+        axios.get('/api/get_result_closed_turn/'+this.turnId).then(
             response => {
                 console.log('Initials aforadors: '+ response.data);
-                this.resultGnc = response.data;
+                this.result = response.data;
+                this.overlay = false;
             }
-        )
+        );
     },
     methods: {
             openTabContent(tabName) {
@@ -81,12 +91,13 @@ export default {
     data(){
         return {
             tabs: ['GNC','ACEITE','VARIOS','TOTALES','A DECLARAR'],
-            resultGnc: {},
+            result: {},
+            overlay: false,
         }
     },
     props: {
         turnId: Number
-    }
+    },
 }
 </script>
 

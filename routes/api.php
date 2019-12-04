@@ -48,3 +48,5 @@ Route::post('/close_turn','TurnController@CloseTurn');
 Route::get('/to_declare/total/{saleId}','ToDeclareController@getTotalCurrentAccount');
 
 Route::get('get_result_gnc/{turnId}','AforadorControlController@getResultTurnGnc');
+
+Route::get('/get_result_closed_turn/{turnId}','TurnController@getResultClosedTurn');

@@ -8,31 +8,12 @@
              </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>BUZON</td>
-                <td>Cambio</td>
-                <td>1000</td>
+            <tr v-for="(element,index) in resultToDeclares.types" v-bind:key="element">
+                <td> {{ resultToDeclares.types[index] }} </td>
+                <td>{{ resultToDeclares.descriptions[index] }}</td>
+                <td>{{ parseFloat(resultToDeclares.amounts[index]).toFixed(2) }}</td>
             </tr>
-            <tr>
-                <td>BUZON</td>
-                <td>Sin Descripcion</td>
-                <td>6000</td>
-            </tr>
-            <tr>
-                <td>CUENTA CORRIENTE</td>
-                <td>Elias</td>
-                <td>3256.2</td>
-            </tr>
-            <tr>
-                <td>VALE</td>
-                <td>Castillo</td>
-                <td>1500</td>
-            </tr>
-            <tr>
-                <td>VALE</td>
-                <td>Descuento</td>
-                <td>1236</td>
-            </tr>
+            
             <tr class="table-active">
                 <td></td>
                 <td></td>
@@ -41,7 +22,7 @@
             <tr>
                 <td class="table-active"></td>
                 <th class="table-success">TOTAL $</th>
-                <td class="table-success">17659</td>
+                <td class="table-success">{{ parseFloat(resultToDeclares.total).toFixed(2) }}</td>
             </tr>
         </tbody>
     </table>
@@ -53,6 +34,9 @@ export default {
         return {
             headersToDeclare: ['Tipo','Descripcion','Monto'],
         }
+    },
+    props:{
+        resultToDeclares: Object
     }
 }
 </script>

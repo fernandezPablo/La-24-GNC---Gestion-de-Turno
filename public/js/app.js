@@ -2246,6 +2246,9 @@ __webpack_require__.r(__webpack_exports__);
     return {
       headersOil: ['Valor inicial aceite', 'Valor final aceite', 'diferencia']
     };
+  },
+  props: {
+    resultOil: Object
   }
 });
 
@@ -2551,15 +2554,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     var _this = this;
 
+    this.overlay = true;
     document.getElementById('gnc').style.display = "block";
     document.getElementsByClassName('tablinks')[0].className += " active";
-    axios.get('/api/get_result_gnc/' + this.turnId).then(function (response) {
+    axios.get('/api/get_result_closed_turn/' + this.turnId).then(function (response) {
       console.log('Initials aforadors: ' + response.data);
-      _this.resultGnc = response.data;
+      _this.result = response.data;
+      _this.overlay = false;
     });
   },
   methods: {
@@ -2588,7 +2601,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       tabs: ['GNC', 'ACEITE', 'VARIOS', 'TOTALES', 'A DECLARAR'],
-      resultGnc: {}
+      result: {},
+      overlay: false
     };
   },
   props: {
@@ -3331,30 +3345,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       headersToDeclare: ['Tipo', 'Descripcion', 'Monto']
     };
+  },
+  props: {
+    resultToDeclares: Object
   }
 });
 
@@ -3413,7 +3411,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+/* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    totals: Object
+  }
+});
 
 /***/ }),
 
@@ -3455,16 +3457,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       headersVarious: ['Descripcion', 'Cantidad', 'Subtotal']
     };
+  },
+  methods: {
+    round: function round(number) {
+      return number.toFixed(2);
+    }
+  },
+  props: {
+    resultVarious: Object
   }
 });
 
@@ -45809,7 +45814,7 @@ var render = function() {
           _c("th", { staticClass: "table-success" }, [_vm._v("$ GNC")]),
           _vm._v(" "),
           _c("td", { staticClass: "table-success" }, [
-            _vm._v(_vm._s(_vm.resultGnc.saleResult[0].total_gnc))
+            _vm._v(_vm._s(parseFloat(_vm.resultGnc.totalGnc).toFixed(2)))
           ])
         ]),
         _vm._v(" "),
@@ -45820,7 +45825,9 @@ var render = function() {
           _vm._v(" "),
           _c("th", [_vm._v("$ GNC s c/c")]),
           _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(_vm.resultGnc.saleResult[0].total_gnc_wca))])
+          _c("td", [
+            _vm._v(_vm._s(parseFloat(_vm.resultGnc.totalGncWCA).toFixed(2)))
+          ])
         ]),
         _vm._v(" "),
         _c("tr", [
@@ -45830,7 +45837,9 @@ var render = function() {
           _vm._v(" "),
           _c("th", [_vm._v("descuento")]),
           _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(_vm.resultGnc.saleResult[0].discount))])
+          _c("td", [
+            _vm._v(_vm._s(parseFloat(_vm.resultGnc.discount).toFixed(2)))
+          ])
         ]),
         _vm._v(" "),
         _c("tr", [
@@ -45841,7 +45850,9 @@ var render = function() {
           _c("th", [_vm._v("$ GNC c/descuento")]),
           _vm._v(" "),
           _c("td", [
-            _vm._v(_vm._s(_vm.resultGnc.saleResult[0].total_gnc_with_discount))
+            _vm._v(
+              _vm._s(parseFloat(_vm.resultGnc.totalGncWithDiscount).toFixed(2))
+            )
           ])
         ])
       ],
@@ -46090,7 +46101,45 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _vm._m(0)
+    _c(
+      "tbody",
+      [
+        _vm._l(_vm.resultOil.aforadorsIn, function(element, index) {
+          return _c("tr", { key: index }, [
+            _c("td", [_vm._v(_vm._s(_vm.resultOil.aforadorsIn[index]) + " ")]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(_vm.resultOil.aforadorsOut[index]))]),
+            _vm._v(" "),
+            _c("td", [
+              _vm._v(_vm._s(_vm.resultOil.difference[index].toFixed(2)))
+            ])
+          ])
+        }),
+        _vm._v(" "),
+        _vm._m(0),
+        _vm._v(" "),
+        _c("tr", [
+          _c("td", { staticClass: "table-active" }),
+          _vm._v(" "),
+          _c("th", [_vm._v("lts")]),
+          _vm._v(" "),
+          _c("td", [
+            _vm._v(_vm._s(parseFloat(_vm.resultOil.totalLts).toFixed(2)))
+          ])
+        ]),
+        _vm._v(" "),
+        _c("tr", [
+          _c("td", { staticClass: "table-active" }),
+          _vm._v(" "),
+          _c("th", { staticClass: "table-success" }, [_vm._v("Total ($)")]),
+          _vm._v(" "),
+          _c("td", { staticClass: "table-success" }, [
+            _vm._v(_vm._s(parseFloat(_vm.resultOil.totalOil).toFixed(2)))
+          ])
+        ])
+      ],
+      2
+    )
   ])
 }
 var staticRenderFns = [
@@ -46098,38 +46147,12 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("tbody", [
-      _c("tr", [
-        _c("td", [_vm._v("123.4")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("124.4")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("1")])
-      ]),
+    return _c("tr", { staticClass: "table-active" }, [
+      _c("td"),
       _vm._v(" "),
-      _c("tr", { staticClass: "table-active" }, [
-        _c("td"),
-        _vm._v(" "),
-        _c("td"),
-        _vm._v(" "),
-        _c("td")
-      ]),
+      _c("td"),
       _vm._v(" "),
-      _c("tr", [
-        _c("td", { staticClass: "table-active" }),
-        _vm._v(" "),
-        _c("th", [_vm._v("lts")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("1")])
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("td", { staticClass: "table-active" }),
-        _vm._v(" "),
-        _c("th", { staticClass: "table-success" }, [_vm._v("Total ($)")]),
-        _vm._v(" "),
-        _c("td", { staticClass: "table-success" }, [_vm._v("160")])
-      ])
+      _c("td")
     ])
   }
 ]
@@ -46525,109 +46548,140 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "main-div" }, [
-    _c("div", { staticClass: "tab" }, [
-      _c(
-        "button",
-        {
-          staticClass: "tablinks",
-          on: {
-            click: function($event) {
-              return _vm.openTabContent("gnc")
+  return _c(
+    "div",
+    { staticClass: "main-div" },
+    [
+      _c("div", { staticClass: "tab" }, [
+        _c(
+          "button",
+          {
+            staticClass: "tablinks",
+            on: {
+              click: function($event) {
+                return _vm.openTabContent("gnc")
+              }
             }
-          }
-        },
-        [_vm._v("\n           GNC\n       ")]
+          },
+          [_vm._v("\n           GNC\n       ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "tablinks",
+            on: {
+              click: function($event) {
+                return _vm.openTabContent("oil")
+              }
+            }
+          },
+          [_vm._v("\n           ACEITE\n       ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "tablinks",
+            on: {
+              click: function($event) {
+                return _vm.openTabContent("various")
+              }
+            }
+          },
+          [_vm._v("\n           VARIOS\n       ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "tablinks",
+            on: {
+              click: function($event) {
+                return _vm.openTabContent("totals")
+              }
+            }
+          },
+          [_vm._v("\n           TOTALES\n       ")]
+        ),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "tablinks",
+            on: {
+              click: function($event) {
+                return _vm.openTabContent("to-declare")
+              }
+            }
+          },
+          [_vm._v("\n           A DECLARAR\n       ")]
+        )
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "tabcontent", attrs: { id: "gnc" } },
+        [
+          _c("gnc-table-component", { attrs: { "result-gnc": _vm.result.gnc } })
+        ],
+        1
       ),
       _vm._v(" "),
       _c(
-        "button",
-        {
-          staticClass: "tablinks",
-          on: {
-            click: function($event) {
-              return _vm.openTabContent("oil")
-            }
-          }
-        },
-        [_vm._v("\n           ACEITE\n       ")]
+        "div",
+        { staticClass: "tabcontent", attrs: { id: "oil" } },
+        [
+          _c("oil-table-component", { attrs: { "result-oil": _vm.result.oil } })
+        ],
+        1
       ),
       _vm._v(" "),
       _c(
-        "button",
-        {
-          staticClass: "tablinks",
-          on: {
-            click: function($event) {
-              return _vm.openTabContent("various")
-            }
-          }
-        },
-        [_vm._v("\n           VARIOS\n       ")]
+        "div",
+        { staticClass: "tabcontent", attrs: { id: "various" } },
+        [
+          _c("various-table-component", {
+            attrs: { "result-various": _vm.result.various }
+          })
+        ],
+        1
       ),
       _vm._v(" "),
       _c(
-        "button",
-        {
-          staticClass: "tablinks",
-          on: {
-            click: function($event) {
-              return _vm.openTabContent("totals")
-            }
-          }
-        },
-        [_vm._v("\n           TOTALES\n       ")]
+        "div",
+        { staticClass: "tabcontent", attrs: { id: "totals" } },
+        [
+          _c("totals-table-component", { attrs: { totals: _vm.result.totals } })
+        ],
+        1
       ),
       _vm._v(" "),
       _c(
-        "button",
-        {
-          staticClass: "tablinks",
-          on: {
-            click: function($event) {
-              return _vm.openTabContent("to-declare")
-            }
-          }
-        },
-        [_vm._v("\n           A DECLARAR\n       ")]
+        "div",
+        { staticClass: "tabcontent", attrs: { id: "to-declare" } },
+        [
+          _c("to-declare-table-component", {
+            attrs: { "result-to-declares": _vm.result.toDeclares }
+          })
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "v-overlay",
+        { attrs: { value: _vm.overlay } },
+        [
+          _c("v-progress-circular", {
+            staticClass: "progress",
+            attrs: { indeterminate: "", size: 64, width: 5 }
+          })
+        ],
+        1
       )
-    ]),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "tabcontent", attrs: { id: "gnc" } },
-      [_c("gnc-table-component", { attrs: { "result-gnc": _vm.resultGnc } })],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "tabcontent", attrs: { id: "oil" } },
-      [_c("oil-table-component")],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "tabcontent", attrs: { id: "various" } },
-      [_c("various-table-component")],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "tabcontent", attrs: { id: "totals" } },
-      [_c("totals-table-component")],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "tabcontent", attrs: { id: "to-declare" } },
-      [_c("to-declare-table-component")],
-      1
-    )
-  ])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -47139,7 +47193,43 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _vm._m(0)
+    _c(
+      "tbody",
+      [
+        _vm._l(_vm.resultToDeclares.types, function(element, index) {
+          return _c("tr", { key: element }, [
+            _c("td", [
+              _vm._v(" " + _vm._s(_vm.resultToDeclares.types[index]) + " ")
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _vm._v(_vm._s(_vm.resultToDeclares.descriptions[index]))
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _vm._v(
+                _vm._s(
+                  parseFloat(_vm.resultToDeclares.amounts[index]).toFixed(2)
+                )
+              )
+            ])
+          ])
+        }),
+        _vm._v(" "),
+        _vm._m(0),
+        _vm._v(" "),
+        _c("tr", [
+          _c("td", { staticClass: "table-active" }),
+          _vm._v(" "),
+          _c("th", { staticClass: "table-success" }, [_vm._v("TOTAL $")]),
+          _vm._v(" "),
+          _c("td", { staticClass: "table-success" }, [
+            _vm._v(_vm._s(parseFloat(_vm.resultToDeclares.total).toFixed(2)))
+          ])
+        ])
+      ],
+      2
+    )
   ])
 }
 var staticRenderFns = [
@@ -47147,62 +47237,12 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("tbody", [
-      _c("tr", [
-        _c("td", [_vm._v("BUZON")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Cambio")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("1000")])
-      ]),
+    return _c("tr", { staticClass: "table-active" }, [
+      _c("td"),
       _vm._v(" "),
-      _c("tr", [
-        _c("td", [_vm._v("BUZON")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Sin Descripcion")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("6000")])
-      ]),
+      _c("td"),
       _vm._v(" "),
-      _c("tr", [
-        _c("td", [_vm._v("CUENTA CORRIENTE")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Elias")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("3256.2")])
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("td", [_vm._v("VALE")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Castillo")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("1500")])
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("td", [_vm._v("VALE")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("Descuento")]),
-        _vm._v(" "),
-        _c("td", [_vm._v("1236")])
-      ]),
-      _vm._v(" "),
-      _c("tr", { staticClass: "table-active" }, [
-        _c("td"),
-        _vm._v(" "),
-        _c("td"),
-        _vm._v(" "),
-        _c("td")
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("td", { staticClass: "table-active" }),
-        _vm._v(" "),
-        _c("th", { staticClass: "table-success" }, [_vm._v("TOTAL $")]),
-        _vm._v(" "),
-        _c("td", { staticClass: "table-success" }, [_vm._v("17659")])
-      ])
+      _c("td")
     ])
   }
 ]
@@ -47227,53 +47267,71 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("table", { staticClass: "table" }, [
+    _c("tbody", [
+      _c("tr", [
+        _c("th", [_vm._v("\n                 TOTAL GNC ($)\n             ")]),
+        _vm._v(" "),
+        _c("td", [
+          _vm._v(
+            "\n                 " +
+              _vm._s(parseFloat(_vm.totals.gnc).toFixed(2)) +
+              "\n             "
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("tr", [
+        _c("th", [_vm._v("\n                TOTAL ACEITE ($)\n            ")]),
+        _vm._v(" "),
+        _c("td", [
+          _vm._v(
+            "\n                " +
+              _vm._s(parseFloat(_vm.totals.oil).toFixed(2)) +
+              "\n            "
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("tr", [
+        _c("th", [_vm._v("\n                TOTAL VARIOS ($)\n            ")]),
+        _vm._v(" "),
+        _c("td", [
+          _vm._v(
+            "\n                " +
+              _vm._s(parseFloat(_vm.totals.various).toFixed(2)) +
+              "\n            "
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _vm._m(0),
+      _vm._v(" "),
+      _c("tr", [
+        _c("th", { staticClass: "table-success" }, [
+          _vm._v("\n                TOTAL ($)\n            ")
+        ]),
+        _vm._v(" "),
+        _c("td", { staticClass: "table-success" }, [
+          _vm._v(
+            "\n                " +
+              _vm._s(parseFloat(_vm.totals.total).toFixed(2)) +
+              "\n            "
+          )
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("table", { staticClass: "table" }, [
-      _c("tbody", [
-        _c("tr", [
-          _c("th", [_vm._v("\n                 TOTAL GNC ($)\n             ")]),
-          _vm._v(" "),
-          _c("td", [_vm._v("\n                 15235\n             ")])
-        ]),
-        _vm._v(" "),
-        _c("tr", [
-          _c("th", [
-            _vm._v("\n                TOTAL ACEITE ($)\n            ")
-          ]),
-          _vm._v(" "),
-          _c("td", [_vm._v("\n                265\n            ")])
-        ]),
-        _vm._v(" "),
-        _c("tr", [
-          _c("th", [
-            _vm._v("\n                TOTAL VARIOS ($)\n            ")
-          ]),
-          _vm._v(" "),
-          _c("td", [_vm._v("\n                123\n            ")])
-        ]),
-        _vm._v(" "),
-        _c("tr", { staticClass: "table-active" }, [
-          _c("td"),
-          _vm._v(" "),
-          _c("td")
-        ]),
-        _vm._v(" "),
-        _c("tr", [
-          _c("th", { staticClass: "table-success" }, [
-            _vm._v("\n                TOTAL ($)\n            ")
-          ]),
-          _vm._v(" "),
-          _c("td", { staticClass: "table-success" }, [
-            _vm._v("\n                17659\n            ")
-          ])
-        ])
-      ])
+    return _c("tr", { staticClass: "table-active" }, [
+      _c("td"),
+      _vm._v(" "),
+      _c("td")
     ])
   }
 ]
@@ -47313,7 +47371,48 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _vm._m(0)
+    _c(
+      "tbody",
+      [
+        _vm._l(_vm.resultVarious.descriptions, function(element, index) {
+          return _c("tr", { key: element }, [
+            _c("td", [
+              _vm._v(" " + _vm._s(_vm.resultVarious.descriptions[index]) + " ")
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _vm._v(
+                " " +
+                  _vm._s(
+                    parseFloat(_vm.resultVarious.amounts[index].toFixed(2))
+                  ) +
+                  " "
+              )
+            ]),
+            _vm._v(" "),
+            _c("td", [
+              _vm._v(
+                " " +
+                  _vm._s(parseFloat(_vm.resultVarious.totals[index]).toFixed(2))
+              )
+            ])
+          ])
+        }),
+        _vm._v(" "),
+        _vm._m(0),
+        _vm._v(" "),
+        _c("tr", [
+          _c("td", { staticClass: "table-active" }),
+          _vm._v(" "),
+          _c("th", { staticClass: "table-success" }, [_vm._v("TOTAL $")]),
+          _vm._v(" "),
+          _c("td", { staticClass: "table-success" }, [
+            _vm._v(_vm._s(parseFloat(_vm.resultVarious.total).toFixed(2)))
+          ])
+        ])
+      ],
+      2
+    )
   ])
 }
 var staticRenderFns = [
@@ -47321,38 +47420,12 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("tbody", [
-      _c("tr", [
-        _c("td", [_vm._v(" Hielo x 5kg ")]),
-        _vm._v(" "),
-        _c("td", [_vm._v(" 3 ")]),
-        _vm._v(" "),
-        _c("td", [_vm._v(" 240 ")])
-      ]),
+    return _c("tr", { staticClass: "table-active" }, [
+      _c("td"),
       _vm._v(" "),
-      _c("tr", [
-        _c("td", [_vm._v(" Hielo x 15kg ")]),
-        _vm._v(" "),
-        _c("td", [_vm._v(" 1 ")]),
-        _vm._v(" "),
-        _c("td", [_vm._v(" 140 ")])
-      ]),
+      _c("td"),
       _vm._v(" "),
-      _c("tr", { staticClass: "table-active" }, [
-        _c("td"),
-        _vm._v(" "),
-        _c("td"),
-        _vm._v(" "),
-        _c("td")
-      ]),
-      _vm._v(" "),
-      _c("tr", [
-        _c("td", { staticClass: "table-active" }),
-        _vm._v(" "),
-        _c("th", { staticClass: "table-success" }, [_vm._v("TOTAL $")]),
-        _vm._v(" "),
-        _c("td", { staticClass: "table-success" }, [_vm._v("380")])
-      ])
+      _c("td")
     ])
   }
 ]

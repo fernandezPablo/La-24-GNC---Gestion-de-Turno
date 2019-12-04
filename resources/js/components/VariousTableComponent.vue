@@ -8,15 +8,10 @@
              </tr>
         </thead>
         <tbody>
-            <tr>
-                <td> Hielo x 5kg </td>
-                <td> 3 </td>
-                <td> 240 </td>
-            </tr>
-            <tr>
-                <td> Hielo x 15kg </td>
-                <td> 1 </td>
-                <td> 140 </td>
+            <tr v-for="(element,index) in resultVarious.descriptions" v-bind:key="element">
+                <td> {{ resultVarious.descriptions[index] }} </td>
+                <td> {{ parseFloat(resultVarious.amounts[index].toFixed(2)) }} </td>
+                <td> {{ parseFloat(resultVarious.totals[index]).toFixed(2) }}</td>
             </tr>
             <tr class="table-active">
                 <td></td>
@@ -26,7 +21,7 @@
             <tr>
                 <td class="table-active"></td>
                 <th class="table-success">TOTAL $</th>
-                <td class="table-success">380</td>
+                <td class="table-success">{{ parseFloat(resultVarious.total).toFixed(2) }}</td>
             </tr>
         </tbody>
     </table>
@@ -39,6 +34,14 @@ export default {
             headersVarious: ['Descripcion','Cantidad','Subtotal'],
         }
     },
+    methods:{
+        round(number){
+            return number.toFixed(2)
+        }
+    },
+    props:{
+        resultVarious: Object
+    }
 }
 </script>
 

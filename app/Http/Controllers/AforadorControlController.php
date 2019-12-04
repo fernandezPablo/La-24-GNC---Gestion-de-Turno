@@ -79,4 +79,61 @@ class AforadorControlController extends Controller
         return json_encode($resultGnc);
     }
 
+    public function getResultAforadors($turnId, $type){
+        $aforadorControls = AforadorControl::where('turn_id',$turnId)->get();
+        $sale = $this->saleController->getSale($turnId);
+        $result = new stdClass;
+
+        if($type == "GNC"){
+            $result = $this->getResultForGnc($aforadorControls,$sale);
+        }
+        else if($type == "OIL"){
+            $result = $this->getResultForOil($aforadorControls,$sale);
+        }
+        else {
+            $result = null;
+        }
+         
+        return $result;
+    }
+
+    private function getResultForGnc($aforadorControls,$sale){
+        $result = new stdClass;
+        foreach($aforadorControls as $aforadorControl){
+            if($aforadorControl->type == "GNC"){
+                $result->m3 = $aforadorControl->total_m3;
+                $result->pmzIn = $aforadorControl->pmz_in;
+                $result->pmzOut = $aforadorControl->pmz_out;
+                $result->pmzDifference = $aforadorControl->pmz_difference;
+                foreach($aforadorControl->aforadors as $aforador){
+                   $result->aforadorsIn[] = $aforador->valueIn;
+                   $result->aforadorsOut[] = $aforador->valueOut;
+                   $result->difference[] = $aforador->difference;
+                }
+            }
+        }
+        $result->totalGnc = $sale[0]->total_gnc;
+        $result->totalGncWCA = $sale[0]->total_gnc_wca;
+        $result->discount = $sale[0]->discount;
+        $result->totalGncWithDiscount = $sale[0]->total_gnc_with_discount;
+
+        return $result;
+    }
+
+    private function getResultForOil($aforadorControls,$sale){
+        $result = new stdClass;
+        foreach($aforadorControls as $aforadorControl){
+            if($aforadorControl->type == "OIL"){
+                $result->totalLts = $aforadorControl->total_lts;
+                foreach($aforadorControl->aforadors as $aforador){
+                    $result->aforadorsIn[] = $aforador->valueIn;
+                    $result->aforadorsOut[] = $aforador->valueOut;
+                    $result->difference[] = $aforador->difference;
+                 }
+            }
+        }
+        $result->totalOil = $sale[0]->total_oil;
+
+        return $result;
+    }
 }

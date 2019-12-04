@@ -68,7 +68,7 @@ const routes = [
     {path: '/cerrarTurno', name: 'closeTurn', component: CloseTurn, props: true},
     {path: '/abmProductos', name: 'abmProducts', component: Example, props: true},
     {path: '/consultarTurno', name: 'checkTurn', component: Example, props: true},
-    {path: '/resultTurn', name: 'resultTurn', component: ResultTurn, props: true}
+    {path: '/resultTurn', name: 'resultTurn', component: ResultTurn, props: true},
 ]
 
 const router = new VueRouter({

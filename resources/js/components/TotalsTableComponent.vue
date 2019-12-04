@@ -6,7 +6,7 @@
                      TOTAL GNC ($)
                  </th>
                  <td>
-                     15235
+                     {{ parseFloat(totals.gnc).toFixed(2) }}
                  </td>
             </tr>
             <tr>
@@ -14,7 +14,7 @@
                     TOTAL ACEITE ($)
                 </th>
                 <td>
-                    265
+                    {{ parseFloat(totals.oil).toFixed(2) }}
                 </td>
             </tr>
             <tr>
@@ -22,7 +22,7 @@
                     TOTAL VARIOS ($)
                 </th>
                 <td>
-                    123
+                    {{ parseFloat(totals.various).toFixed(2) }}
                 </td>
             </tr>
             <tr class="table-active">
@@ -34,7 +34,7 @@
                     TOTAL ($)
                 </th>
                 <td class="table-success">
-                    17659
+                    {{ parseFloat(totals.total).toFixed(2) }}
                 </td>
             </tr>
         </tbody>
@@ -44,7 +44,9 @@
 
 <script>
 export default {
-    
+ props:{
+     totals: Object
+ }   
 }
 </script>
 

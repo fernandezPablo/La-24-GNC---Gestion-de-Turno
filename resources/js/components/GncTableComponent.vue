@@ -42,25 +42,25 @@
                         <td class="table-active"></td>
                         <td class="table-active"></td>
                         <th class="table-success">$ GNC</th>
-                        <td class="table-success">{{ resultGnc.saleResult[0].total_gnc }}</td>
+                        <td class="table-success">{{ parseFloat(resultGnc.totalGnc).toFixed(2) }}</td>
                     </tr>
                     <tr>
                         <td class="table-active"></td>
                         <td class="table-active"></td>
                         <th>$ GNC s c/c</th>
-                        <td>{{ resultGnc.saleResult[0].total_gnc_wca }}</td>
+                        <td>{{ parseFloat(resultGnc.totalGncWCA).toFixed(2) }}</td>
                     </tr>
                     <tr>
                         <td class="table-active"></td>
                         <td class="table-active"></td>
                         <th>descuento</th>
-                        <td>{{ resultGnc.saleResult[0].discount }}</td>
+                        <td>{{ parseFloat(resultGnc.discount).toFixed(2) }}</td>
                     </tr>
                     <tr>
                         <td class="table-active"></td>
                         <td class="table-active"></td>
                         <th>$ GNC c/descuento</th>
-                        <td>{{ resultGnc.saleResult[0].total_gnc_with_discount }}</td>
+                        <td>{{ parseFloat(resultGnc.totalGncWithDiscount).toFixed(2) }}</td>
                     </tr>
                 </tbody>
             </table>    

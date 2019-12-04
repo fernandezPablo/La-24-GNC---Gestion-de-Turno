@@ -95,3 +95,5 @@ issue14:
     was separated the result component on 5 new components
     commit 3:
     Loaded data on the gnc table
+    commit 4:
+    Loaded data on oil table, table various, table to Declare, and totals table.

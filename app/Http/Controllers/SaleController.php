@@ -52,16 +52,34 @@ class SaleController extends Controller
         return $total;
     }
 
-    /**
-     * return:
-     * total_gnc
-     * total_gnc_wca
-     * discount
-     * total_gnc_with_discount
-     */
-    public function getResultTurnGncSale($turnId){
+    public function getResultVarious($turnId){
         $sale = Sale::where('turn_id',$turnId)->get();
-        
-        return $resultGnc;
+        $result = new stdClass;
+
+        foreach($sale[0]->saleLines as $saleLine){
+            $result->descriptions[] = $saleLine->product->description;
+            $result->amounts[] = $saleLine->amount;
+            $result->totals[] = $saleLine->total;
+        }
+
+        $result->total = $sale[0]->total_various;
+
+        return $result;
+    }
+
+    public function getResultToDeclares($turnId){
+        $sale = Sale::where('turn_id',$turnId)->get();
+        $result = new stdClass;
+
+        $result->total = 0;
+
+        foreach($sale[0]->toDeclares as $toDeclare){
+            $result->types[] = $toDeclare->type;
+            $result->descriptions[] = $toDeclare->description;
+            $result->amounts[] = $toDeclare->amount;
+            $result->total += $toDeclare->amount;
+        }
+
+        return $result;
     }
 }
