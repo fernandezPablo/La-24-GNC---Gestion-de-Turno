@@ -97,3 +97,8 @@ issue14:
     Loaded data on the gnc table
     commit 4:
     Loaded data on oil table, table various, table to Declare, and totals table.
+    issue17:
+    On this issue is fixed existing bugs
+    commit 1:
+    simplified template on openTurnComponent and closeTurnComponent
+    verified values of "aforadors" before closed the turn

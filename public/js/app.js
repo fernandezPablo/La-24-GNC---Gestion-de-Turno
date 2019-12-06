@@ -1805,23 +1805,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     userId: Number
@@ -1830,7 +1813,10 @@ __webpack_require__.r(__webpack_exports__);
     return {
       afGnc: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
       pmz: 0.0,
-      afOil: [0.0]
+      afOil: [0.0],
+      afGncIni: [],
+      afOilIni: [],
+      pmzIni: 0.0
     };
   },
   mounted: function mounted() {
@@ -1838,7 +1824,12 @@ __webpack_require__.r(__webpack_exports__);
 
     if (!this.isTurnOpenOnStore()) {
       this.isTurnOpenOnDataBase();
+    } else {
+      this.getAforadorsIniAndPmz();
     }
+  },
+  watch: {
+    afGnc: function afGnc() {}
   },
   methods: {
     isTurnOpenOnStore: function isTurnOpenOnStore() {
@@ -1854,6 +1845,8 @@ __webpack_require__.r(__webpack_exports__);
           var lastResult = response.data[response.data.length - 1];
 
           _this.$store.commit('setTurn', lastResult);
+
+          _this.getAforadorsIniAndPmz();
 
           _this.overlay = false;
         } else {
@@ -1901,11 +1894,37 @@ __webpack_require__.r(__webpack_exports__);
               params: {
                 turnId: _this2.$store.getters.getTurn.id
               }
-            }); //this.$store.commit('setTurn',{});
-
+            });
           });
         }
       });
+    },
+    getAforadorsIniAndPmz: function getAforadorsIniAndPmz() {
+      var _this3 = this;
+
+      var aforadors = [];
+      axios.get('/api/aforadors_values/' + this.$store.getters.getTurn.id).then(function (response) {
+        for (var i = 0; i < response.data.length; i++) {
+          if (i < 6) {
+            _this3.afGncIni.push(response.data[i]);
+          } else if (i == 6) {
+            _this3.pmzIni = response.data[i];
+          } else {
+            _this3.afOilIni.push(response.data[i]);
+          }
+        }
+      });
+    },
+    verifyValue: function verifyValue(valueIn, valueOut) {
+      if (valueOut < valueIn) {
+        console.log('El valor final no puede ser mayor que el valor inicial...');
+        swal.fire({
+          type: 'error',
+          title: 'Oops...',
+          text: 'El valor final no puede ser menor que el valor inicial',
+          footer: 'Modifique el valor de salida, o edite el valor de entrada en la opcion abrir turno'
+        });
+      }
     }
   }
 });
@@ -2266,26 +2285,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -45393,245 +45392,106 @@ var render = function() {
         }
       },
       [
-        _c("div", { staticClass: "form-card mt-1" }, [
-          _c("h2", { staticClass: "text-center" }, [_vm._v("GNC")]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", { attrs: { for: "aforador1" } }, [
-              _vm._v("AFORADOR 1")
-            ]),
+        _c(
+          "div",
+          { staticClass: "form-card mt-1" },
+          [
+            _c("h2", { staticClass: "text-center" }, [_vm._v("GNC")]),
             _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.afGnc[0],
-                  expression: "afGnc[0]"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: {
-                placeholder: "VALOR DE SALIDA DEL AFORADOR 1",
-                type: "number",
-                step: "0.01",
-                name: "aforador1",
-                id: "aforador1"
-              },
-              domProps: { value: _vm.afGnc[0] },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
+            _vm._l(_vm.afGnc, function(aforador, index) {
+              return _c("div", { key: index, staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "aforador" + (index + 1) } }, [
+                  _vm._v("AFORADOR " + _vm._s(index + 1))
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.afGnc[index],
+                      expression: "afGnc[index]"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    placeholder: "VALOR DE SALIDA DEL AFORADOR " + (index + 1),
+                    type: "number",
+                    step: "0.01",
+                    name: "aforador" + (index + 1),
+                    id: "aforador" + (index + 1)
+                  },
+                  domProps: { value: _vm.afGnc[index] },
+                  on: {
+                    change: function($event) {
+                      return _vm.verifyValue(
+                        _vm.afGncIni[index],
+                        _vm.afGnc[index]
+                      )
+                    },
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.$set(_vm.afGnc, index, $event.target.value)
+                    }
                   }
-                  _vm.$set(_vm.afGnc, 0, $event.target.value)
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", { attrs: { for: "aforador2" } }, [
-              _vm._v("AFORADOR 2")
-            ]),
+                }),
+                _vm._v(" "),
+                _vm.afGncIni.lenght != 0
+                  ? _c("small", [
+                      _vm._v(
+                        "valor inicial del aforador: " +
+                          _vm._s(_vm.afGncIni[index])
+                      )
+                    ])
+                  : _vm._e()
+              ])
+            }),
             _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.afGnc[1],
-                  expression: "afGnc[1]"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: {
-                placeholder: "VALOR DE SALIDA DEL AFORADOR 2",
-                type: "number",
-                step: "0.01",
-                name: "aforador2",
-                id: "aforador2"
-              },
-              domProps: { value: _vm.afGnc[1] },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
+            _c("div", { staticClass: "form-group" }, [
+              _c("label", { attrs: { for: "pmz" } }, [_vm._v("PMZ")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.pmz,
+                    expression: "pmz"
                   }
-                  _vm.$set(_vm.afGnc, 1, $event.target.value)
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", { attrs: { for: "aforador3" } }, [
-              _vm._v("AFORADOR 3")
-            ]),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.afGnc[2],
-                  expression: "afGnc[2]"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: {
-                placeholder: "VALOR DE SALIDA DEL AFORADOR 3",
-                type: "number",
-                step: "0.01",
-                name: "aforador3",
-                id: "aforador3"
-              },
-              domProps: { value: _vm.afGnc[2] },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
+                ],
+                staticClass: "form-control",
+                attrs: {
+                  placeholder: "VALOR DE SALIDA DEL PMZ",
+                  type: "number",
+                  step: "0.01",
+                  name: "pmz",
+                  id: "pmz"
+                },
+                domProps: { value: _vm.pmz },
+                on: {
+                  change: function($event) {
+                    return _vm.verifyValue(_vm.pmzIni, _vm.pmz)
+                  },
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.pmz = $event.target.value
                   }
-                  _vm.$set(_vm.afGnc, 2, $event.target.value)
                 }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", { attrs: { for: "aforador4" } }, [
-              _vm._v("AFORADOR 4")
-            ]),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.afGnc[3],
-                  expression: "afGnc[3]"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: {
-                placeholder: "VALOR DE SALIDA DEL AFORADOR 4",
-                type: "number",
-                step: "0.01",
-                name: "aforador4",
-                id: "aforador4"
-              },
-              domProps: { value: _vm.afGnc[3] },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.afGnc, 3, $event.target.value)
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", { attrs: { for: "aforador5" } }, [
-              _vm._v("AFORADOR 5")
-            ]),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.afGnc[4],
-                  expression: "afGnc[4]"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: {
-                placeholder: "VALOR DE SALIDA DEL AFORADOR 5",
-                type: "number",
-                step: "0.01",
-                name: "aforador5",
-                id: "aforador5"
-              },
-              domProps: { value: _vm.afGnc[4] },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.afGnc, 4, $event.target.value)
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", { attrs: { for: "aforador6" } }, [
-              _vm._v("AFORADOR 6")
-            ]),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.afGnc[5],
-                  expression: "afGnc[5]"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: {
-                placeholder: "VALOR DE SALIDA DEL AFORADOR 6",
-                type: "number",
-                step: "0.01",
-                name: "aforador6",
-                id: "aforador6"
-              },
-              domProps: { value: _vm.afGnc[5] },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.$set(_vm.afGnc, 5, $event.target.value)
-                }
-              }
-            })
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c("label", { attrs: { for: "pmz" } }, [_vm._v("PMZ")]),
-            _vm._v(" "),
-            _c("input", {
-              directives: [
-                {
-                  name: "model",
-                  rawName: "v-model",
-                  value: _vm.pmz,
-                  expression: "pmz"
-                }
-              ],
-              staticClass: "form-control",
-              attrs: {
-                placeholder: "VALOR DE SALIDA DEL PMZ",
-                type: "number",
-                step: "0.01",
-                name: "pmz",
-                id: "pmz"
-              },
-              domProps: { value: _vm.pmz },
-              on: {
-                input: function($event) {
-                  if ($event.target.composing) {
-                    return
-                  }
-                  _vm.pmz = $event.target.value
-                }
-              }
-            })
-          ])
-        ]),
+              }),
+              _vm._v(" "),
+              _vm.afGncIni.lenght != 0
+                ? _c("small", [
+                    _vm._v("valor inicial del pmz: " + _vm._s(_vm.pmzIni))
+                  ])
+                : _vm._e()
+            ])
+          ],
+          2
+        ),
         _vm._v(" "),
         _c("div", { staticClass: "form-card mt-1 mb-1" }, [
           _c("h2", { staticClass: "text-center" }, [_vm._v("ACEITE")]),
@@ -45658,6 +45518,9 @@ var render = function() {
               },
               domProps: { value: _vm.afOil[0] },
               on: {
+                change: function($event) {
+                  return _vm.verifyValue(_vm.afOilIni, _vm.afOil[0])
+                },
                 input: function($event) {
                   if ($event.target.composing) {
                     return
@@ -45665,7 +45528,15 @@ var render = function() {
                   _vm.$set(_vm.afOil, 0, $event.target.value)
                 }
               }
-            })
+            }),
+            _vm._v(" "),
+            _vm.afGncIni.lenght != 0
+              ? _c("small", [
+                  _vm._v(
+                    "valor inicial del aforador: " + _vm._s(_vm.afOilIni[0])
+                  )
+                ])
+              : _vm._e()
           ])
         ]),
         _vm._v(" "),
@@ -45778,7 +45649,11 @@ var render = function() {
             _vm._v(" "),
             _c("td", [_vm._v(_vm._s(_vm.resultGnc.aforadorsOut[index]))]),
             _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(_vm.resultGnc.difference[index]))])
+            _c("td", [
+              _vm._v(
+                _vm._s(parseFloat(_vm.resultGnc.difference[index].toFixed(2)))
+              )
+            ])
           ])
         }),
         _vm._v(" "),
@@ -45791,7 +45666,9 @@ var render = function() {
           _vm._v(" "),
           _c("td", [_vm._v(_vm._s(_vm.resultGnc.pmzOut))]),
           _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(_vm.resultGnc.pmzDifference))])
+          _c("td", [
+            _vm._v(_vm._s(parseFloat(_vm.resultGnc.pmzDifference).toFixed(2)))
+          ])
         ]),
         _vm._v(" "),
         _vm._m(1),
@@ -45803,7 +45680,7 @@ var render = function() {
           _vm._v(" "),
           _c("th", [_vm._v("m3")]),
           _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(_vm.resultGnc.m3))])
+          _c("td", [_vm._v(_vm._s(parseFloat(_vm.resultGnc.m3.toFixed(2))))])
         ]),
         _vm._v(" "),
         _c("tr", [
@@ -46198,269 +46075,107 @@ var render = function() {
           }
         },
         [
-          _c("div", { staticClass: "form-card mt-1" }, [
-            _c("h2", { staticClass: "text-center" }, [_vm._v("GNC")]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.userId,
-                    expression: "userId"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "hidden", name: "user_id", id: "user_id" },
-                domProps: { value: _vm.userId },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+          _c(
+            "div",
+            { staticClass: "form-card mt-1" },
+            [
+              _c("h2", { staticClass: "text-center" }, [_vm._v("GNC")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.userId,
+                      expression: "userId"
                     }
-                    _vm.userId = $event.target.value
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "hidden", name: "user_id", id: "user_id" },
+                  domProps: { value: _vm.userId },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.userId = $event.target.value
+                    }
                   }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "aforador1" } }, [
-                _vm._v("AFORADOR 1")
+                })
               ]),
               _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.afGnc[0],
-                    expression: "afGnc[0]"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  placeholder: "VALOR DE ENTRADA DEL AFORADOR 1",
-                  type: "number",
-                  step: "0.01",
-                  name: "aforador1",
-                  id: "aforador1"
-                },
-                domProps: { value: _vm.afGnc[0] },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+              _vm._l(_vm.afGnc, function(aforador, index) {
+                return _c("div", { key: index, staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "aforador" + (index + 1) } }, [
+                    _vm._v("AFORADOR " + _vm._s(index))
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.afGnc[index],
+                        expression: "afGnc[index]"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      placeholder:
+                        "VALOR DE ENTRADA DEL AFORADOR " + (index + 1),
+                      type: "number",
+                      step: "0.01",
+                      name: "aforador" + (index + 1),
+                      id: "aforador" + (index + 1)
+                    },
+                    domProps: { value: _vm.afGnc[index] },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.afGnc, index, $event.target.value)
+                      }
                     }
-                    _vm.$set(_vm.afGnc, 0, $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "aforador2" } }, [
-                _vm._v("AFORADOR 2")
-              ]),
+                  })
+                ])
+              }),
               _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.afGnc[1],
-                    expression: "afGnc[1]"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  placeholder: "VALOR DE ENTRADA DEL AFORADOR 2",
-                  type: "number",
-                  step: "0.01",
-                  name: "aforador2",
-                  id: "aforador2"
-                },
-                domProps: { value: _vm.afGnc[1] },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "pmz" } }, [_vm._v("PMZ")]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.pmz,
+                      expression: "pmz"
                     }
-                    _vm.$set(_vm.afGnc, 1, $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "aforador3" } }, [
-                _vm._v("AFORADOR 3")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.afGnc[2],
-                    expression: "afGnc[2]"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  placeholder: "VALOR DE ENTRADA DEL AFORADOR 3",
-                  type: "number",
-                  step: "0.01",
-                  name: "aforador3",
-                  id: "aforador3"
-                },
-                domProps: { value: _vm.afGnc[2] },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    placeholder: "VALOR DE ENTRADA DEL PMZ",
+                    type: "number",
+                    step: "0.01",
+                    name: "pmz",
+                    id: "pmz"
+                  },
+                  domProps: { value: _vm.pmz },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.pmz = $event.target.value
                     }
-                    _vm.$set(_vm.afGnc, 2, $event.target.value)
                   }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "aforador4" } }, [
-                _vm._v("AFORADOR 4")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.afGnc[3],
-                    expression: "afGnc[3]"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  placeholder: "VALOR DE ENTRADA DEL AFORADOR 4",
-                  type: "number",
-                  step: "0.01",
-                  name: "aforador4",
-                  id: "aforador4"
-                },
-                domProps: { value: _vm.afGnc[3] },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.afGnc, 3, $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "aforador5" } }, [
-                _vm._v("AFORADOR 5")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.afGnc[4],
-                    expression: "afGnc[4]"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  placeholder: "VALOR DE ENTRADA DEL AFORADOR 5",
-                  type: "number",
-                  step: "0.01",
-                  name: "aforador5",
-                  id: "aforador5"
-                },
-                domProps: { value: _vm.afGnc[4] },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.afGnc, 4, $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "aforador6" } }, [
-                _vm._v("AFORADOR 6")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.afGnc[5],
-                    expression: "afGnc[5]"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  placeholder: "VALOR DE ENTRADA DEL AFORADOR 6",
-                  type: "number",
-                  step: "0.01",
-                  name: "aforador6",
-                  id: "aforador6"
-                },
-                domProps: { value: _vm.afGnc[5] },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.$set(_vm.afGnc, 5, $event.target.value)
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "form-group" }, [
-              _c("label", { attrs: { for: "pmz" } }, [_vm._v("PMZ")]),
-              _vm._v(" "),
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.pmz,
-                    expression: "pmz"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: {
-                  placeholder: "VALOR DE ENTRADA DEL PMZ",
-                  type: "number",
-                  step: "0.01",
-                  name: "pmz",
-                  id: "pmz"
-                },
-                domProps: { value: _vm.pmz },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.pmz = $event.target.value
-                  }
-                }
-              })
-            ])
-          ]),
+                })
+              ])
+            ],
+            2
+          ),
           _vm._v(" "),
           _c("div", { staticClass: "form-card mt-1 mb-1" }, [
             _c("h2", { staticClass: "text-center" }, [_vm._v("ACEITE")]),

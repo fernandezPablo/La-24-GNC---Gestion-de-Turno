@@ -4,40 +4,23 @@
         <form class="form" action="#" v-on:submit.prevent="closeTurn" method="post">
             <div class="form-card mt-1">
                 <h2 class="text-center">GNC</h2>
-                <div class="form-group">
-                    <label for="aforador1">AFORADOR 1</label>
-                    <input class="form-control" placeholder="VALOR DE SALIDA DEL AFORADOR 1" type="number" step="0.01" name="aforador1" id="aforador1" v-model="afGnc[0]">
-                </div>
-                <div class="form-group">
-                    <label for="aforador2">AFORADOR 2</label>
-                    <input class="form-control" placeholder="VALOR DE SALIDA DEL AFORADOR 2" type="number" step="0.01" name="aforador2" id="aforador2" v-model="afGnc[1]">
-                </div>
-                <div class="form-group">
-                    <label for="aforador3">AFORADOR 3</label>
-                    <input class="form-control" placeholder="VALOR DE SALIDA DEL AFORADOR 3"  type="number" step="0.01" name="aforador3" id="aforador3" v-model="afGnc[2]">
-                </div>
-                <div class="form-group">
-                    <label for="aforador4">AFORADOR 4</label>
-                    <input class="form-control" placeholder="VALOR DE SALIDA DEL AFORADOR 4" type="number" step="0.01" name="aforador4" id="aforador4" v-model="afGnc[3]">
-                </div>
-                <div class="form-group">
-                    <label for="aforador5">AFORADOR 5</label>
-                    <input class="form-control" placeholder="VALOR DE SALIDA DEL AFORADOR 5" type="number" step="0.01" name="aforador5" id="aforador5" v-model="afGnc[4]">
-                </div>
-                <div class="form-group">
-                    <label for="aforador6">AFORADOR 6</label>
-                    <input class="form-control" placeholder="VALOR DE SALIDA DEL AFORADOR 6" type="number" step="0.01" name="aforador6" id="aforador6" v-model="afGnc[5]">
+                <div class="form-group" v-for="(aforador,index) in afGnc" v-bind:key="index">
+                    <label :for="'aforador'+(index+1)">AFORADOR {{ index + 1}}</label>
+                    <input class="form-control" :placeholder="'VALOR DE SALIDA DEL AFORADOR '+ (index + 1)" type="number" step="0.01" :name="'aforador' + (index +1)" :id="'aforador' + (index +1)" v-model="afGnc[index]" @change="verifyValue(afGncIni[index],afGnc[index])">
+                    <small v-if="afGncIni.lenght != 0">valor inicial del aforador: {{afGncIni[index]}}</small>
                 </div>
                 <div class="form-group">
                     <label for="pmz">PMZ</label>
-                    <input class="form-control" placeholder="VALOR DE SALIDA DEL PMZ" type="number" step="0.01" name="pmz" id="pmz" v-model="pmz">
+                    <input class="form-control" placeholder="VALOR DE SALIDA DEL PMZ" type="number" step="0.01" name="pmz" id="pmz" v-model="pmz" @change="verifyValue(pmzIni,pmz)">
+                    <small v-if="afGncIni.lenght != 0">valor inicial del pmz: {{pmzIni}}</small>
                 </div>
             </div>
             <div class="form-card mt-1 mb-1">
                 <h2 class="text-center">ACEITE</h2>
                 <div class="form-group">
                     <label for="pmz">ACEITE SALIDA</label>
-                    <input class="form-control" placeholder="VALOR DE SALIDA DE ACEITE" type="number" step="0.01" name="aceite_salida" id="aceite_salida" v-model="afOil[0]">
+                    <input class="form-control" placeholder="VALOR DE SALIDA DE ACEITE" type="number" step="0.01" name="aceite_salida" id="aceite_salida" v-model="afOil[0]" @change="verifyValue(afOilIni,afOil[0])">
+                    <small v-if="afGncIni.lenght != 0">valor inicial del aforador: {{afOilIni[0]}}</small>
                 </div>
             </div>
             <button class="btn btn-primary form-control" type="submit">GUARDAR</button>
@@ -55,12 +38,23 @@ export default {
             afGnc: [0.0,0.0,0.0,0.0,0.0,0.0],
             pmz: 0.0,
             afOil: [0.0],
+            afGncIni: [],
+            afOilIni:[],
+            pmzIni: 0.0,
         }   
     },
     mounted(){
         console.log('CloseTurnComponent mounted...');
         if(!this.isTurnOpenOnStore()){
             this.isTurnOpenOnDataBase();
+        }
+        else{
+            this.getAforadorsIniAndPmz();
+        }
+    },
+    watch:{
+        afGnc: function (){
+
         }
     },
     methods:{
@@ -76,6 +70,7 @@ export default {
                         if(response.data.length != 0){
                             var lastResult = response.data[response.data.length - 1];
                             this.$store.commit('setTurn',lastResult);
+                            this.getAforadorsIniAndPmz();
                             this.overlay = false;
                         }
                         else{
@@ -118,12 +113,40 @@ export default {
                                     text: 'Turno Cerrado Correctamente',
                                 })
                                 this.$router.push({name: 'resultTurn', params: {turnId: this.$store.getters.getTurn.id}})
-                                //this.$store.commit('setTurn',{});
                             }
                         )                        
                     }
                 });
         },
+        getAforadorsIniAndPmz(){
+            var aforadors = []
+            axios.get('/api/aforadors_values/'+this.$store.getters.getTurn.id).then(
+                response => {
+                    for(var i = 0; i< response.data.length; i++){
+                        if(i < 6){
+                            this.afGncIni.push(response.data[i])
+                        }
+                        else if(i == 6){
+                            this.pmzIni = response.data[i]
+                        }
+                        else{
+                            this.afOilIni.push(response.data[i])
+                        }
+                    }
+                }
+            )
+        },
+        verifyValue(valueIn,valueOut){
+            if(valueOut < valueIn){
+                console.log('El valor final no puede ser mayor que el valor inicial...');
+                 swal.fire({
+                        type: 'error',
+                        title: 'Oops...',
+                        text: 'El valor final no puede ser menor que el valor inicial',
+                        footer: 'Modifique el valor de salida, o edite el valor de entrada en la opcion abrir turno'
+                    })
+            }
+        }
     }
 }
 </script>

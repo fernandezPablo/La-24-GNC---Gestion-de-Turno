@@ -12,7 +12,7 @@
                         <td>{{ index + 1}}</td>
                         <td>{{ resultGnc.aforadorsIn[index] }} </td>
                         <td>{{ resultGnc.aforadorsOut[index] }}</td>
-                        <td>{{ resultGnc.difference[index] }}</td>
+                        <td>{{ parseFloat(resultGnc.difference[index].toFixed(2)) }}</td>
                     </tr>
                     <tr class="table-active">
                         <td></td>
@@ -24,7 +24,7 @@
                         <th>PMZ </th>
                         <td>{{ resultGnc.pmzIn }}</td>
                         <td>{{ resultGnc.pmzOut }}</td>
-                        <td>{{ resultGnc.pmzDifference }}</td>
+                        <td>{{ parseFloat(resultGnc.pmzDifference).toFixed(2) }}</td>
                     </tr>
                     <tr class="table-active">
                         <td></td>
@@ -36,7 +36,7 @@
                         <td class="table-active"></td>
                         <td class="table-active"></td>
                         <th>m3</th>
-                        <td>{{ resultGnc.m3 }}</td>
+                        <td>{{ parseFloat(resultGnc.m3.toFixed(2)) }}</td>
                     </tr>
                     <tr>
                         <td class="table-active"></td>
