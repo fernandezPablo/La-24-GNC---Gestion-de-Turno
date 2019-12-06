@@ -13095,3 +13095,7 @@ a.link-form:hover {
   background-color: #ffffff;
 }
 
+.input-error {
+  border-color: red !important;
+}
+

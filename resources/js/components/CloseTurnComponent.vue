@@ -99,22 +99,44 @@ export default {
                 confirmButtonText: 'Confirmar',
             }).then( result => {
                     if(result.value){
-                        var data = {
-                            turnId: this.$store.getters.getTurn.id,
-                            pmz: this.pmz,
-                            aforadorsGnc: this.afGnc,
-                            aforadorOil: this.afOil,
-                        }
-                        axios.post('/api/close_turn',data).then(
-                            result => {
-                                swal.fire({
-                                    type: 'success',
-                                    title: 'Turno Cerrado',
-                                    text: 'Turno Cerrado Correctamente',
-                                })
-                                this.$router.push({name: 'resultTurn', params: {turnId: this.$store.getters.getTurn.id}})
+                            var wrongValues = this.verifyValuesBeforeCloseTurn()
+                            if(wrongValues.length == 0){
+                                var data = {
+                                    turnId: this.$store.getters.getTurn.id,
+                                    pmz: this.pmz,
+                                    aforadorsGnc: this.afGnc,
+                                    aforadorOil: this.afOil,
+                                }
+                                axios.post('/api/close_turn',data).then(
+                                    result => {
+                                        swal.fire({
+                                            type: 'success',
+                                            title: 'Turno Cerrado',
+                                            text: 'Turno Cerrado Correctamente',
+                                        })
+                                        this.$router.push({name: 'resultTurn', params: {turnId: this.$store.getters.getTurn.id}})
+                                    }
+                                ) 
                             }
-                        )                        
+                            else{
+                                swal.fire({
+                                    type: 'error',
+                                    title: 'Oops...',
+                                    text: 'El valor final no puede ser menor que el valor inicial',
+                                    footer: 'Modifique el/los valor/es de salida, o edite el/los valor/es de entrada en la opcion abrir turno'
+                                })
+                                for(var i=0; i < wrongValues.length; i++){
+                                    if(wrongValues[i] != 'oil' && wrongValues[i] != 'pmz'){
+                                        document.getElementById('aforador'+(wrongValues[i]+1)).className += ' input-error'
+                                    }
+                                    else if(wrongValues[i] == 'oil'){
+                                        document.getElementById('aceite_salida').className += ' input-error'
+                                    }
+                                    else if(wrongValues[i] == 'pmz'){
+                                        document.getElementById('pmz').className += ' input-error'
+                                    }
+                                }
+                            }                  
                     }
                 });
         },
@@ -146,12 +168,27 @@ export default {
                         footer: 'Modifique el valor de salida, o edite el valor de entrada en la opcion abrir turno'
                     })
             }
+        },
+        verifyValuesBeforeCloseTurn(){
+            var result = []
+            for(var i = 0; i < this.afGnc.length; i ++){
+                if(this.afGnc[i] < this.afGncIni[i]){
+                    result.push(i)
+                }            
+            }
+            if(this.afOil[0] < this.afOilIni[0]){
+                result.push('oil')
+            }
+            if(this.pmz < this.pmzIni){
+                result.push('pmz')
+            }
+            return result
         }
     }
 }
 </script>
 
 <style>
-    
+   
 </style>
 

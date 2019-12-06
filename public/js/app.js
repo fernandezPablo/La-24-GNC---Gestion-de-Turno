@@ -1876,26 +1876,47 @@ __webpack_require__.r(__webpack_exports__);
         confirmButtonText: 'Confirmar'
       }).then(function (result) {
         if (result.value) {
-          var data = {
-            turnId: _this2.$store.getters.getTurn.id,
-            pmz: _this2.pmz,
-            aforadorsGnc: _this2.afGnc,
-            aforadorOil: _this2.afOil
-          };
-          axios.post('/api/close_turn', data).then(function (result) {
+          var wrongValues = _this2.verifyValuesBeforeCloseTurn();
+
+          if (wrongValues.length == 0) {
+            var data = {
+              turnId: _this2.$store.getters.getTurn.id,
+              pmz: _this2.pmz,
+              aforadorsGnc: _this2.afGnc,
+              aforadorOil: _this2.afOil
+            };
+            axios.post('/api/close_turn', data).then(function (result) {
+              swal.fire({
+                type: 'success',
+                title: 'Turno Cerrado',
+                text: 'Turno Cerrado Correctamente'
+              });
+
+              _this2.$router.push({
+                name: 'resultTurn',
+                params: {
+                  turnId: _this2.$store.getters.getTurn.id
+                }
+              });
+            });
+          } else {
             swal.fire({
-              type: 'success',
-              title: 'Turno Cerrado',
-              text: 'Turno Cerrado Correctamente'
+              type: 'error',
+              title: 'Oops...',
+              text: 'El valor final no puede ser menor que el valor inicial',
+              footer: 'Modifique el/los valor/es de salida, o edite el/los valor/es de entrada en la opcion abrir turno'
             });
 
-            _this2.$router.push({
-              name: 'resultTurn',
-              params: {
-                turnId: _this2.$store.getters.getTurn.id
+            for (var i = 0; i < wrongValues.length; i++) {
+              if (wrongValues[i] != 'oil' && wrongValues[i] != 'pmz') {
+                document.getElementById('aforador' + (wrongValues[i] + 1)).className += ' input-error';
+              } else if (wrongValues[i] == 'oil') {
+                document.getElementById('aceite_salida').className += ' input-error';
+              } else if (wrongValues[i] == 'pmz') {
+                document.getElementById('pmz').className += ' input-error';
               }
-            });
-          });
+            }
+          }
         }
       });
     },
@@ -1925,6 +1946,25 @@ __webpack_require__.r(__webpack_exports__);
           footer: 'Modifique el valor de salida, o edite el valor de entrada en la opcion abrir turno'
         });
       }
+    },
+    verifyValuesBeforeCloseTurn: function verifyValuesBeforeCloseTurn() {
+      var result = [];
+
+      for (var i = 0; i < this.afGnc.length; i++) {
+        if (this.afGnc[i] < this.afGncIni[i]) {
+          result.push(i);
+        }
+      }
+
+      if (this.afOil[0] < this.afOilIni[0]) {
+        result.push('oil');
+      }
+
+      if (this.pmz < this.pmzIni) {
+        result.push('pmz');
+      }
+
+      return result;
     }
   }
 });
