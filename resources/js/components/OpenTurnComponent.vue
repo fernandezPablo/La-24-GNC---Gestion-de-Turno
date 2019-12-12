@@ -80,7 +80,7 @@ export default {
                 turnId: 0
             };
             if(!this.isEdit){
-                let response = await axios.post('/api/open_turn',data);
+                let response = await axios.post('http://nameless-stream-56079.herokuapp.com/api/open_turn',data);
                 var dateFormat = require('dateformat')
                 var turnDate = new Date(response.data.date)   
                 response.data.date = dateFormat(turnDate,'dd/mm/yyyy HH:MM')
