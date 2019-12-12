@@ -2409,7 +2409,6 @@ __webpack_require__.r(__webpack_exports__);
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
-              debugger;
               data = {
                 user_id: this.userId,
                 aforadorsGnc: this.afGnc,
@@ -2419,14 +2418,14 @@ __webpack_require__.r(__webpack_exports__);
               };
 
               if (this.isEdit) {
-                _context.next = 13;
+                _context.next = 12;
                 break;
               }
 
-              _context.next = 5;
+              _context.next = 4;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('/api/open_turn', data));
 
-            case 5:
+            case 4:
               response = _context.sent;
               dateFormat = __webpack_require__(/*! dateformat */ "./node_modules/dateformat/lib/dateformat.js");
               turnDate = new Date(response.data.date);
@@ -2437,27 +2436,27 @@ __webpack_require__.r(__webpack_exports__);
                 title: 'Turno Abierto',
                 text: 'Turno Abierto Correctamente'
               });
-              _context.next = 19;
+              _context.next = 18;
               break;
 
-            case 13:
+            case 12:
               data.turnId = this.$store.getters.getTurn.id;
               console.log('Editing...');
               console.log(data.turn);
-              _context.next = 18;
+              _context.next = 17;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('/api/edit_open_turn', data));
 
-            case 18:
+            case 17:
               swal.fire({
                 type: 'success',
                 title: 'Turno Editado',
                 text: 'Turno Editado Correctamente'
               });
 
-            case 19:
+            case 18:
               this.$router.push("/");
 
-            case 20:
+            case 19:
             case "end":
               return _context.stop();
           }

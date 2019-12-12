@@ -72,7 +72,6 @@ export default {
     },
     methods:{
         async saveTurn(){
-            debugger
             var data = {
                 user_id: this.userId,
                 aforadorsGnc: this.afGnc,
