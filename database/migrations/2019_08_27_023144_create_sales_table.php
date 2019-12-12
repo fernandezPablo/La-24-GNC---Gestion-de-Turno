@@ -27,6 +27,14 @@ class CreateSalesTable extends Migration
      */
     public function down()
     {
+        Schema::table('sales', function (Blueprint $table){
+            $table->dropForeign(['turn_id']);
+            $table->dropColumn('turn_id');
+        });
+        Schema::table('turns', function (Blueprint $table){
+            $table->dropForeign(['sales_id']);
+            $table->dropColumn('sales_id');
+        });
         Schema::dropIfExists('turns');
         Schema::dropIfExists('sales');
     }
