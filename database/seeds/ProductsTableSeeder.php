@@ -12,6 +12,8 @@ class ProductsTableSeeder extends Seeder
     public function run()
     {
         DB::table('products')->insert([
+            ['id' => 1 , 'description' => 'GNC', 'price' => 22.99, 'discount' => 10],
+            ['id' => 2 , 'description' => 'Aceite', 'price' => 160, 'discount' => 0],
             ['id' => 3 , 'description' => 'Agua destilada x 1lts', 'price' => 40, 'discount' => 0],
             ['id' => 4 , 'description' => 'Agua destilada x 5lts', 'price' => 140, 'discount' => 0],
             ['id' => 5 , 'description' => 'Refrigerante x 1lts', 'price' => 45, 'discount' => 0],
