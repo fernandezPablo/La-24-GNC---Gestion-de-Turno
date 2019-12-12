@@ -39,7 +39,9 @@
 </template>
 
 <script>
+
 export default {
+
     mounted(){
         console.log('Mounted OpenTurnComponent...');
 
@@ -65,10 +67,12 @@ export default {
     computed:{
         gncAforadors(){
             return this.afGnc;
-        }
+        },
+        
     },
     methods:{
         async saveTurn(){
+            debugger
             var data = {
                 user_id: this.userId,
                 aforadorsGnc: this.afGnc,
@@ -78,6 +82,9 @@ export default {
             };
             if(!this.isEdit){
                 let response = await axios.post('/api/open_turn',data);
+                var dateFormat = require('dateformat')
+                var turnDate = new Date(response.data.date)   
+                response.data.date = dateFormat(turnDate,'dd/mm/yyyy HH:MM')
                 this.$store.commit('setTurn',response.data);
                 swal.fire({
                     type: 'success',

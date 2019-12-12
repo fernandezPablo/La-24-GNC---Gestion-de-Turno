@@ -22,11 +22,8 @@
                         </div>
                         <div v-else>
                             <ul class="navbar-nav">
-                                <li class="nav-link" v-if="!this.withoutTurn">
-                                    Turno: {{this.turnNumber}} - {{this.date}}  
-                                </li>
-                                <li class="nav-link" v-else> 
-                                    NINGUN TURNO ABIERTO
+                                <li class="nav-link">
+                                    Turno: {{turn.number}} - {{turn.date}}      
                                 </li>
                                 <li class="nav-item dropdown">
                                     <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -56,10 +53,11 @@
 
 <script>
 import { async } from 'q';
+import { mapState, mapGetters } from 'vuex'
 export default {
     mounted(){
         console.log('Component navbar mounted...');
-        console.log(this.routeLogout);
+        console.log('Turn on navbar: ' + this.turn.user_id);
         if(this.$store.getters.getUserId == 0){
             this.setUserIdOnState();
         }
@@ -68,11 +66,10 @@ export default {
             this.getTurnData();
         }
         else{
-            var turn = this.$store.getters.turn;
             var dateFormat = require('dateformat')
-            var turnDate = new Date(turn.date)   
+            var turnDate = new Date(this.turn.date)   
             this.date = dateFormat(turnDate,'dd/mm/yyyy HH:MM:ss')
-            this.turnNumber = turn.number
+            this.turnNumber = this.turn.number
         }
 
     },
@@ -97,7 +94,7 @@ export default {
                 var lastResult = response.data[response.data.length - 1];
                 var dateFormat = require('dateformat')
                 var turnDate = new Date(lastResult.date)   
-                this.date = dateFormat(turnDate,'dd/mm/yyyy HH:MM:ss')
+                this.date = dateFormat(turnDate,'dd/mm/yyyy HH:MM')
                 this.turnNumber = lastResult.number
                 this.setTurnOnState(lastResult);
             }
@@ -109,6 +106,13 @@ export default {
     computed: {
         getUserId(){
             return this.$store.getters.getUserId;
+        },
+        ...mapState(['turn']),
+    },
+    watch:{
+        turn(oldValue,newValue){
+            this.turnNumber = newValue.number
+            this.date = newValue.date
         }
     },
     props: {

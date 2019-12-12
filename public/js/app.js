@@ -2110,6 +2110,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var q__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! q */ "./node_modules/q/q.js");
 /* harmony import */ var q__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(q__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
 //
@@ -2164,14 +2172,12 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
+
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
     console.log('Component navbar mounted...');
-    console.log(this.routeLogout);
+    console.log('Turn on navbar: ' + this.turn.user_id);
 
     if (this.$store.getters.getUserId == 0) {
       this.setUserIdOnState();
@@ -2181,13 +2187,11 @@ __webpack_require__.r(__webpack_exports__);
       console.log('the turn obj is not defined on store...');
       this.getTurnData();
     } else {
-      var turn = this.$store.getters.turn;
-
       var dateFormat = __webpack_require__(/*! dateformat */ "./node_modules/dateformat/lib/dateformat.js");
 
-      var turnDate = new Date(turn.date);
+      var turnDate = new Date(this.turn.date);
       this.date = dateFormat(turnDate, 'dd/mm/yyyy HH:MM:ss');
-      this.turnNumber = turn.number;
+      this.turnNumber = this.turn.number;
     }
   },
   data: function data() {
@@ -2221,7 +2225,7 @@ __webpack_require__.r(__webpack_exports__);
                 lastResult = response.data[response.data.length - 1];
                 dateFormat = __webpack_require__(/*! dateformat */ "./node_modules/dateformat/lib/dateformat.js");
                 turnDate = new Date(lastResult.date);
-                this.date = dateFormat(turnDate, 'dd/mm/yyyy HH:MM:ss');
+                this.date = dateFormat(turnDate, 'dd/mm/yyyy HH:MM');
                 this.turnNumber = lastResult.number;
                 this.setTurnOnState(lastResult);
               } else {
@@ -2236,9 +2240,15 @@ __webpack_require__.r(__webpack_exports__);
       }, null, this);
     }
   },
-  computed: {
+  computed: _objectSpread({
     getUserId: function getUserId() {
       return this.$store.getters.getUserId;
+    }
+  }, Object(vuex__WEBPACK_IMPORTED_MODULE_2__["mapState"])(['turn'])),
+  watch: {
+    turn: function turn(oldValue, newValue) {
+      this.turnNumber = newValue.number;
+      this.date = newValue.date;
     }
   },
   props: {
@@ -2394,11 +2404,12 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     saveTurn: function saveTurn() {
-      var data, response;
+      var data, response, dateFormat, turnDate;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.async(function saveTurn$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
             case 0:
+              debugger;
               data = {
                 user_id: this.userId,
                 aforadorsGnc: this.afGnc,
@@ -2408,42 +2419,45 @@ __webpack_require__.r(__webpack_exports__);
               };
 
               if (this.isEdit) {
-                _context.next = 9;
+                _context.next = 13;
                 break;
               }
 
-              _context.next = 4;
+              _context.next = 5;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('/api/open_turn', data));
 
-            case 4:
+            case 5:
               response = _context.sent;
+              dateFormat = __webpack_require__(/*! dateformat */ "./node_modules/dateformat/lib/dateformat.js");
+              turnDate = new Date(response.data.date);
+              response.data.date = dateFormat(turnDate, 'dd/mm/yyyy HH:MM');
               this.$store.commit('setTurn', response.data);
               swal.fire({
                 type: 'success',
                 title: 'Turno Abierto',
                 text: 'Turno Abierto Correctamente'
               });
-              _context.next = 15;
+              _context.next = 19;
               break;
 
-            case 9:
+            case 13:
               data.turnId = this.$store.getters.getTurn.id;
               console.log('Editing...');
               console.log(data.turn);
-              _context.next = 14;
+              _context.next = 18;
               return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('/api/edit_open_turn', data));
 
-            case 14:
+            case 18:
               swal.fire({
                 type: 'success',
                 title: 'Turno Editado',
                 text: 'Turno Editado Correctamente'
               });
 
-            case 15:
+            case 19:
               this.$router.push("/");
 
-            case 16:
+            case 20:
             case "end":
               return _context.stop();
           }
@@ -45874,21 +45888,15 @@ var render = function() {
                   ])
                 : _c("div", [
                     _c("ul", { staticClass: "navbar-nav" }, [
-                      !this.withoutTurn
-                        ? _c("li", { staticClass: "nav-link" }, [
-                            _vm._v(
-                              "\n                                Turno: " +
-                                _vm._s(this.turnNumber) +
-                                " - " +
-                                _vm._s(this.date) +
-                                "  \n                            "
-                            )
-                          ])
-                        : _c("li", { staticClass: "nav-link" }, [
-                            _vm._v(
-                              " \n                                NINGUN TURNO ABIERTO\n                            "
-                            )
-                          ]),
+                      _c("li", { staticClass: "nav-link" }, [
+                        _vm._v(
+                          "\n                                Turno: " +
+                            _vm._s(_vm.turn.number) +
+                            " - " +
+                            _vm._s(_vm.turn.date) +
+                            "      \n                            "
+                        )
+                      ]),
                       _vm._v(" "),
                       _c("li", { staticClass: "nav-item dropdown" }, [
                         _c(
@@ -101902,6 +101910,7 @@ __webpack_require__.r(__webpack_exports__);
       id: 0,
       number: 0,
       state: "CLOSE",
+      date: "00/00/0000",
       user_id: 0,
       sales_id: 0
     }
@@ -101911,7 +101920,12 @@ __webpack_require__.r(__webpack_exports__);
       state.userId = id;
     },
     setTurn: function setTurn(state, turn) {
-      state.turn = turn;
+      state.turn.id = turn.id;
+      state.turn.number = turn.number;
+      state.turn.state = turn.state;
+      state.turn.date = turn.date;
+      state.turn.user_id = turn.user_id;
+      state.turn.sales_id = turn.sales_id;
     }
   },
   getters: {

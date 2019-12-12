@@ -105,3 +105,5 @@ issue14:
     commit 2:
     avoided close the turn with wrong values of aforador
     paint incorrect fields when the user try close the turn with incorrect values for aforadors
+    commit 3:
+    was modified the turn number and date on navbar after open the turn without reload the page

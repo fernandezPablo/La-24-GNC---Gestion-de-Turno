@@ -7,6 +7,7 @@ export default {
             id: 0,
             number: 0,
             state: "CLOSE",
+            date: "00/00/0000",
             user_id: 0,
             sales_id: 0
         },
@@ -16,7 +17,12 @@ export default {
             state.userId = id;
         },
         setTurn(state,turn){
-            state.turn = turn;
+            state.turn.id = turn.id
+            state.turn.number = turn.number
+            state.turn.state = turn.state
+            state.turn.date = turn.date
+            state.turn.user_id = turn.user_id
+            state.turn.sales_id = turn.sales_id
         }
     },
     getters: {
