@@ -29,6 +29,7 @@ class CreateAforadorControlsTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('aforadors');
         Schema::dropIfExists('aforador_controls');
     }
 }
