@@ -8,7 +8,7 @@
                     <input class="form-control" type="hidden" name="user_id" id="user_id" v-model="userId">
                 </div>
                 <div class="form-group" v-for="(aforador,index) in afGnc" v-bind:key="index">
-                    <label :for="'aforador'+(index+1)">AFORADOR {{index}}</label>
+                    <label :for="'aforador'+(index+1)">AFORADOR {{index+1}}</label>
                     <input class="form-control" :placeholder="'VALOR DE ENTRADA DEL AFORADOR '+(index+1)" type="number" step="0.01" :name="'aforador'+(index+1)" :id="'aforador'+(index+1)" v-model="afGnc[index]">
                 </div>
                 <div class="form-group">

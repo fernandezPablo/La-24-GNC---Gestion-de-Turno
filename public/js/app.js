@@ -2423,7 +2423,7 @@ __webpack_require__.r(__webpack_exports__);
               }
 
               _context.next = 4;
-              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('http://nameless-stream-56079.herokuapp.com/api/open_turn', data));
+              return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.awrap(axios.post('/api/open_turn', data));
 
             case 4:
               response = _context.sent;
@@ -46155,7 +46155,7 @@ var render = function() {
               _vm._l(_vm.afGnc, function(aforador, index) {
                 return _c("div", { key: index, staticClass: "form-group" }, [
                   _c("label", { attrs: { for: "aforador" + (index + 1) } }, [
-                    _vm._v("AFORADOR " + _vm._s(index))
+                    _vm._v("AFORADOR " + _vm._s(index + 1))
                   ]),
                   _vm._v(" "),
                   _c("input", {
