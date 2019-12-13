@@ -56,8 +56,6 @@ class TurnController extends Controller
         $turn->user_id = $request->user_id;
         $turn->state = "OPEN";
 
-        $turn->save();
-        
         $turn->sales_id = $saleController->newSale($turn->id);
         $turn->save();
 
