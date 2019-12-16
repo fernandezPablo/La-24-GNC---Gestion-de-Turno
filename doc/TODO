@@ -107,3 +107,7 @@ issue14:
     paint incorrect fields when the user try close the turn with incorrect values for aforadors
     commit 3:
     was modified the turn number and date on navbar after open the turn without reload the page
+    issue18:
+    On this issue is implemented the abmProductos component
+    commit 1:
+    Created the UI for abmProductos component
