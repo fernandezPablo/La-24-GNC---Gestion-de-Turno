@@ -4,6 +4,8 @@ namespace La24GNC\Http\Controllers;
 
 use Illuminate\Http\Request;
 use La24GNC\Product;
+use Storage;
+use File;
 
 class ProductController extends Controller
 {
@@ -13,5 +15,31 @@ class ProductController extends Controller
 
    public function getProduct($id){
       return Product::find($id);
+   }
+
+   public function newProduct(Request $request){
+      $product = new Product;
+
+      $product->description = $request->description;
+      $product->price = $request->price;
+      $product->discount = $request->discount;
+      
+      $imageFile = $request->file('image');
+      $extension = $imageFile->getClientOriginalExtension();
+
+      $path = $request->file('image')->store('public');
+      
+      $explodePath = explode('/',$path);
+
+      $product->url_image = 'storage/'.$explodePath[1];
+      
+      $product->save();
+
+      return json_encode($product);
+   }
+
+   public function getImageFromStore($path){
+      $explodePath = explode('/',$path);
+      return Store::download($explodePath[2]);
    }
 }

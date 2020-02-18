@@ -45,6 +45,7 @@ Vue.component('oil-table-component',require('./components/OilTableComponent.vue'
 Vue.component('various-table-component',require('./components/VariousTableComponent.vue').default);
 Vue.component('totals-table-component',require('./components/TotalsTableComponent.vue').default);
 Vue.component('to-declare-table-component',require('./components/ToDeclareTableComponent.vue').default);
+Vue.component('abm-products',require('./components/ABMProductsComponent.vue').default);
 
 import StoreData from './store';
 import OpenTurn from './components/OpenTurnComponent';
@@ -58,6 +59,7 @@ import OilTable from './components/OilTableComponent';
 import VariousTable from './components/VariousTableComponent';
 import TotalsTable from './components/TotalsTableComponent';
 import ToDeclareTable from './components/ToDeclareTableComponent';
+import AbmProducts from './components/ABMProductsComponent';
 import Axios from 'axios';
 
 //Routes for router-view
@@ -66,7 +68,7 @@ const routes = [
     {path: '/venta', name: 'sales', component: Sales, props: true},
     {path: '/a_declarar', name: 'to_declare', component: ToDeclare, props: true},
     {path: '/cerrarTurno', name: 'closeTurn', component: CloseTurn, props: true},
-    {path: '/abmProductos', name: 'abmProducts', component: Example, props: true},
+    {path: '/abmProductos', name: 'abmProducts', component: AbmProducts, props: true},
     {path: '/consultarTurno', name: 'checkTurn', component: Example, props: true},
     {path: '/resultTurn', name: 'resultTurn', component: ResultTurn, props: true},
 ]

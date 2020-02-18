@@ -50,3 +50,7 @@ Route::get('/to_declare/total/{saleId}','ToDeclareController@getTotalCurrentAcco
 Route::get('get_result_gnc/{turnId}','AforadorControlController@getResultTurnGnc');
 
 Route::get('/get_result_closed_turn/{turnId}','TurnController@getResultClosedTurn');
+
+Route::post('/new_product/','ProductController@newProduct');
+
+Route::get('/public_path/','ProductController@getImageFromStore');
