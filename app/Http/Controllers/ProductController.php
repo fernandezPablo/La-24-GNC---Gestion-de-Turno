@@ -38,8 +38,15 @@ class ProductController extends Controller
       return json_encode($product);
    }
 
-   public function getImageFromStore($path){
+   public function deleteProduct(Request $request){
+      $product = Product::find($request->id);
+
+      $path = $request->url_image;
+
       $explodePath = explode('/',$path);
-      return Store::download($explodePath[2]);
+
+      $product->delete();
+      Storage::disk('public')->delete($explodePath[1]);
    }
+
 }

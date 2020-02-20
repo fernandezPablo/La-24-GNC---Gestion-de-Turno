@@ -40,7 +40,7 @@
                     <img :id="'img-product-'+(index+1)" class="align-self-stretch image-product" :src="product.url_image" alt="productImage">
                     <input type="file" name="image" class="form-control hidden-element" :id="'input-image-'+(index+1)">
                 </div>
-                <input type="hidden" value="" :id="'input-id-'+(index+1)">
+                <input type="hidden" :value="product.id" :id="'input-id-'+(index+1)">
                 <div class="d-flex flex-column p-4 right-side-card">
                     <h2 :id="'label-description-'+(index+1)">
                         {{ product.description }}
@@ -62,7 +62,7 @@
                                 edit
                             </i>
                         </button>
-                        <button class="btn btn-danger btn-sm" @click="deleteProduct(index)">
+                        <button class="btn btn-danger btn-sm" @click="deleteProduct(index)" v-if="product.id != 1 && product.id != 2">
                             <i class="material-icons md-18">
                                 delete
                             </i>
@@ -169,12 +169,6 @@ export default {
                 data.append("price",priceInput.value)
                 data.append("discount",discountInput.value)
                 data.append("image",this.imageFile)
-                /**var data = {
-                description: descriptionInput.value,
-                price: priceInput.value,
-                discount: discountInput.value,
-                image: this.imageFile
-                }*/
 
                 console.log(data.image)
                 axios.post('/api/new_product/',data).then(
@@ -215,7 +209,17 @@ export default {
                 closeOnCancel: false 
             }).then((result) => {
                 if(result.value){
-                        
+                        var data = new FormData()
+                        data.append('id',this.products[index].id)
+                        data.append('url_image',this.products[index].url_image)
+                        axios.post('/api/delete_product/',data).then( result => {
+                             this.products.splice(index,1)
+                             swal.fire({
+                                    type: 'success',
+                                    title: 'Producto eliminado',
+                                    text: 'El producto fue eliminado exitosamente',
+                                })
+                        })
                     }
                 }
             )

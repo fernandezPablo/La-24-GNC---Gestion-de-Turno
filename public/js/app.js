@@ -1941,13 +1941,6 @@ __webpack_require__.r(__webpack_exports__);
         data.append("price", priceInput.value);
         data.append("discount", discountInput.value);
         data.append("image", this.imageFile);
-        /**var data = {
-        description: descriptionInput.value,
-        price: priceInput.value,
-        discount: discountInput.value,
-        image: this.imageFile
-        }*/
-
         console.log(data.image);
         axios.post('/api/new_product/', data).then(function (response) {
           _this2.products.push(response.data);
@@ -1975,6 +1968,8 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     deleteProduct: function deleteProduct(index) {
+      var _this3 = this;
+
       swal.fire({
         title: "Esta seguro de eliminar el producto " + this.products[index].description + "?",
         text: "No se podrá recuperar el producto una vez borrado!",
@@ -1986,7 +1981,20 @@ __webpack_require__.r(__webpack_exports__);
         closeOnConfirm: false,
         closeOnCancel: false
       }).then(function (result) {
-        if (result.value) {}
+        if (result.value) {
+          var data = new FormData();
+          data.append('id', _this3.products[index].id);
+          data.append('url_image', _this3.products[index].url_image);
+          axios.post('/api/delete_product/', data).then(function (result) {
+            _this3.products.splice(index, 1);
+
+            swal.fire({
+              type: 'success',
+              title: 'Producto eliminado',
+              text: 'El producto fue eliminado exitosamente'
+            });
+          });
+        }
       });
     }
   }
@@ -45804,11 +45812,8 @@ var render = function() {
             ]),
             _vm._v(" "),
             _c("input", {
-              attrs: {
-                type: "hidden",
-                value: "",
-                id: "input-id-" + (index + 1)
-              }
+              attrs: { type: "hidden", id: "input-id-" + (index + 1) },
+              domProps: { value: product.id }
             }),
             _vm._v(" "),
             _c(
@@ -45898,24 +45903,26 @@ var render = function() {
                   ]
                 ),
                 _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-danger btn-sm",
-                    on: {
-                      click: function($event) {
-                        return _vm.deleteProduct(index)
-                      }
-                    }
-                  },
-                  [
-                    _c("i", { staticClass: "material-icons md-18" }, [
-                      _vm._v(
-                        "\n                            delete\n                        "
-                      )
-                    ])
-                  ]
-                )
+                product.id != 1 && product.id != 2
+                  ? _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger btn-sm",
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteProduct(index)
+                          }
+                        }
+                      },
+                      [
+                        _c("i", { staticClass: "material-icons md-18" }, [
+                          _vm._v(
+                            "\n                            delete\n                        "
+                          )
+                        ])
+                      ]
+                    )
+                  : _vm._e()
               ]),
               _vm._v(" "),
               _c(

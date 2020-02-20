@@ -54,3 +54,5 @@ Route::get('/get_result_closed_turn/{turnId}','TurnController@getResultClosedTur
 Route::post('/new_product/','ProductController@newProduct');
 
 Route::get('/public_path/','ProductController@getImageFromStore');
+
+Route::post('delete_product/','ProductController@deleteProduct');
