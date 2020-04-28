@@ -17,21 +17,21 @@ class ProductController extends Controller
       return Product::find($id);
    }
 
+   public function storeImage($imageFile){
+      $path = $imageFile->store('public'); 
+      $explodePath = explode('/',$path);
+      return 'storage/'.$explodePath[1];
+   }
+
    public function newProduct(Request $request){
       $product = new Product;
 
       $product->description = $request->description;
       $product->price = $request->price;
       $product->discount = $request->discount;
-      
-      $imageFile = $request->file('image');
-      $extension = $imageFile->getClientOriginalExtension();
 
-      $path = $request->file('image')->store('public');
-      
-      $explodePath = explode('/',$path);
-
-      $product->url_image = 'storage/'.$explodePath[1];
+      $imageFile = $request->file('image'); 
+      $product->url_image = ProductController::storeImage($imageFile);
       
       $product->save();
 
@@ -47,6 +47,21 @@ class ProductController extends Controller
 
       $product->delete();
       Storage::disk('public')->delete($explodePath[1]);
+   }
+
+   public function updateProduct(Request $request){
+      $product = Product::find($request->id);
+
+      $product->description = $request->description;
+      $product->price = $request->price;
+      $product->discount = $request->discount;
+
+      $imageFile = $request->file('image');
+      $product->url_image = ProductController::storeImage($imageFile);
+
+      $product->save();
+
+      return json_encode($product);
    }
 
 }

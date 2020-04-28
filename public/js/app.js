@@ -1867,7 +1867,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       products: [],
-      imageFile: ''
+      imageFile: '',
+      imageUpdated: false
     };
   },
   methods: {
@@ -1923,9 +1924,22 @@ __webpack_require__.r(__webpack_exports__);
         imageInput.style.display = "none";
       }
     },
-    handleImageFile: function handleImageFile() {
-      this.imageFile = this.$refs.file.files[0];
-      console.log(this.file);
+    handleImageFile: function handleImageFile(isEdited, index) {
+      if (isEdited) {
+        console.log(this.$refs.editFile[index]);
+        this.imageFile = this.$refs.editFile[index].files[0];
+      } else {
+        this.imageFile = this.$refs.file.files[0];
+      }
+
+      console.log('handleImageFile');
+      console.log(this.imageFile);
+    },
+    clearImageFile: function clearImageFile() {
+      this.imageFile = '';
+    },
+    isImageChanged: function isImageChanged() {
+      this.imageUpdated = true;
     },
     createOrUpdateProduct: function createOrUpdateProduct(index, mode) {
       var _this2 = this;
@@ -1941,13 +1955,14 @@ __webpack_require__.r(__webpack_exports__);
         data.append("price", priceInput.value);
         data.append("discount", discountInput.value);
         data.append("image", this.imageFile);
-        console.log(data.image);
         axios.post('/api/new_product/', data).then(function (response) {
           _this2.products.push(response.data);
 
           descriptionInput.value = '';
           priceInput.value = '';
           discountInput.value = '';
+
+          _this2.clearImageFile();
 
           _this2.toggleNewProduct(0);
 
@@ -1957,14 +1972,30 @@ __webpack_require__.r(__webpack_exports__);
             text: 'El producto fue creado exitosamente'
           });
         });
-      } else {
+      } else if (mode === "EDIT") {
         var idInput = document.getElementById("input-id-" + index);
-        var data = {
-          id: idInput.value,
-          description: descriptionInput.value,
-          price: priceInput.value,
-          discount: discountInput.value
-        };
+        var data = new FormData();
+        data.append('id', idInput.value);
+        data.append('description', descriptionInput.value);
+        data.append('price', priceInput.value);
+        data.append('discount', discountInput.value);
+        data.append('image', this.imageFile);
+        axios.post('api/update_product/', data).then(function (response) {
+          _this2.products[index - 1].description = response.data.description;
+          _this2.products[index - 1].price = response.data.price;
+          _this2.products[index - 1].discount = response.data.discount;
+          _this2.products[index - 1].url_image = response.data.url_image;
+
+          _this2.clearImageFile();
+
+          _this2.toggleNewProduct(index);
+
+          swal.fire({
+            type: 'success',
+            title: 'Producto editado',
+            text: 'El producto fue editado exitosamente!'
+          });
+        });
       }
     },
     deleteProduct: function deleteProduct(index) {
@@ -45736,7 +45767,11 @@ var render = function() {
               ref: "file",
               staticClass: "form-control hidden-element",
               attrs: { type: "file", name: "image", id: "input-image-0" },
-              on: { change: _vm.handleImageFile }
+              on: {
+                change: function($event) {
+                  return _vm.handleImageFile(false, 0)
+                }
+              }
             })
           ]),
           _vm._v(" "),
@@ -45802,11 +45837,18 @@ var render = function() {
               }),
               _vm._v(" "),
               _c("input", {
+                ref: "editFile",
+                refInFor: true,
                 staticClass: "form-control hidden-element",
                 attrs: {
                   type: "file",
                   name: "image",
                   id: "input-image-" + (index + 1)
+                },
+                on: {
+                  change: function($event) {
+                    return _vm.handleImageFile(true, index)
+                  }
                 }
               })
             ]),
@@ -45929,7 +45971,12 @@ var render = function() {
                 "button",
                 {
                   staticClass: "btn btn-success btn-lg mt-3 hidden-element",
-                  attrs: { id: "btn-save-" + (index + 1) }
+                  attrs: { id: "btn-save-" + (index + 1) },
+                  on: {
+                    click: function($event) {
+                      _vm.createOrUpdateProduct(index + 1, "EDIT")
+                    }
+                  }
                 },
                 [_vm._v("\n                   Guardar\n                ")]
               ),

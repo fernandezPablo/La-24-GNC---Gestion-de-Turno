@@ -5,7 +5,7 @@
             <div class="card-body d-flex">
                 <div class="d-flex">
                     <img id="img-product-0" class="align-self-stretch image-product" src="/img/products/no_image.jpg" alt="productImage">
-                    <input type="file" name="image" class="form-control hidden-element" id="input-image-0" ref='file' @change="handleImageFile">
+                    <input type="file" name="image" class="form-control hidden-element" id="input-image-0" ref='file' @change="handleImageFile(false,0)">
                 </div>
                 <div class="d-flex flex-column p-4 right-side-card">
                     <h2 id="label-description-0">
@@ -38,7 +38,7 @@
             <div class="card-body d-flex">
                 <div class="d-flex">
                     <img :id="'img-product-'+(index+1)" class="align-self-stretch image-product" :src="product.url_image" alt="productImage">
-                    <input type="file" name="image" class="form-control hidden-element" :id="'input-image-'+(index+1)">
+                    <input type="file" name="image" class="form-control hidden-element" :id="'input-image-'+(index+1)" ref="editFile" @change="handleImageFile(true,index)">
                 </div>
                 <input type="hidden" :value="product.id" :id="'input-id-'+(index+1)">
                 <div class="d-flex flex-column p-4 right-side-card">
@@ -68,7 +68,7 @@
                             </i>
                         </button>
                     </div> 
-                    <button :id="'btn-save-'+(index+1)" class="btn btn-success btn-lg mt-3 hidden-element" >
+                    <button :id="'btn-save-'+(index+1)" class="btn btn-success btn-lg mt-3 hidden-element" @click="createOrUpdateProduct((index+1),'EDIT')">
                        Guardar
                     </button>
                     <button :id="'btn-cancel-'+(index+1)" class="btn btn-danger btn-lg mt-3 hidden-element" @click="toggleNewProduct(index+1)">
@@ -91,7 +91,8 @@ export default {
     data(){
         return{
             products: [],
-            imageFile: ''
+            imageFile: '',
+            imageUpdated: false,
         }
     },
     methods:{
@@ -153,9 +154,23 @@ export default {
 
 
         },
-        handleImageFile(){
-            this.imageFile = this.$refs.file.files[0]
-            console.log(this.file)
+        handleImageFile(isEdited,index){
+            if(isEdited){
+                console.log(this.$refs.editFile[index])
+                this.imageFile = this.$refs.editFile[index].files[0]
+            }
+            else{
+                this.imageFile = this.$refs.file.files[0]
+            }
+
+            console.log('handleImageFile')
+            console.log(this.imageFile)
+        },
+        clearImageFile(){
+            this.imageFile = ''
+        },
+        isImageChanged(){
+            this.imageUpdated = true
         },
         createOrUpdateProduct(index,mode){
             var descriptionInput = document.getElementById("input-description-"+index)
@@ -170,13 +185,13 @@ export default {
                 data.append("discount",discountInput.value)
                 data.append("image",this.imageFile)
 
-                console.log(data.image)
                 axios.post('/api/new_product/',data).then(
                      response =>{
                         this.products.push(response.data)
                         descriptionInput.value = ''
                         priceInput.value = ''
                         discountInput.value = ''
+                        this.clearImageFile()
                         this.toggleNewProduct(0)
                         swal.fire({
                                     type: 'success',
@@ -186,14 +201,31 @@ export default {
                     }
                 )    
             }
-            else{
+            else if(mode === "EDIT"){
+
                 var idInput = document.getElementById("input-id-"+index)            
-                var data = {
-                id: idInput.value,
-                description: descriptionInput.value,
-                price: priceInput.value,
-                discount: discountInput.value
-                }
+                var data = new FormData()
+                data.append('id',idInput.value)
+                data.append('description',descriptionInput.value)
+                data.append('price',priceInput.value)
+                data.append('discount',discountInput.value)
+                data.append('image',this.imageFile)
+
+                axios.post('api/update_product/',data).then(response => {
+
+                    this.products[index-1].description = response.data.description
+                    this.products[index-1].price = response.data.price
+                    this.products[index-1].discount = response.data.discount
+                    this.products[index-1].url_image = response.data.url_image
+                    this.clearImageFile()
+                    this.toggleNewProduct(index)
+                    swal.fire({
+                                type: 'success',
+                                title: 'Producto editado',
+                                text: 'El producto fue editado exitosamente!',
+                            })
+                })
+
             }
         },
         deleteProduct(index){
