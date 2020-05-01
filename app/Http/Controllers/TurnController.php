@@ -241,4 +241,5 @@ class TurnController extends Controller
 
         return json_encode($result);
     }
+
 }

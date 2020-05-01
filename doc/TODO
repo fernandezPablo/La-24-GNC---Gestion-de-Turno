@@ -117,3 +117,7 @@ issue14:
     developed option to delete products
     commit 4:
     developed otpion to update products
+    issue19:
+    On this issue is implemented the option to query turns
+    commit 1:
+    Created the UI for turn query 
