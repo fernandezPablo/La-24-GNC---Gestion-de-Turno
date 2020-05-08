@@ -18,10 +18,10 @@ class AforadorController extends Controller
         $aforador->valueOut = 0.0;
         $aforador->type = $type;   
         if($type == "GNC"){
-            $aforador->id_product = $_GNC;
+            $aforador->product_id = $_GNC;
         }
         else{
-            $aforador->id_product = $_OIL;
+            $aforador->product_id = $_OIL;
         }
         $aforador->difference = 0.0;
         $aforador->aforador_control_id = $aforadorControlId;

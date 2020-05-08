@@ -2894,7 +2894,50 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      turns: [],
+      overlay: false,
+      withoutTurn: false
+    };
+  },
+  methods: {
+    searchTurn: function searchTurn() {
+      var _this = this;
+
+      this.overlay = true;
+      var dateInput = document.getElementById("date");
+      var date = dateInput.value;
+      this.turns = []; //ATENCION REVISAR
+
+      axios.get('api/get_turns/' + date).then(function (response) {
+        _this.withoutTurn = false;
+        console.log(response.data);
+
+        if (response.data.length > 0) {
+          response.data.forEach(function (element) {
+            _this.turns.push(element);
+          });
+        } else {
+          _this.withoutTurn = true;
+        }
+
+        _this.overlay = false;
+      });
+    }
+  }
+});
 
 /***/ }),
 
@@ -47088,113 +47131,170 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "main-div" }, [
+  return _c(
+    "div",
+    { staticClass: "main-div" },
+    [
       _c("h2", { staticClass: "text-center text-white" }, [
         _vm._v("CONSULTA DE TURNOS")
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "card card-search" }, [
         _c("div", { staticClass: "card-body" }, [
-          _c("form", { staticClass: "form", attrs: { action: "" } }, [
-            _c("div", { staticClass: "form-row" }, [
-              _c("div", { staticClass: "form-group col-md-10" }, [
-                _c("label", { attrs: { for: "date" } }, [
-                  _vm._v("Fecha del turno")
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass: "form-control",
-                  attrs: { id: "date", type: "date" }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", { staticClass: "form-group col-md-2" }, [
-                _c(
-                  "label",
-                  { staticStyle: { color: "white" }, attrs: { for: "" } },
-                  [_vm._v("xxx")]
-                ),
-                _vm._v(" "),
-                _c("button", { staticClass: "form-control btn-primary" }, [
-                  _c("span", { staticClass: "material-icons" }, [
-                    _vm._v(
-                      "\n                                search\n                            "
-                    )
-                  ])
-                ])
-              ])
-            ])
-          ])
+          _c(
+            "form",
+            {
+              staticClass: "form",
+              attrs: { action: "#" },
+              on: {
+                submit: function($event) {
+                  $event.preventDefault()
+                  return _vm.searchTurn($event)
+                }
+              }
+            },
+            [_vm._m(0)]
+          )
         ])
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "card card-search mt-2" }, [
-        _c("div", { staticClass: "card-header" }, [
-          _c("h2", { staticClass: "card-title text-center" }, [
-            _vm._v("Resultados de la busqueda")
-          ])
-        ]),
+        _vm._m(1),
         _vm._v(" "),
-        _c("div", { staticClass: "card-body bg-danger" }, [
-          _c("h4", { staticClass: "text-center" }, [
-            _vm._v("No hay turnos para la fecha seleccionada")
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "card-body" }, [
-          _c("table", { staticClass: "table" }, [
-            _c("thead", { staticClass: "thead-dark" }, [
-              _c("tr", [
-                _c("th", [
-                  _vm._v(
-                    "\n                            Nro. de Turno\n                        "
-                  )
-                ]),
-                _vm._v(" "),
-                _c("th", [
-                  _vm._v(
-                    "\n                            Fecha del turno\n                        "
-                  )
-                ]),
-                _vm._v(" "),
-                _c("th", [
-                  _vm._v(
-                    "\n                            Usuario\n                        "
-                  )
-                ]),
-                _vm._v(" "),
-                _c("th")
-              ])
-            ]),
-            _vm._v(" "),
-            _c("tbody", [
-              _c("tr", [
-                _c("td", [_vm._v("1")]),
-                _vm._v(" "),
-                _c("td", [_vm._v("12/04/2020")]),
-                _vm._v(" "),
-                _c("td", [_vm._v("Pablo")]),
-                _vm._v(" "),
-                _c("td", [
-                  _c("button", [
-                    _c("span", { staticClass: "material-icons" }, [
-                      _vm._v(
-                        "\n                                    visibility\n                                "
-                      )
-                    ])
-                  ])
-                ])
+        _vm.withoutTurn
+          ? _c("div", { staticClass: "card-body bg-danger" }, [
+              _c("h4", { staticClass: "text-center" }, [
+                _vm._v("No hay turnos para la fecha seleccionada")
               ])
             ])
+          : _c("div", { staticClass: "card-body" }, [
+              _c("table", { staticClass: "table" }, [
+                _vm._m(2),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.turns, function(turn) {
+                    return _c("tr", { key: turn.id }, [
+                      _c("td", [_vm._v(_vm._s(turn.number))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(turn.date))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(turn.user.name))]),
+                      _vm._v(" "),
+                      _c(
+                        "td",
+                        [
+                          _c(
+                            "router-link",
+                            {
+                              attrs: {
+                                to: {
+                                  name: "resultTurn",
+                                  params: { turnId: turn.id }
+                                }
+                              }
+                            },
+                            [
+                              _c("button", [
+                                _c("span", { staticClass: "material-icons" }, [
+                                  _vm._v(
+                                    "\n                                         visibility\n                                     "
+                                  )
+                                ])
+                              ])
+                            ]
+                          )
+                        ],
+                        1
+                      )
+                    ])
+                  }),
+                  0
+                )
+              ])
+            ])
+      ]),
+      _vm._v(" "),
+      _c(
+        "v-overlay",
+        { attrs: { value: _vm.overlay } },
+        [
+          _c("v-progress-circular", {
+            staticClass: "progress",
+            attrs: { indeterminate: "", size: 64, width: 5 }
+          })
+        ],
+        1
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-row" }, [
+      _c("div", { staticClass: "form-group col-md-10" }, [
+        _c("label", { attrs: { for: "date" } }, [_vm._v("Fecha del turno")]),
+        _vm._v(" "),
+        _c("input", {
+          staticClass: "form-control",
+          attrs: { id: "date", type: "date" }
+        })
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "form-group col-md-2" }, [
+        _c("label", { staticStyle: { color: "white" }, attrs: { for: "" } }, [
+          _vm._v("xxx")
+        ]),
+        _vm._v(" "),
+        _c("button", { staticClass: "form-control btn-primary" }, [
+          _c("span", { staticClass: "material-icons" }, [
+            _vm._v(
+              "\n                                search\n                            "
+            )
           ])
         ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("h2", { staticClass: "card-title text-center" }, [
+        _vm._v("Resultados de la busqueda")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", { staticClass: "thead-dark" }, [
+      _c("tr", [
+        _c("th", [
+          _vm._v(
+            "\n                            Nro. de Turno\n                        "
+          )
+        ]),
+        _vm._v(" "),
+        _c("th", [
+          _vm._v(
+            "\n                            Fecha del turno\n                        "
+          )
+        ]),
+        _vm._v(" "),
+        _c("th", [
+          _vm._v(
+            "\n                            Usuario\n                        "
+          )
+        ]),
+        _vm._v(" "),
+        _c("th")
       ])
     ])
   }

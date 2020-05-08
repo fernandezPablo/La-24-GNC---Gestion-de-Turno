@@ -56,3 +56,5 @@ Route::post('/new_product/','ProductController@newProduct');
 Route::post('delete_product/','ProductController@deleteProduct');
 
 Route::post('/update_product/','ProductController@updateProduct');
+
+Route::get('/get_turns/{date}','TurnController@getTurnsForDate');

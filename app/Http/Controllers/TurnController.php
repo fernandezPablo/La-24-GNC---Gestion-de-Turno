@@ -242,4 +242,20 @@ class TurnController extends Controller
         return json_encode($result);
     }
 
+
+    public function getTurnsForDate($date){
+        $turns = Turn::query()->where('date','LIKE',"{$date}%")->get();
+       
+        /**
+         * al recorrer cada uno de los elementos del array turns usando el metodo user() declarado 
+         * en la case Turn, se extrae un objeto de tipo user que se agrega al objeto de tipo turn
+         */
+        foreach($turns as $turn){
+            $turn->user;
+        } 
+
+        return $turns;
+    }
+
+
 }
