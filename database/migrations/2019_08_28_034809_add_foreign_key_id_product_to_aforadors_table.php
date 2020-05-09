@@ -6,6 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddForeignKeyIdProductToAforadorsTable extends Migration
 {
+    
     /**
      * Run the migrations.
      *
