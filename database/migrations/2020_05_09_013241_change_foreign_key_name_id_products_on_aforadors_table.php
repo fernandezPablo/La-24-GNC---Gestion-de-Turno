@@ -20,7 +20,7 @@ class ChangeForeignKeyNameIdProductsOnAforadorsTable extends Migration
     {
         Schemma::table('aforadors', function (Blueprint $table){
             $table->renameColumn('id_product','product_id');
-        })
+        });
     }
 
     /**
