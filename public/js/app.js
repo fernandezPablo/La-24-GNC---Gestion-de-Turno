@@ -2919,8 +2919,7 @@ __webpack_require__.r(__webpack_exports__);
       this.overlay = true;
       var dateInput = document.getElementById("date");
       var date = dateInput.value;
-      this.turns = []; //ATENCION REVISAR
-
+      this.turns = [];
       axios.get('api/get_turns/' + date).then(function (response) {
         _this.withoutTurn = false;
         console.log(response.data);

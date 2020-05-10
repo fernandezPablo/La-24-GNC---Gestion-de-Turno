@@ -89,7 +89,7 @@ export default {
             this.overlay = true
             const dateInput = document.getElementById("date")
             var date = dateInput.value
-            this.turns = [] //ATENCION REVISAR
+            this.turns = [] 
             axios.get('api/get_turns/'+date).then(
                 response => {
                     this.withoutTurn = false
