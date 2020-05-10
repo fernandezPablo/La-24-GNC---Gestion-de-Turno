@@ -101916,7 +101916,7 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
   routes: routes
 });
 var store = new vuex__WEBPACK_IMPORTED_MODULE_1__["default"].Store(_store__WEBPACK_IMPORTED_MODULE_3__["default"]);
-axios__WEBPACK_IMPORTED_MODULE_17___default.a.defaults.timeout = 3000;
+axios__WEBPACK_IMPORTED_MODULE_17___default.a.defaults.timeout = 4000;
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
