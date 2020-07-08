@@ -51,10 +51,11 @@ Route::get('get_result_gnc/{turnId}','AforadorControlController@getResultTurnGnc
 
 Route::get('/get_result_closed_turn/{turnId}','TurnController@getResultClosedTurn');
 
-Route::post('/new_product/','ProductController@newProduct');
+Route::post('/new_product','ProductController@newProduct');
 
-Route::post('delete_product/','ProductController@deleteProduct');
+Route::post('/
+delete_product','ProductController@deleteProduct');
 
-Route::post('/update_product/','ProductController@updateProduct');
+Route::post('/update_product','ProductController@updateProduct');
 
 Route::get('/get_turns/{date}','TurnController@getTurnsForDate');
